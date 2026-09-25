@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>EventEase - Smoke Test Report</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; padding: 24px; }
+    .card { background: #1e293b; border-radius: 12px; padding: 20px; margin-bottom: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); }
+    h1, h2 { margin-top: 0; color: #38bdf8; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 20px; }
+    .metric { background: #334155; padding: 16px; border-radius: 8px; text-align: center; }
+    .metric-val { font-size: 28px; font-weight: bold; color: #e2e8f0; margin-top: 8px; }
+    .good { color: #4ade80; }
+    .warn { color: #facc15; }
+    .bad { color: #f87171; }
+    table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    th, td { text-align: left; padding: 12px; border-bottom: 1px solid #475569; }
+    th { color: #94a3b8; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>EventEase Performance Report: Smoke Test</h1>
+    <p>Generated: Mon, 07 Sep 2026 10:42:56 GMT</p>
+  </div>
+
+  <div class="grid">
+    <div class="metric"><div>Peak VUs</div><div class="metric-val">1</div></div>
+    <div class="metric"><div>Throughput</div><div class="metric-val">1.20 <span style="font-size:14px">req/s</span></div></div>
+    <div class="metric"><div>p95 Latency</div><div class="metric-val good">301.17 <span style="font-size:14px">ms</span></div></div>
+    <div class="metric"><div>Error Rate</div><div class="metric-val bad">5.00%</div></div>
+  </div>
+
+  <div class="card">
+    <h2>Detailed Latency Percentiles</h2>
+    <table>
+      <tr><th>Metric</th><th>Latency (ms)</th><th>SLA Target</th><th>Status</th></tr>
+      <tr><td>p50 (Median)</td><td>0.00 ms</td><td>&lt; 400 ms</td><td>✅ PASS</td></tr>
+      <tr><td>p90</td><td>253.55 ms</td><td>&lt; 800 ms</td><td>✅ PASS</td></tr>
+      <tr><td>p95</td><td>301.17 ms</td><td>&lt; 1200 ms</td><td>✅ PASS</td></tr>
+      <tr><td>p99</td><td>0.00 ms</td><td>&lt; 2500 ms</td><td>✅ PASS</td></tr>
+      <tr><td>Max Latency</td><td>408.63 ms</td><td>-</td><td>-</td></tr>
+      <tr><td>Average</td><td>149.34 ms</td><td>-</td><td>-</td></tr>
+    </table>
+  </div>
+</body>
+</html>

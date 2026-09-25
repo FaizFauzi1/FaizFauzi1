@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "YOUR_TEAM_ID.com.example.eventease_new",
+        "paths": ["/vendor/*", "/service/*", "/vendors/*", "/services/*"]
+      }
+    ]
+  }
+}

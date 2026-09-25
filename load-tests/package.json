@@ -1,0 +1,25 @@
+{
+  "name": "eventease-k6-load-tests",
+  "version": "1.0.0",
+  "description": "Comprehensive k6 performance and load testing suite for EventEase",
+  "scripts": {
+    "test:smoke": "k6 run tests/smoke.js",
+    "test:load": "k6 run tests/load.js",
+    "test:stress": "k6 run tests/stress.js",
+    "test:spike": "k6 run tests/spike.js",
+    "test:soak": "k6 run tests/soak.js",
+    "test:concurrency": "k6 run tests/concurrency.js",
+    "test:storage": "k6 run scenarios/storage.js",
+    "test:realtime": "k6 run scenarios/realtime.js",
+    "test:payment": "k6 run scenarios/payment.js"
+  },
+  "keywords": [
+    "k6",
+    "load-testing",
+    "performance-testing",
+    "supabase",
+    "eventease"
+  ],
+  "author": "EventEase Engineering",
+  "license": "ISC"
+}

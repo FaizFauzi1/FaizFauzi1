@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /vendor/dashboard/
+Disallow: /customer/profile/
+
+Sitemap: https://eventease.com/sitemap.xml

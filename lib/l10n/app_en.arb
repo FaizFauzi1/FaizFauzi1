@@ -1,0 +1,325 @@
+{
+  "@@locale": "en",
+  "commonCancel": "Cancel",
+  "commonSave": "Save",
+  "commonClose": "Close",
+  "commonExport": "Export",
+  "commonGotIt": "Got it",
+  "vendorSettingsTitle": "Settings",
+  "vendorTooltipSearch": "Search Settings",
+  "vendorTooltipHelp": "Help",
+  "vendorTooltipSave": "Save Settings",
+  "vendorSectionAccount": "Account Settings",
+  "vendorSectionNotifications": "Notifications",
+  "vendorSectionAppPreferences": "App Preferences",
+  "vendorSectionDataPrivacy": "Data & Privacy",
+  "vendorSectionBusinessOperations": "Business Operations",
+  "vendorSectionShippingDelivery": "Shipping & Delivery",
+  "vendorSectionPaymentBilling": "Payment & Billing",
+  "vendorSectionIntegrations": "Integrations",
+  "vendorSectionAdvancedFeatures": "Advanced Features",
+  "vendorSectionBusinessAnalytics": "Business Analytics",
+  "vendorSectionSupportHelp": "Support & Help",
+  "vendorSectionAccountDanger": "Account",
+  "vendorProfileInformation": "Profile Information",
+  "vendorProfileInformationSubtitle": "Manage your business profile",
+  "vendorBusinessDetails": "Business Details",
+  "vendorBusinessDetailsSubtitle": "Update business information",
+  "vendorDocumentsCertifications": "Documents & Certifications",
+  "vendorDocumentsSubtitle": "Manage legal documents",
+  "vendorEnableNotifications": "Enable Notifications",
+  "vendorEnableNotificationsSubtitle": "Receive booking and system notifications",
+  "vendorEmailNotifications": "Email Notifications",
+  "vendorEmailNotificationsSubtitle": "Receive notifications via email",
+  "vendorPushNotifications": "Push Notifications",
+  "vendorPushNotificationsSubtitle": "Receive push notifications on mobile",
+  "vendorLanguage": "Language",
+  "vendorCurrency": "Currency",
+  "vendorDarkMode": "Dark Mode",
+  "vendorDarkModeSubtitle": "Switch to dark theme",
+  "vendorAutoBackup": "Auto Backup",
+  "vendorAutoBackupSubtitle": "Automatically backup your data",
+  "vendorDataRetention": "Data Retention",
+  "vendorPublicProfile": "Public Profile",
+  "vendorPublicProfileSubtitle": "Make your business profile visible to everyone",
+  "vendorShowContactInfo": "Show Contact Info",
+  "vendorShowContactInfoSubtitle": "Display contact information publicly",
+  "vendorPrivateBookingHistory": "Private Booking History",
+  "vendorPrivateBookingHistorySubtitle": "Keep booking history private",
+  "vendorMarketingEmails": "Marketing Emails",
+  "vendorMarketingEmailsSubtitle": "Receive promotional emails",
+  "vendorDataSharing": "Data Sharing",
+  "vendorDataSharingSubtitle": "Share anonymized data for improvements",
+  "vendorAnalyticsTracking": "Analytics Tracking",
+  "vendorAnalyticsTrackingSubtitle": "Allow analytics tracking for better service",
+  "vendorPrivacyPolicy": "Privacy Policy",
+  "vendorPrivacyPolicySubtitle": "View our privacy policy",
+  "vendorTermsOfService": "Terms of Service",
+  "vendorTermsOfServiceSubtitle": "View terms and conditions",
+  "vendorAutoAcceptBookings": "Auto-Accept Bookings",
+  "vendorAutoAcceptBookingsSubtitle": "Automatically accept new bookings",
+  "vendorRequireDeposit": "Require Deposit",
+  "vendorDepositSubtitle": "Require {percent}% deposit for bookings",
+  "@vendorDepositSubtitle": {
+    "placeholders": {
+      "percent": {"type": "int"}
+    }
+  },
+  "vendorDepositPercentage": "Deposit Percentage",
+  "vendorWeekendPricing": "Weekend Pricing",
+  "vendorWeekendPricingSubtitle": "Apply special pricing for weekends",
+  "vendorHolidayPricing": "Holiday Pricing",
+  "vendorHolidayPricingSubtitle": "Apply special pricing for holidays",
+  "vendorBulkDiscounts": "Bulk Discounts",
+  "vendorBulkDiscountsSubtitle": "Offer discounts for large bookings",
+  "vendorLoyaltyProgram": "Loyalty Program",
+  "vendorLoyaltyProgramSubtitle": "Reward repeat customers",
+  "vendorVacationMode": "Vacation Mode",
+  "vendorVacationModeSubtitle": "Temporarily disable new bookings",
+  "vendorVacationPeriod": "Vacation Period",
+  "vendorVacationSetDates": "Set vacation dates",
+  "vendorVacationMessage": "Vacation Message",
+  "vendorEnableShipping": "Enable Shipping",
+  "vendorEnableShippingSubtitle": "Offer shipping services to customers",
+  "vendorBaseShippingRate": "Base Shipping Rate",
+  "vendorBaseShippingRateAmount": "RM {amount}",
+  "@vendorBaseShippingRateAmount": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "vendorFreeShipping": "Free Shipping",
+  "vendorFreeShippingSubtitle": "Free shipping for orders over RM {amount}",
+  "@vendorFreeShippingSubtitle": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "vendorFreeShippingThreshold": "Free Shipping Threshold",
+  "vendorLocalDelivery": "Local Delivery",
+  "vendorLocalDeliverySubtitle": "Offer delivery within local area",
+  "vendorInternationalShipping": "International Shipping",
+  "vendorInternationalShippingSubtitle": "Ship to international locations",
+  "vendorProcessingTime": "Processing Time",
+  "vendorDaysCount": "{days} days",
+  "@vendorDaysCount": {
+    "placeholders": {
+      "days": {"type": "int"}
+    }
+  },
+  "vendorProcessingDaysOneDay": "{days} day",
+  "@vendorProcessingDaysOneDay": {
+    "placeholders": {
+      "days": {"type": "int"}
+    }
+  },
+  "vendorProcessingDaysManyDays": "{days} days",
+  "@vendorProcessingDaysManyDays": {
+    "placeholders": {
+      "days": {"type": "int"}
+    }
+  },
+  "vendorCashOnDelivery": "Cash on Delivery",
+  "vendorCashOnDeliverySubtitle": "Accept cash payments on delivery",
+  "vendorOnlinePayment": "Online Payment",
+  "vendorOnlinePaymentSubtitle": "Accept online payments",
+  "vendorBankTransfer": "Bank Transfer",
+  "vendorBankTransferSubtitle": "Accept direct bank transfers",
+  "vendorDigitalWallet": "Digital Wallet",
+  "vendorDigitalWalletSubtitle": "Accept digital wallet payments",
+  "vendorProcessingFee": "Processing Fee",
+  "vendorProcessingFeePercent": "{percent}%",
+  "@vendorProcessingFeePercent": {
+    "placeholders": {
+      "percent": {"type": "String"}
+    }
+  },
+  "vendorAutoRefund": "Auto Refund",
+  "vendorAutoRefundSubtitle": "Automatically process refunds",
+  "vendorRefundWindow": "Refund Window",
+  "vendorPaymentReminders": "Payment Reminders",
+  "vendorPaymentRemindersSubtitle": "Send payment reminders to customers",
+  "vendorCalendarSync": "Calendar Sync",
+  "vendorCalendarSyncSubtitle": "Sync bookings with external calendars",
+  "vendorPaymentGateway": "Payment Gateway",
+  "vendorPaymentGatewaySubtitle": "Enable online payments",
+  "vendorAutoSocialMediaPosts": "Auto Social Media Posts",
+  "vendorAutoSocialMediaPostsSubtitle": "Automatically post updates to social media",
+  "vendorEmailMarketing": "Email Marketing",
+  "vendorEmailMarketingSubtitle": "Send promotional emails to customers",
+  "vendorSmsNotifications": "SMS Notifications",
+  "vendorSmsNotificationsSubtitle": "Send SMS notifications to customers",
+  "vendorWhatsappBusinessTile": "WhatsApp Business",
+  "vendorWhatsappBusinessTileSubtitle": "Enable WhatsApp Business integration",
+  "vendorChatSupport": "Chat Support",
+  "vendorChatSupportSubtitle": "Enable customer chat support",
+  "vendorChatNotifications": "Chat Notifications",
+  "vendorChatNotificationsSubtitle": "Receive notifications for new messages",
+  "vendorChatAvailability": "Chat Availability",
+  "vendorAutoResponse": "Auto Response",
+  "vendorAutoResponseSubtitle": "Send automatic responses when offline",
+  "vendorAutoResponseMessage": "Auto Response Message",
+  "vendorChatHistory": "Chat History",
+  "vendorChatHistorySubtitle": "Save chat history with customers",
+  "vendorAdvancedAnalytics": "Advanced Analytics",
+  "vendorAdvancedAnalyticsSubtitle": "Enable detailed business analytics",
+  "vendorCustomReports": "Custom Reports",
+  "vendorCustomReportsSubtitle": "Create custom business reports",
+  "vendorApiAccess": "API Access",
+  "vendorApiAccessSubtitle": "Enable API access for developers",
+  "vendorWebhookNotifications": "Webhook Notifications",
+  "vendorWebhookNotificationsSubtitle": "Receive real-time notifications via webhooks",
+  "vendorMultiLocationSupport": "Multi-Location Support",
+  "vendorMultiLocationSupportSubtitle": "Manage multiple business locations",
+  "vendorStaffManagement": "Staff Management",
+  "vendorStaffManagementSubtitle": "Manage staff accounts and permissions",
+  "vendorFinancialReports": "Financial Reports",
+  "vendorFinancialReportsSubtitle": "Configure financial reporting preferences",
+  "vendorPerformanceMetrics": "Performance Metrics",
+  "vendorPerformanceMetricsSubtitle": "Customize performance tracking",
+  "vendorExportData": "Export Data",
+  "vendorExportDataSubtitle": "Export your business data",
+  "vendorHelpCenter": "Help Center",
+  "vendorHelpCenterSubtitle": "Get help and support",
+  "vendorContactSupport": "Contact Support",
+  "vendorContactSupportSubtitle": "Reach out to our support team",
+  "vendorReportIssue": "Report Issue",
+  "vendorReportIssueSubtitle": "Report a bug or issue",
+  "vendorAppVersion": "App Version",
+  "vendorAppVersionNumber": "1.0.0",
+  "vendorSignOut": "Sign Out",
+  "vendorSignOutSubtitle": "Sign out of your account",
+  "vendorDeleteAccount": "Delete Account",
+  "vendorDeleteAccountSubtitle": "Permanently delete your account",
+  "vendorSelectLanguage": "Select Language",
+  "vendorLangEnglish": "English",
+  "vendorLangMalay": "Bahasa Malaysia",
+  "vendorLangChinese": "中文",
+  "vendorSelectCurrency": "Select Currency",
+  "vendorCurrencyMyr": "MYR (Ringgit Malaysia)",
+  "vendorCurrencyUsd": "USD (US Dollar)",
+  "vendorCurrencySgd": "SGD (Singapore Dollar)",
+  "vendorDataRetentionPeriod": "Data Retention Period",
+  "vendorDataRetentionKeep": "Keep data for {days} days",
+  "@vendorDataRetentionKeep": {
+    "placeholders": {
+      "days": {"type": "int"}
+    }
+  },
+  "vendorFinancialReportsBody": "Financial reporting preferences would be configured here",
+  "vendorPerformanceMetricsBody": "Performance tracking preferences would be configured here",
+  "vendorExportDataBody": "Data export options would be available here",
+  "vendorHelpCenterDialogTitle": "Help Center",
+  "vendorHelpWelcome": "Welcome to the Vendor Settings Help Center!",
+  "vendorHelpBulletAccount": "• Account Settings: Manage your profile and business information",
+  "vendorHelpBulletNotifications": "• Notifications: Configure how you receive updates",
+  "vendorHelpBulletBusiness": "• Business Operations: Set up booking and pricing preferences",
+  "vendorHelpBulletIntegrations": "• Integrations: Connect with external services",
+  "vendorHelpBulletAdvanced": "• Advanced Features: Enable premium functionality",
+  "vendorHelpBulletAnalytics": "• Business Analytics: Configure reporting and metrics",
+  "vendorHelpContactTeam": "For more help, contact our support team.",
+  "vendorContactSupportSheetTitle": "Contact Support",
+  "vendorContactSupportHours": "Our vendor support team is available Monday – Friday, 9 AM – 6 PM (MYT).",
+  "vendorEmailSupport": "Email Support",
+  "vendorCallUs": "Call Us",
+  "vendorWhatsappBusiness": "WhatsApp Business",
+  "vendorSnackEmail": "Email: vendors@eventease.com",
+  "vendorSnackPhone": "Phone: +60 3-1234 5678",
+  "vendorSnackWhatsapp": "WhatsApp: +60 11-1234 5678",
+  "vendorBusinessDetailsTitle": "Business Details",
+  "vendorBusinessDetailsIntro": "Update your business information below.",
+  "vendorBusinessName": "Business Name",
+  "vendorBusinessDescription": "Business Description",
+  "vendorBusinessPhone": "Business Phone",
+  "vendorBusinessWebsite": "Website (optional)",
+  "vendorBusinessUpdated": "Business details updated",
+  "vendorReportIssueTitle": "Report an Issue",
+  "vendorReportCategory": "Category",
+  "vendorReportDescribeIssue": "Describe the issue",
+  "vendorReportIssueHint": "Please describe the issue in detail...",
+  "vendorReportSubmit": "Submit Report",
+  "vendorReportDescribeEmpty": "Please describe the issue.",
+  "vendorReportSignInRequired": "Sign in to submit a report, or email vendors@eventease.com.",
+  "vendorReportSuccess": "Report submitted. Our team will follow up soon.",
+  "vendorReportCouldNotSubmit": "Could not submit online: {error}. Email vendors@eventease.com.",
+  "@vendorReportCouldNotSubmit": {
+    "placeholders": {
+      "error": {"type": "String"}
+    }
+  },
+  "vendorSignOutDialogTitle": "Sign Out",
+  "vendorSignOutDialogBody": "Are you sure you want to sign out?",
+  "vendorDeleteAccountDialogTitle": "Delete Account",
+  "vendorDeleteAccountDialogBody": "This action cannot be undone. All your data will be permanently deleted.",
+  "vendorSettingsSaved": "Settings saved successfully",
+  "vendorSettingsHelpTitle": "Settings Help",
+  "vendorSettingsHelpBulletAccount": "• Account Settings: Manage your profile and business information",
+  "vendorSettingsHelpBulletNotifications": "• Notifications: Configure how you receive updates",
+  "vendorSettingsHelpBulletBusiness": "• Business Operations: Set up booking and pricing preferences",
+  "vendorSettingsHelpBulletIntegrations": "• Integrations: Connect with external services",
+  "vendorSettingsHelpBulletAdvanced": "• Advanced Features: Enable premium functionality",
+  "vendorSettingsHelpBulletAnalytics": "• Business Analytics: Configure reporting and metrics",
+  "vendorVacationPeriodTitle": "Set Vacation Period",
+  "vendorVacationStartDate": "Start Date",
+  "vendorVacationEndDate": "End Date",
+  "vendorVacationMessageTitle": "Vacation Message",
+  "vendorNotSet": "Not set",
+  "vendorVacationMessageHint": "Enter message for customers during vacation",
+  "vendorShippingRateTitle": "Base Shipping Rate",
+  "vendorShippingRateCurrent": "Current rate: RM {amount}",
+  "@vendorShippingRateCurrent": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "vendorProcessingTimeDialogTitle": "Processing Time",
+  "vendorProcessingTimeCurrent": "Current processing time: {label}",
+  "@vendorProcessingTimeCurrent": {
+    "placeholders": {
+      "label": {"type": "String"}
+    }
+  },
+  "vendorProcessingFeeDialogTitle": "Processing Fee",
+  "vendorProcessingFeeCurrent": "Current fee: {percent}%",
+  "@vendorProcessingFeeCurrent": {
+    "placeholders": {
+      "percent": {"type": "String"}
+    }
+  },
+  "vendorRefundWindowTitle": "Refund Window",
+  "vendorRefundWindowCurrent": "Current window: {days} days",
+  "@vendorRefundWindowCurrent": {
+    "placeholders": {
+      "days": {"type": "int"}
+    }
+  },
+  "vendorChatAvailabilityTitle": "Chat Availability",
+  "vendorAutoResponseHint": "Enter automatic response message",
+  "vendorDefaultVendorName": "Vendor",
+  "vendorReportCatBug": "Bug",
+  "vendorReportCatPayment": "Payment Issue",
+  "vendorReportCatBooking": "Booking Problem",
+  "vendorReportCatAccount": "Account Issue",
+  "vendorReportCatOther": "Other",
+  "vendorChatHours247": "24/7",
+  "vendorChatHoursBusiness": "Business Hours",
+  "vendorChatHoursCustom": "Custom",
+  "vendorSearchScrollTo": "Would scroll to: {name}",
+  "@vendorSearchScrollTo": {
+    "placeholders": {
+      "name": {"type": "String"}
+    }
+  },
+  "vendorSliderRmLabel": "RM {amount}",
+  "@vendorSliderRmLabel": {
+    "placeholders": {
+      "amount": {"type": "String"}
+    }
+  },
+  "vendorDepositSliderLabel": "{percent}%",
+  "@vendorDepositSliderLabel": {
+    "placeholders": {
+      "percent": {"type": "int"}
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "576075181196",
+    "project_id": "eventease-5def8",
+    "storage_bucket": "eventease-5def8.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:576075181196:android:affff99de7c61dd26fdfa9",
+        "android_client_info": {
+          "package_name": "com.example.eventease_new"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrsm2S_TTPRB6FMb4DNi4LqJ51snmufSU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

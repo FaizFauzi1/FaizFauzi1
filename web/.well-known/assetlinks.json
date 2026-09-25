@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.example.eventease_new",
+      "sha256_cert_fingerprints": [
+        "D9:10:07:C8:F3:29:4F:8E:24:C8:A7:B4:20:E3:AC:4F:65:0F:58:41:C2:CF:FE:37:85:E0:60:CA:5D:D3:57:DB"
+      ]
+    }
+  }
+]

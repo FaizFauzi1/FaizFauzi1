@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">EventEase</string>
+    <string name="widget_description">Event countdown widget showing days, hours, and minutes until your next event</string>
+    <string name="widget_no_event">No upcoming events</string>
+    <string name="widget_event_ended">Event has started!</string>
+</resources>

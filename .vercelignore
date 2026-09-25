@@ -1,0 +1,5 @@
+# Ignore everything by default
+/*
+!build/
+!build/web/
+!vercel.json

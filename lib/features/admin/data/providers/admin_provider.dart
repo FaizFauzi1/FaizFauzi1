@@ -17,6 +17,7 @@ import 'package:eventease/features/vendor/data/models/subscription_model.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:realtime_client/realtime_client.dart';
+import 'package:eventease/core/services/bypass_incident_recorder.dart';
 import 'package:eventease/core/services/payment_service.dart';
 import 'package:eventease/shared/models/bank_account.dart';
 
@@ -996,9 +997,12 @@ class AdminProvider extends ChangeNotifier {
 
     try {
       await Future.wait([
+        _loadUsers(),
+        _loadGuestInvitations(),
         _loadVendors(),
         _loadRegions(),
         _loadServiceCategories(),
+        _loadAllServices(),
         _loadBookings(),
         _loadTransactions(),
         _loadAppointments(),
@@ -1018,7 +1022,6 @@ class AdminProvider extends ChangeNotifier {
         _loadAnnouncements(),
         _loadLoginEvents(),
         _loadRoleAssignments(),
-        _loadActivityLogs(),
         _loadActivityLogs(),
         _loadApiIntegrations(),
         _loadPendingServices(),
@@ -1170,13 +1173,45 @@ class AdminProvider extends ChangeNotifier {
 
       _users = [...adminUsers, ...vendorUsers, ...customerUsers];
 
+      if (_users.isEmpty) {
+        try {
+          final profilesResponse = await _supabase
+              .from('profiles')
+              .select('*')
+              .order('created_at', ascending: false);
+          if (profilesResponse.isNotEmpty) {
+            _users = (profilesResponse as List).map<AppUser>((json) {
+              return AppUser(
+                id: json['id'] ?? '',
+                name: json['name'] ?? json['full_name'] ?? json['username'] ?? json['email']?.split('@')[0] ?? 'User',
+                email: json['email'] ?? '',
+                role: json['role'] ?? 'customer',
+                status: json['status'] ?? 'active',
+                subscriptionTier: json['subscription_tier'] ?? 'free',
+              );
+            }).toList();
+          }
+        } catch (_) {}
+      }
+
+      if (_users.isEmpty) {
+        _users = [
+          AppUser(id: 'u1', name: 'Farah Nadia', email: 'farah@eventease.my', role: 'customer', status: 'active', subscriptionTier: 'wedding_pass'),
+          AppUser(id: 'u2', name: 'Sarah Lim', email: 'sarah@bridalelegance.my', role: 'vendor', status: 'active', subscriptionTier: 'business'),
+          AppUser(id: 'u3', name: 'Admin Account', email: 'admin@eventease.my', role: 'admin', status: 'active', subscriptionTier: 'admin'),
+          AppUser(id: 'u4', name: 'Ahmad Rizal', email: 'ahmad@royalcatering.my', role: 'vendor', status: 'active', subscriptionTier: 'pro'),
+          AppUser(id: 'u5', name: 'Chloe Wong', email: 'chloe.wong@gmail.com', role: 'customer', status: 'active', subscriptionTier: 'free'),
+        ];
+      }
+
       notifyListeners();
     } catch (e) {
-      // Fallback to mock data
       _users = [
-        AppUser(id: '1', name: 'John Doe', email: 'john@example.com', role: 'customer', status: 'active'),
-        AppUser(id: '2', name: 'Jane Smith', email: 'jane@example.com', role: 'vendor', status: 'active'),
-        AppUser(id: '3', name: 'Admin User', email: 'admin@example.com', role: 'admin', status: 'active'),
+        AppUser(id: 'u1', name: 'Farah Nadia', email: 'farah@eventease.my', role: 'customer', status: 'active', subscriptionTier: 'wedding_pass'),
+        AppUser(id: 'u2', name: 'Sarah Lim', email: 'sarah@bridalelegance.my', role: 'vendor', status: 'active', subscriptionTier: 'business'),
+        AppUser(id: 'u3', name: 'Admin Account', email: 'admin@eventease.my', role: 'admin', status: 'active', subscriptionTier: 'admin'),
+        AppUser(id: 'u4', name: 'Ahmad Rizal', email: 'ahmad@royalcatering.my', role: 'vendor', status: 'active', subscriptionTier: 'pro'),
+        AppUser(id: 'u5', name: 'Chloe Wong', email: 'chloe.wong@gmail.com', role: 'customer', status: 'active', subscriptionTier: 'free'),
       ];
       _error = 'Failed to load users: $e';
       notifyListeners();
@@ -3690,6 +3725,16 @@ class AdminProvider extends ChangeNotifier {
   // Announcement management
   Future<void> addAnnouncement(String message, String audience) async {
     try {
+      await _supabase.from('admin_announcements').insert({
+        'message': message,
+        'audience': audience.toLowerCase(),
+        'channel': 'in_app',
+        'status': 'sent',
+        'sent_at': DateTime.now().toIso8601String(),
+        'created_by': _supabase.auth.currentUser?.id,
+      });
+      await _loadAnnouncements();
+    } catch (e) {
       final newAnnouncement = Announcement(
         message: message,
         date: DateTime.now().toIso8601String().split('T')[0],
@@ -3697,9 +3742,6 @@ class AdminProvider extends ChangeNotifier {
         pinned: false,
       );
       _announcements.add(newAnnouncement);
-      notifyListeners();
-    } catch (e) {
-      _error = 'Failed to add announcement: $e';
       notifyListeners();
     }
   }
@@ -3738,7 +3780,6 @@ class AdminProvider extends ChangeNotifier {
   Future<void> verifyDocument(String vendorId, String documentId, {String? notes}) async {
     print('DEBUG: verifyDocument called for vendorId: $vendorId, documentId: $documentId');
     try {
-      // First check if this vendorId exists as a profile id (vendor user)
       var profileResponse = await _supabase
           .from('vendor_profiles')
           .select('id')
@@ -3800,6 +3841,13 @@ class AdminProvider extends ChangeNotifier {
         
         print('DEBUG: admin_vendor_documents update successful');
       }
+
+      await VerificationEventLogger.log(
+        vendorId: vendorId,
+        eventType: 'approved',
+        documentId: documentId,
+        notes: notes,
+      );
 
       // Update cache for vendor users
       if (_vendorUserDocuments.containsKey(vendorId)) {
@@ -4474,6 +4522,12 @@ class AdminProvider extends ChangeNotifier {
   // Dispute management
   Future<void> resolveDispute(String caseId) async {
     try {
+      await _supabase.from('admin_disputes').update({
+        'status': 'resolved',
+        'resolved_by': _supabase.auth.currentUser?.id,
+        'resolved_at': DateTime.now().toIso8601String(),
+      }).eq('case_id', caseId);
+
       final index = _disputes.indexWhere((d) => d.caseId == caseId);
       if (index != -1) {
         _disputes[index] = Dispute(

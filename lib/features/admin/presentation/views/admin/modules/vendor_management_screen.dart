@@ -21,6 +21,10 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:eventease/features/vendor/presentation/views/enhanced_service_creation_screen.dart';
 import 'package:eventease/features/vendor/presentation/views/vendor_installment_settings_screen.dart';
+import 'package:eventease/features/admin/data/services/admin_impersonation_service.dart';
+import 'package:eventease/features/auth/data/auth_provider.dart';
+import 'package:eventease/features/vendor/presentation/views/vendor_dashboard_screen.dart';
+import 'package:eventease/features/vendor/data/providers/vendor_provider_updated.dart';
 
 
 part 'tabs/all_vendors_tab.dart';
@@ -1626,6 +1630,43 @@ Widget _buildDocumentReviewItem(BuildContext context, VendorDocument doc, AdminV
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            ListTile(
+              leading: const Icon(Icons.switch_account, color: Colors.orange),
+              title: const Text(
+                'Login as Vendor (Impersonate)',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: const Text('View and manage app as this vendor'),
+              onTap: () async {
+                Navigator.pop(context);
+                final auth = context.read<AuthProvider>();
+                final adminId = auth.userId ?? Supabase.instance.client.auth.currentUser?.id ?? 'admin';
+                final adminEmail = auth.userEmail;
+                final ok = await AdminImpersonationService.instance.startImpersonation(
+                  adminId: adminId,
+                  targetUserId: vendor.id,
+                  targetRole: 'vendor',
+                  vendorName: vendor.name,
+                  adminEmail: adminEmail,
+                );
+                if (ok && context.mounted) {
+                  await context.read<VendorProvider>().loadCurrentVendorFromSupabase(force: true);
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Impersonating ${vendor.name}'),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const VendorDashboardScreen()),
+                    );
+                  }
+                }
+              },
+            ),
+            const Divider(),
             ListTile(
               leading: const Icon(Icons.description),
               title: const Text('View Documents'),
