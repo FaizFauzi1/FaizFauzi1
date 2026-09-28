@@ -696,7 +696,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       );
 
       // Get address from coordinates
-      List<Placemark> placemarks = await placemarkFromCoordinates(
+      List<Placemark> placemarks = await Geocoding().placemarkFromCoordinates(
         position.latitude,
         position.longitude,
       );

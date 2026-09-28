@@ -416,9 +416,6 @@ class _AdminPackageApprovalScreenState extends State<AdminPackageApprovalScreen>
                             context,
                             type: MarketplaceEntityType.package,
                             entityId: package.id,
-                            entityName: package.name,
-                            vendorName: package.vendorName,
-                            status: package.approvalStatus.name,
                           );
                         },
                         icon: const Icon(Icons.hub_outlined, size: 15),

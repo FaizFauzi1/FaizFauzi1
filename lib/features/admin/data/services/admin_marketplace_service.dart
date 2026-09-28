@@ -33,7 +33,8 @@ enum MarketplaceEntityType {
   booking('Booking', Icons.confirmation_number_outlined, Color(0xFF059669)),
   payment('Payment / Transaction', Icons.payments_outlined, Color(0xFF84CC16)),
   supportCase('Support Case', Icons.support_agent_outlined, Color(0xFFEF4444)),
-  document('Vendor Document', Icons.description_outlined, Color(0xFF64748B));
+  document('Vendor Document', Icons.description_outlined, Color(0xFF64748B)),
+  category('Category', Icons.category_outlined, Color(0xFF14B8A6));
 
   final String label;
   final IconData icon;

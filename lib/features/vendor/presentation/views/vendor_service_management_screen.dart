@@ -873,7 +873,7 @@ class _VendorServiceManagementScreenState extends State<VendorServiceManagementS
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ServiceCreationWizard(
+        builder: (context) => EnhancedServiceCreationScreen(
           vendorId: widget.vendor.id,
         ),
       ),

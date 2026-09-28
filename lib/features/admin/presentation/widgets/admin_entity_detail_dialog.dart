@@ -222,7 +222,7 @@ class _AdminEntityDetailDialogState extends State<AdminEntityDetailDialog> {
     }
 
     final packagesUsingService = workflow.packages.where((p) {
-      return p.components.any((c) => c.serviceId == service!.id);
+      return p.components.any((c) => c.approvedCollaborators.any((collab) => collab.serviceId == service!.id) || c.category == service!.category);
     }).toList();
 
     final appointmentsForService = workflow.appointments.where((a) {
@@ -474,15 +474,15 @@ class _AdminEntityDetailDialogState extends State<AdminEntityDetailDialog> {
                     Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
-                        color: comp.type == PackageComponentType.fixedVendor ? Colors.blue.shade50 : Colors.purple.shade50,
+                        color: comp.isFixedVendor ? Colors.blue.shade50 : Colors.purple.shade50,
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
-                        comp.type.displayName,
+                        comp.isFixedVendor ? 'Fixed Vendor' : 'Customer Choice',
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
-                          color: comp.type == PackageComponentType.fixedVendor ? Colors.blue.shade700 : Colors.purple.shade700,
+                          color: comp.isFixedVendor ? Colors.blue.shade700 : Colors.purple.shade700,
                         ),
                       ),
                     ),
@@ -493,19 +493,19 @@ class _AdminEntityDetailDialogState extends State<AdminEntityDetailDialog> {
                   comp.description,
                   style: const TextStyle(fontSize: 12, color: AppTheme.textSecondaryColor),
                 ),
-                if (comp.collaborators.isNotEmpty) ...[
+                if (comp.approvedCollaborators.isNotEmpty) ...[
                   const Divider(height: 16),
                   const Text('Approved Collaborator Options:', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.grey)),
                   const SizedBox(height: 6),
                   Wrap(
                     spacing: 8,
                     runSpacing: 6,
-                    children: comp.collaborators.map((c) {
+                    children: comp.approvedCollaborators.map((c) {
                       return InkWell(
                         onTap: () => _navigateToEntity(MarketplaceEntityType.vendor, c.vendorId),
                         child: Chip(
                           avatar: const Icon(Icons.check_circle, size: 14, color: Colors.green),
-                          label: Text('${c.vendorName} (RM ${c.priceAdjustment >= 0 ? "+" : ""}${c.priceAdjustment.toStringAsFixed(0)})', style: const TextStyle(fontSize: 11)),
+                          label: Text('${c.vendorName} (RM ${c.priceDelta >= 0 ? "+" : ""}${c.priceDelta.toStringAsFixed(0)})', style: const TextStyle(fontSize: 11)),
                           backgroundColor: Colors.grey.shade100,
                         ),
                       );
@@ -565,7 +565,7 @@ class _AdminEntityDetailDialogState extends State<AdminEntityDetailDialog> {
                 ],
               ),
             ),
-            _buildStatusPill(appointment.status.displayName, appointment.status.badgeColor),
+            _buildStatusPill(appointment.status.displayName, appointment.status.color),
           ],
         ),
         const SizedBox(height: 16),
@@ -811,7 +811,7 @@ class _AdminEntityDetailDialogState extends State<AdminEntityDetailDialog> {
             _buildHealthCard('Cancellation Rate', '0.8%', 'Target < 3%', Colors.green),
             _buildHealthCard('No-Show Rate', '0.0%', '0 incidents reported', Colors.teal),
             _buildHealthCard('Refund Rate', '1.2%', 'Low dispute risk', Colors.indigo),
-            _buildHealthCard('Policy Violations', '0', 'Clean record', Colors.greenAccent),
+            _buildHealthCard('Policy Violations', '0', 'Clean record', Colors.emeraldAccent),
           ],
         ),
         const SizedBox(height: 20),

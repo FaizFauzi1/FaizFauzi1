@@ -33,6 +33,94 @@ class VendorProfileProvider extends ChangeNotifier {
     return _vendorProfile!['profile_completion_status'] ?? 'incomplete';
   }
 
+  /// Structured setup tasks for dashboard / profile checklist UI.
+  List<VendorSetupTask> getSetupChecklist({int serviceCount = 0}) {
+    if (_vendorProfile == null) return [];
+    final p = _vendorProfile!;
+
+    final hasBasicInfo = p['business_name']?.toString().isNotEmpty == true &&
+        p['description']?.toString().isNotEmpty == true &&
+        p['phone']?.toString().isNotEmpty == true &&
+        p['email']?.toString().isNotEmpty == true &&
+        p['address']?.toString().isNotEmpty == true;
+
+    final hasLegalInfo = p['legal_business_name']?.toString().isNotEmpty == true &&
+        p['ssm_number']?.toString().isNotEmpty == true;
+    bool hasOwnerInfo = false;
+    if (p['vendor_owners'] != null && (p['vendor_owners'] as List).isNotEmpty) {
+      final owner = (p['vendor_owners'] as List).first;
+      hasOwnerInfo = owner['full_name']?.toString().isNotEmpty == true;
+    }
+
+    bool hasBanking = false;
+    if (p['vendor_banking'] != null && (p['vendor_banking'] as List).isNotEmpty) {
+      final banking = (p['vendor_banking'] as List).first;
+      hasBanking = banking['bank_name']?.toString().isNotEmpty == true &&
+          banking['account_number']?.toString().isNotEmpty == true;
+    }
+
+    final hasCapability = p['coverage_area_state']?.toString().isNotEmpty == true;
+    final hasPricing =
+        p['starting_price'] != null && p['starting_price'].toString().isNotEmpty == true;
+
+    bool hasRequiredDocs = p['ssm_cert_url'] != null ||
+        p['ic_upload_url'] != null ||
+        p['bank_statement_url'] != null;
+    if (!hasRequiredDocs && _documents.isNotEmpty) {
+      hasRequiredDocs = true;
+    }
+
+    return [
+      VendorSetupTask(
+        id: 'basic_info',
+        label: 'Complete business overview (name, contact, address)',
+        done: hasBasicInfo,
+        deepLink: VendorSetupDeepLink.profileTab,
+        tabIndex: 0,
+      ),
+      VendorSetupTask(
+        id: 'legal_owner',
+        label: 'Add legal business name, SSM & owner details',
+        done: hasLegalInfo && hasOwnerInfo,
+        deepLink: VendorSetupDeepLink.profileTab,
+        tabIndex: 1,
+      ),
+      VendorSetupTask(
+        id: 'banking',
+        label: 'Add bank account for payouts',
+        done: hasBanking,
+        deepLink: VendorSetupDeepLink.profileTab,
+        tabIndex: 3,
+      ),
+      VendorSetupTask(
+        id: 'capability',
+        label: 'Set service coverage area',
+        done: hasCapability,
+        deepLink: VendorSetupDeepLink.profileTab,
+        tabIndex: 4,
+      ),
+      VendorSetupTask(
+        id: 'pricing',
+        label: 'Set starting price',
+        done: hasPricing,
+        deepLink: VendorSetupDeepLink.profileTab,
+        tabIndex: 5,
+      ),
+      VendorSetupTask(
+        id: 'documents',
+        label: 'Upload required documents',
+        done: hasRequiredDocs,
+        deepLink: VendorSetupDeepLink.documents,
+      ),
+      VendorSetupTask(
+        id: 'first_service',
+        label: 'Publish at least one service',
+        done: serviceCount > 0,
+        deepLink: VendorSetupDeepLink.addService,
+      ),
+    ];
+  }
+
   /// Load vendor profile for current user or impersonated vendor
   Future<void> loadVendorProfile({String? targetVendorId}) async {
     try {
@@ -936,4 +1024,22 @@ class VendorProfileProvider extends ChangeNotifier {
       notifyListeners();
     }
   }
+}
+
+enum VendorSetupDeepLink { profileTab, documents, addService }
+
+class VendorSetupTask {
+  final String id;
+  final String label;
+  final bool done;
+  final VendorSetupDeepLink deepLink;
+  final int? tabIndex;
+
+  const VendorSetupTask({
+    required this.id,
+    required this.label,
+    required this.done,
+    required this.deepLink,
+    this.tabIndex,
+  });
 }

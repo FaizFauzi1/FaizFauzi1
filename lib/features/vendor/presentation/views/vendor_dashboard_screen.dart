@@ -4,6 +4,8 @@ import 'package:eventease/core/utils/app_theme.dart';
 import 'package:eventease/features/finance/data/providers/commission_provider.dart';
 import 'package:eventease/features/vendor/presentation/views/vendor_document_management_screen_fixed.dart';
 import 'package:eventease/features/vendor/presentation/widgets/vendor_drawer.dart';
+import 'package:eventease/features/vendor/presentation/widgets/vendor_responsive_scaffold.dart';
+import 'package:eventease/core/utils/responsive_utils.dart';
 import 'package:eventease/features/vendor/data/providers/vendor_provider_updated.dart';
 import 'package:eventease/features/vendor/data/models/vendor.dart';
 import 'package:eventease/features/customer/data/providers/review_provider.dart';
@@ -26,11 +28,13 @@ import 'package:eventease/features/vendor/presentation/views/vendor_order_manage
 import 'package:eventease/features/vendor/presentation/views/workflow/vendor_services_hub_screen.dart';
 import 'package:eventease/features/vendor/presentation/views/workflow/vendor_packages_hub_screen.dart';
 import 'package:eventease/features/vendor/presentation/views/workflow/vendor_unified_calendar_screen.dart';
-import 'package:eventease/features/vendor/presentation/views/workflow/vendor_service_creator_screen.dart';
+import 'package:eventease/features/vendor/presentation/views/enhanced_service_creation_screen.dart';
 import 'package:eventease/features/vendor/presentation/views/vendor_catalog_screen.dart';
 import 'package:eventease/features/vendor/presentation/views/vendor_notifications_screen.dart';
 import 'package:eventease/features/vendor/presentation/views/vendor_settings_screen_enhanced.dart';
 import 'package:eventease/features/vendor/presentation/views/vendor_event_checkin_screen.dart';
+import 'package:eventease/features/vendor/presentation/widgets/vendor_setup_checklist.dart';
+import 'package:eventease/features/vendor/data/providers/vendor_profile_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:eventease/core/services/analytics_service.dart';
@@ -68,7 +72,7 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
       vendor != null
           ? VendorServiceManagementScreen(vendor: vendor)
           : const Center(child: CircularProgressIndicator()),
-      const VendorChatScreen(),
+      const VendorChatScreen(embeddedInDashboard: true),
       const VendorProfileScreen(),
     ];
     return _screens;
@@ -191,6 +195,16 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
         ),
       ),
     );
+  }
+
+  void _onTabTap(int index) {
+    const tabNames = ['Dashboard', 'Bookings', 'Management', 'Messages', 'Profile'];
+    AnalyticsService().trackTabChanged(
+      tabName: tabNames[index],
+      tabIndex: index,
+      screen: 'VendorDashboard',
+    );
+    setState(() => _currentIndex = index);
   }
 
   @override
@@ -317,6 +331,7 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
           context,
           listen: false,
         ).loadAnalyticsData(),
+        Provider.of<VendorProfileProvider>(context, listen: false).loadVendorProfile(),
       ]);
     }
   }
@@ -380,97 +395,84 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
             : vendorProvider.getCurrentVendorServicesForId(vendor.id);
     final analyticsProvider = Provider.of<VendorAnalyticsProvider>(context);
 
-    return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              vendor?.name ?? 'Loading...',
-              style: const TextStyle(
-                color: AppTheme.textPrimaryColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
-            ),
-            Text(
-              vendor?.categories.isNotEmpty == true
-                  ? vendor!.categories.join(' • ')
-                  : 'Vendor',
-              style: const TextStyle(
-                color: AppTheme.textSecondaryColor,
-                fontSize: 12,
-              ),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.notifications_outlined,
-              color: AppTheme.textPrimaryColor,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const VendorNotificationsScreen(),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWide = constraints.maxWidth > 900;
+        final contentPadding = ResponsiveUtils.getScreenPadding(context);
+
+        if (vendorProvider.isLoading && vendor == null) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        Widget mainCards;
+        if (isWide) {
+          mainCards = Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                flex: 6,
+                child: Column(
+                  children: [
+                    _buildRevenueOverviewCard(bookings, monthlyRevenue, analyticsProvider),
+                    const SizedBox(height: 16),
+                    _buildInquiryAndQuoteMetrics(analyticsProvider),
+                    const SizedBox(height: 16),
+                    _buildConversionFunnelPreview(analyticsProvider),
+                    const SizedBox(height: 16),
+                    _buildActiveServicesSection(activeServices),
+                    const SizedBox(height: 16),
+                    _buildPerformanceSection(avgRating, reviews.length, completionRate, searchVisibility, responseRate),
+                  ],
                 ),
-              );
-            },
-          ),
-          IconButton(
-            icon: const Icon(
-              Icons.settings_outlined,
-              color: AppTheme.textPrimaryColor,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const VendorSettingsScreen()),
-              );
-            },
-          ),
-        ],
-      ),
-      drawer: VendorDrawer.build(context),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            if (vendorProvider.isLoading && vendor == null)
-              const Center(child: CircularProgressIndicator())
-            else ...[
-              _buildWelcomeSection(
-                vendor?.name ?? 'Vendor',
-                avgRating,
-                reviews.length,
-                pendingBookings,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(width: 16),
+              Expanded(
+                flex: 5,
+                child: Column(
+                  children: [
+                    _buildEventEaseWorkflowHubCard(),
+                    const SizedBox(height: 16),
+                    _buildLeadKanbanQuickActionCard(bookings),
+                    const SizedBox(height: 16),
+                    _buildEventsTodaySection(bookings),
+                    const SizedBox(height: 16),
+                    _buildRecentBookings(vendor, bookings),
+                    const SizedBox(height: 16),
+                    _buildRecentReviews(reviews),
+                    const SizedBox(height: 16),
+                    _buildCommissionSection(vendor?.id ?? ''),
+                    const SizedBox(height: 16),
+                    _buildQuickActions(),
+                    const SizedBox(height: 16),
+                    _buildExhibitorPromoSection(),
+                    const SizedBox(height: 16),
+                    _buildNetworkingSection(),
+                  ],
+                ),
+              ),
+            ],
+          );
+        } else {
+          mainCards = Column(
+            children: [
               _buildEventEaseWorkflowHubCard(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               _buildLeadKanbanQuickActionCard(bookings),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               _buildRevenueOverviewCard(
                 bookings,
                 monthlyRevenue,
                 analyticsProvider,
               ),
-              const SizedBox(height: 20),
-              _buildQuickStats(totalBookings, monthlyRevenue, pendingBookings),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               _buildInquiryAndQuoteMetrics(analyticsProvider),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               _buildConversionFunnelPreview(analyticsProvider),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               _buildEventsTodaySection(bookings),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               _buildActiveServicesSection(activeServices),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               _buildPerformanceSection(
                 avgRating,
                 reviews.length,
@@ -478,22 +480,37 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 searchVisibility,
                 responseRate,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               _buildRecentReviews(reviews),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               _buildRecentBookings(vendor, bookings),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               _buildCommissionSection(vendor?.id ?? ''),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               _buildQuickActions(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               _buildExhibitorPromoSection(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               _buildNetworkingSection(),
             ],
-          ],
-        ),
-      ),
+          );
+        }
+
+        return SingleChildScrollView(
+          padding: contentPadding,
+          child: Column(
+            children: [
+              _buildWelcomeSection(vendor?.name ?? 'Vendor', avgRating, reviews.length, pendingBookings),
+              const SizedBox(height: 16),
+              const VendorSetupChecklist(),
+              const SizedBox(height: 16),
+              _buildQuickStats(totalBookings, monthlyRevenue, pendingBookings),
+              const SizedBox(height: 16),
+              mainCards,
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -692,10 +709,12 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 subtitle: 'Category-Aware Dynamic Wizard',
                 color: const Color(0xFFF59E0B),
                 onTap: () {
+                  final v = Provider.of<VendorProvider>(context, listen: false).currentVendor;
+                  if (v == null) return;
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (_) => const VendorServiceCreatorScreen(),
+                      builder: (_) => EnhancedServiceCreationScreen(vendorId: v.id),
                     ),
                   );
                 },
@@ -1560,35 +1579,48 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
   }
 
   Widget _buildQuickStats(int total, double revenue, int pending) {
-    return Row(
-      children: [
-        Expanded(
-          child: _buildStatCard(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final wide = constraints.maxWidth > 700;
+        final cards = [
+          _buildStatCard(
             'Total Bookings',
             total.toString(),
             Icons.book_online,
             AppTheme.primaryColor,
           ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _buildStatCard(
-            'Monthly Revenue',
+          _buildStatCard(
+            'Revenue',
             'RM ${revenue.toStringAsFixed(0)}',
-            Icons.payment,
+            Icons.attach_money,
             AppTheme.successColor,
           ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _buildStatCard(
+          _buildStatCard(
             'Pending',
             pending.toString(),
-            Icons.pending,
+            Icons.pending_actions,
             AppTheme.warningColor,
           ),
-        ),
-      ],
+        ];
+        if (wide) {
+          return Row(
+            children: [
+              for (var i = 0; i < cards.length; i++) ...[
+                if (i > 0) const SizedBox(width: 12),
+                Expanded(child: cards[i]),
+              ],
+            ],
+          );
+        }
+        return Column(
+          children: [
+            for (var i = 0; i < cards.length; i++) ...[
+              if (i > 0) const SizedBox(height: 12),
+              cards[i],
+            ],
+          ],
+        );
+      },
     );
   }
 

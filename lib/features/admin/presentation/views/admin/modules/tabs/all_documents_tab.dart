@@ -1,13 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:eventease/core/utils/app_theme.dart';
-import 'package:eventease/features/admin/data/providers/admin_provider.dart';
-import 'package:eventease/features/admin/presentation/views/admin/admin_vendor_management_screen.dart';
-import 'package:eventease/features/admin/data/services/admin_marketplace_service.dart';
-import 'package:eventease/features/admin/presentation/widgets/admin_entity_detail_dialog.dart';
+part of vendor_management;
 
 class AllDocumentsTab extends StatefulWidget {
-  final AdminVendorManagementScreenState state;
+  final _VendorManagementScreenState state;
   final AdminProvider admin;
 
   const AllDocumentsTab({

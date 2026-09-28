@@ -48,7 +48,7 @@ class LocationHelper {
     try {
       final position = await _determinePosition();
       if (position != null) {
-        List<Placemark> placemarks = await placemarkFromCoordinates(
+        List<Placemark> placemarks = await Geocoding().placemarkFromCoordinates(
           position.latitude,
           position.longitude,
         );

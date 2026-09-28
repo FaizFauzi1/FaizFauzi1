@@ -2,5 +2,7 @@
     "editor.tabCompletion": "on",
     "diffEditor.codeLens": true,
     "MutableAI.upsell": false,
-    "terminal.integrated.scrollback": 10000
+    "terminal.integrated.scrollback": 10000,
+    "java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx4G -Xms100m -Xlog:disable",
+    "cmake.ignoreCMakeListsMissing": true
 }

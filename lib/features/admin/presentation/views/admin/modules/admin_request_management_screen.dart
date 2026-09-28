@@ -301,9 +301,9 @@ class _AdminRequestManagementScreenState extends State<AdminRequestManagementScr
                 runSpacing: 6,
                 children: [
                   _buildEntityChip(Icons.person_outline, caseItem.customerName, MarketplaceEntityType.customer),
-                  _buildEntityChip(Icons.storefront_outlined, caseItem.vendorName ?? 'Unknown vendor', MarketplaceEntityType.vendor),
-                  _buildEntityChip(Icons.bookmark_outline, caseItem.bookingId ?? 'No booking', MarketplaceEntityType.booking),
-                  _buildEntityChip(Icons.event_outlined, caseItem.eventName ?? 'No event', MarketplaceEntityType.event),
+                  if (caseItem.vendorName != null) _buildEntityChip(Icons.storefront_outlined, caseItem.vendorName! ?? 'Unknown vendor', MarketplaceEntityType.vendor),
+                  if (caseItem.bookingId != null) _buildEntityChip(Icons.bookmark_outline, caseItem.bookingId! ?? 'No booking', MarketplaceEntityType.booking),
+                  if (caseItem.eventName != null) _buildEntityChip(Icons.event_outlined, caseItem.eventName! ?? 'No event', MarketplaceEntityType.event),
                 ],
               ),
             ),
@@ -355,11 +355,6 @@ class _AdminRequestManagementScreenState extends State<AdminRequestManagementScr
                         context,
                         type: MarketplaceEntityType.supportCase,
                         entityId: caseItem.id,
-                        entityName: caseItem.subject,
-                        customerName: caseItem.customerName,
-                        vendorName: caseItem.vendorName,
-                        bookingId: caseItem.bookingId,
-                        status: caseItem.status,
                       );
                     },
                     icon: const Icon(Icons.hub_outlined, size: 16),
@@ -565,15 +560,12 @@ class _AdminRequestManagementScreenState extends State<AdminRequestManagementScr
                       ElevatedButton(
                         onPressed: () {
                           if (noteController.text.trim().isNotEmpty) {
-                            Provider.of<AdminMarketplaceProvider>(context, listen: false).addCaseTimelineItem(
-                              caseItem.id,
-                              AdminCaseTimelineItem(
-                                actor: 'Admin Team',
-                                role: 'Admin',
-                                action: 'Internal Note Added',
-                                details: noteController.text.trim(),
-                                timestamp: DateTime.now(),
-                              ),
+                            Provider.of<AdminMarketplaceProvider>(context, listen: false).addCaseMessage(
+                              caseId: caseItem.id,
+                              actor: 'Admin Team',
+                              role: 'Admin',
+                              action: 'Internal Note Added',
+                              message: noteController.text.trim(),
                             );
                             setDialogState(() {});
                             noteController.clear();
@@ -599,11 +591,6 @@ class _AdminRequestManagementScreenState extends State<AdminRequestManagementScr
                     context,
                     type: MarketplaceEntityType.supportCase,
                     entityId: caseItem.id,
-                    entityName: caseItem.subject,
-                    customerName: caseItem.customerName,
-                    vendorName: caseItem.vendorName,
-                    bookingId: caseItem.bookingId,
-                    status: caseItem.status,
                   );
                 },
                 child: const Text('Inspect Relationships'),
@@ -611,7 +598,7 @@ class _AdminRequestManagementScreenState extends State<AdminRequestManagementScr
               if (caseItem.status != 'Resolved')
                 ElevatedButton(
                   onPressed: () {
-                    Provider.of<AdminMarketplaceProvider>(context, listen: false).updateCaseStatus(caseItem.id, 'Resolved');
+                    Provider.of<AdminMarketplaceProvider>(context, listen: false).updateCaseStatus(caseItem.id, 'Resolved', 'Super Admin');
                     Navigator.pop(context);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('${caseItem.id} marked as Resolved!'), backgroundColor: Colors.green),

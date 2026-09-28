@@ -224,7 +224,7 @@ class _QuillBodyState extends State<_QuillBody> {
 
     return quill.QuillEditor.basic(
       controller: _controller,
-      configurations: const quill.QuillEditorConfigurations(),
+      config: const quill.QuillEditorConfig(),
     );
   }
 }

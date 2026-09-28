@@ -12,9 +12,9 @@ import 'package:eventease/features/event/data/models/invitation.dart';
 import 'package:eventease/shared/models/photo_album.dart';
 import 'package:eventease/features/vendor/data/models/vendor.dart';
 import 'package:eventease/features/vendor/models/vendor_service.dart';
+import 'package:eventease/features/vendor/models/vendor_service_enhanced.dart';
 import 'package:eventease/features/vendor/presentation/views/workflow/vendor_services_hub_screen.dart';
 import 'package:eventease/features/vendor/presentation/views/workflow/vendor_packages_hub_screen.dart';
-import 'package:eventease/features/vendor/presentation/views/workflow/vendor_service_creator_screen.dart';
 import 'package:eventease/features/vendor/presentation/views/workflow/collaborative_package_builder_screen.dart';
 import 'package:eventease/features/vendor/presentation/views/workflow/vendor_unified_calendar_screen.dart';
 import 'package:eventease/features/customer/presentation/views/customer/customer_package_customization_screen.dart';
@@ -259,7 +259,6 @@ Booking _getDefaultBooking() {
       '/networking': (context) => const VendorNetworkingScreen(),
       '/find-partners': (context) => const VendorNetworkingScreen(),
       '/collaboration-requests': (context) => const VendorNetworkingScreen(),
-      '/package-builder': (context) => const VendorPackageBuilderScreen(),
       '/vendor-groups': (context) => const VendorNetworkingScreen(),
       '/marketplace': (context) => const VendorMarketplaceScreen(),
 
@@ -339,11 +338,16 @@ Booking _getDefaultBooking() {
 
       // New Product Service Enhancement Routes
       '/product-service-demo': (context) => const ProductServiceDemoScreen(),
+      // Canonical service create — EnhancedServiceCreationScreen only
       '/enhanced-service-creation': (context) {
-        final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-        return ServiceCreationWizard(
-          vendorId: args?['vendorId'] ?? 'demo-vendor',
-          existingService: args?['existingService'] is VendorService ? args!['existingService'] as VendorService : null,
+        final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+        final vendor = Provider.of<VendorProvider>(context, listen: false).currentVendor;
+        final vendorId = args?['vendorId'] as String? ?? vendor?.id ?? '';
+        return EnhancedServiceCreationScreen(
+          vendorId: vendorId,
+          existingService: args?['existingService'] is VendorServiceEnhanced
+              ? args!['existingService'] as VendorServiceEnhanced
+              : null,
         );
       },
       '/vendor-availability-management': (context) => const SimpleAvailabilityScreen(),
@@ -501,17 +505,25 @@ Booking _getDefaultBooking() {
       },
       '/event-management': (context) => const EventManagementScreen(),
       '/service-creation': (context) {
-        final args = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>?;
-        return ServiceCreationWizard(
-          vendorId: args?['vendorId'] ?? 'demo-vendor',
-          existingService: args?['existingService'] is VendorService ? args!['existingService'] as VendorService : null,
+        final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+        final vendor = Provider.of<VendorProvider>(context, listen: false).currentVendor;
+        final vendorId = args?['vendorId'] as String? ?? vendor?.id ?? '';
+        return EnhancedServiceCreationScreen(
+          vendorId: vendorId,
+          existingService: args?['existingService'] is VendorServiceEnhanced
+              ? args!['existingService'] as VendorServiceEnhanced
+              : null,
         );
       },
       '/services-hub': (context) => const VendorServicesHubScreen(),
       '/packages-hub': (context) => const VendorPackagesHubScreen(),
-      '/service-creator': (context) => const VendorServiceCreatorScreen(),
+      '/service-creator': (context) {
+        final vendor = Provider.of<VendorProvider>(context, listen: false).currentVendor;
+        return EnhancedServiceCreationScreen(vendorId: vendor?.id ?? '');
+      },
       '/collaborative-package-builder': (context) => const CollaborativePackageBuilderScreen(),
       '/unified-calendar': (context) => const VendorUnifiedCalendarScreen(),
+      '/package-builder': (context) => const VendorPackagesHubScreen(),
       '/package-customization': (context) {
         final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
         final package = args?['package'] as CollaborativePackage?;

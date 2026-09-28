@@ -14,10 +14,10 @@ class VendorOrderSettingsScreen extends StatefulWidget {
   });
 
   @override
-  State\u003cVendorOrderSettingsScreen\u003e createState() =\u003e _VendorOrderSettingsScreenState();
+  State<VendorOrderSettingsScreen> createState() => _VendorOrderSettingsScreenState();
 }
 
-class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScreen\u003e {
+class _VendorOrderSettingsScreenState extends State<VendorOrderSettingsScreen> {
   bool _isLoading = true;
   bool _isSaving = false;
   VendorOrderSettings? _settings;
@@ -36,7 +36,7 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
   bool _showDeliveryMethod = true;
   String _defaultDeliveryMethod = 'Pickup';
   bool _autoApproveOrders = false;
-  List\u003cCustomOrderField\u003e _customFields = [];
+  List<CustomOrderField> _customFields = [];
 
   @override
   void initState() {
@@ -52,8 +52,8 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
     super.dispose();
   }
 
-  Future\u003cvoid\u003e _loadSettings() async {
-    setState(() =\u003e _isLoading = true);
+  Future<void> _loadSettings() async {
+    setState(() => _isLoading = true);
     try {
       final response = await Supabase.instance.client
           .from('vendor_order_settings')
@@ -76,7 +76,7 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
         );
       }
     } finally {
-      setState(() =\u003e _isLoading = false);
+      setState(() => _isLoading = false);
     }
   }
 
@@ -98,8 +98,8 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
     });
   }
 
-  Future\u003cvoid\u003e _saveSettings() async {
-    setState(() =\u003e _isSaving = true);
+  Future<void> _saveSettings() async {
+    setState(() => _isSaving = true);
     try {
       final updatedSettings = VendorOrderSettings(
         vendorId: widget.vendorId,
@@ -144,7 +144,7 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
         );
       }
     } finally {
-      setState(() =\u003e _isSaving = false);
+      setState(() => _isSaving = false);
     }
   }
 
@@ -276,7 +276,7 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
             title: const Text('Require Event Date'),
             subtitle: const Text('Customers must select an event date'),
             value: _requireEventDate,
-            onChanged: (value) =\u003e setState(() =\u003e _requireEventDate = value),
+            onChanged: (value) => setState(() => _requireEventDate = value),
             activeColor: AppTheme.primaryColor,
           ),
           const Divider(),
@@ -284,7 +284,7 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
             title: const Text('Require Event Time'),
             subtitle: const Text('Customers must select an event time'),
             value: _requireEventTime,
-            onChanged: (value) =\u003e setState(() =\u003e _requireEventTime = value),
+            onChanged: (value) => setState(() => _requireEventTime = value),
             activeColor: AppTheme.primaryColor,
           ),
           const Divider(),
@@ -292,7 +292,7 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
             title: const Text('Require Delivery Address'),
             subtitle: const Text('Customers must provide delivery address'),
             value: _requireDeliveryAddress,
-            onChanged: (value) =\u003e setState(() =\u003e _requireDeliveryAddress = value),
+            onChanged: (value) => setState(() => _requireDeliveryAddress = value),
             activeColor: AppTheme.primaryColor,
           ),
           const Divider(),
@@ -300,7 +300,7 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
             title: const Text('Require Special Requirements'),
             subtitle: const Text('Customers must fill special requirements field'),
             value: _requireSpecialRequirements,
-            onChanged: (value) =\u003e setState(() =\u003e _requireSpecialRequirements = value),
+            onChanged: (value) => setState(() => _requireSpecialRequirements = value),
             activeColor: AppTheme.primaryColor,
           ),
         ],
@@ -328,10 +328,11 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
             title: const Text('Show Quantity Field'),
             subtitle: const Text('Allow customers to specify quantity'),
             value: _showQuantityField,
-            onChanged: (value) =\u003e setState(() =\u003e _showQuantityField = value),
+            onChanged: (value) => setState(() => _showQuantityField = value),
             activeColor: AppTheme.primaryColor,
           ),
-          if (_showQuantityField) ...[\n            const SizedBox(height: 16),
+          if (_showQuantityField) ...[
+            const SizedBox(height: 16),
             Row(
               children: [
                 Expanded(
@@ -383,11 +384,12 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
             title: const Text('Show Delivery Method'),
             subtitle: const Text('Allow customers to choose delivery method'),
             value: _showDeliveryMethod,
-            onChanged: (value) =\u003e setState(() =\u003e _showDeliveryMethod = value),
+            onChanged: (value) => setState(() => _showDeliveryMethod = value),
             activeColor: AppTheme.primaryColor,
           ),
-          if (_showDeliveryMethod) ...[\n            const SizedBox(height: 16),
-            DropdownButtonFormField\u003cString\u003e(
+          if (_showDeliveryMethod) ...[
+            const SizedBox(height: 16),
+            DropdownButtonFormField<String>(
               value: _defaultDeliveryMethod,
               decoration: const InputDecoration(
                 labelText: 'Default Delivery Method',
@@ -401,7 +403,7 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
               }).toList(),
               onChanged: (value) {
                 if (value != null) {
-                  setState(() =\u003e _defaultDeliveryMethod = value);
+                  setState(() => _defaultDeliveryMethod = value);
                 }
               },
             ),
@@ -429,7 +431,7 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
         title: const Text('Auto-Approve Orders'),
         subtitle: const Text('Automatically approve all incoming orders'),
         value: _autoApproveOrders,
-        onChanged: (value) =\u003e setState(() =\u003e _autoApproveOrders = value),
+        onChanged: (value) => setState(() => _autoApproveOrders = value),
         activeColor: AppTheme.primaryColor,
       ),
     );
@@ -503,11 +505,11 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
           children: [
             IconButton(
               icon: const Icon(Icons.edit, size: 20),
-              onPressed: () =\u003e _editCustomField(index),
+              onPressed: () => _editCustomField(index),
             ),
             IconButton(
               icon: const Icon(Icons.delete, size: 20, color: Colors.red),
-              onPressed: () =\u003e _deleteCustomField(index),
+              onPressed: () => _deleteCustomField(index),
             ),
           ],
         ),
@@ -554,12 +556,12 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
     final placeholderController = TextEditingController(text: existingField?.placeholder ?? '');
     String fieldType = existingField?.fieldType ?? 'text';
     bool required = existingField?.required ?? false;
-    List\u003cString\u003e options = List.from(existingField?.options ?? []);
+    List<String> options = List.from(existingField?.options ?? []);
 
     showDialog(
       context: context,
-      builder: (context) =\u003e StatefulBuilder(
-        builder: (context, setDialogState) =\u003e AlertDialog(
+      builder: (context) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
           title: Text(isEditing ? 'Edit Custom Field' : 'Add Custom Field'),
           content: SingleChildScrollView(
             child: Column(
@@ -573,7 +575,7 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
                   ),
                 ),
                 const SizedBox(height: 16),
-                DropdownButtonFormField\u003cString\u003e(
+                DropdownButtonFormField<String>(
                   value: fieldType,
                   decoration: const InputDecoration(labelText: 'Field Type'),
                   items: [
@@ -587,7 +589,7 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
                   }).toList(),
                   onChanged: (value) {
                     if (value != null) {
-                      setDialogState(() =\u003e fieldType = value);
+                      setDialogState(() => fieldType = value);
                     }
                   },
                 ),
@@ -603,10 +605,11 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
                 SwitchListTile(
                   title: const Text('Required Field'),
                   value: required,
-                  onChanged: (value) =\u003e setDialogState(() =\u003e required = value),
+                  onChanged: (value) => setDialogState(() => required = value),
                   activeColor: AppTheme.primaryColor,
                 ),
-                if (fieldType == 'dropdown') ...[\n                  const SizedBox(height: 16),
+                if (fieldType == 'dropdown') ...[
+                  const SizedBox(height: 16),
                   const Text('Dropdown Options:'),
                   ...options.asMap().entries.map((entry) {
                     return ListTile(
@@ -626,7 +629,7 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
                       final optionController = TextEditingController();
                       showDialog(
                         context: context,
-                        builder: (ctx) =\u003e AlertDialog(
+                        builder: (ctx) => AlertDialog(
                           title: const Text('Add Option'),
                           content: TextField(
                             controller: optionController,
@@ -634,7 +637,7 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
                           ),
                           actions: [
                             TextButton(
-                              onPressed: () =\u003e Navigator.pop(ctx),
+                              onPressed: () => Navigator.pop(ctx),
                               child: const Text('Cancel'),
                             ),
                             TextButton(
@@ -661,7 +664,7 @@ class _VendorOrderSettingsScreenState extends State\u003cVendorOrderSettingsScre
           ),
           actions: [
             TextButton(
-              onPressed: () =\u003e Navigator.pop(context),
+              onPressed: () => Navigator.pop(context),
               child: const Text('Cancel'),
             ),
             ElevatedButton(

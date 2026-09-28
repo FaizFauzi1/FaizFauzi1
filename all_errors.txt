@@ -1,0 +1,1052 @@
+﻿  error - Undefined name 'items' - AD_INTEGRATION_EXAMPLES.dart:25:26 - undefined_identifier
+  error - Undefined name 'items' - AD_INTEGRATION_EXAMPLES.dart:38:34 - undefined_identifier
+  error - Undefined name 'items' - AD_INTEGRATION_EXAMPLES.dart:42:39 - undefined_identifier
+  error - Directives must appear before any declarations - AD_INTEGRATION_EXAMPLES.dart:69:1 - directive_after_declaration
+  error - Undefined name 'services' - AD_INTEGRATION_EXAMPLES.dart:168:42 - undefined_identifier
+  error - Undefined name 'services' - AD_INTEGRATION_EXAMPLES.dart:170:27 - undefined_identifier
+  error - Directives must appear before any declarations - AD_INTEGRATION_EXAMPLES.dart:190:1 - directive_after_declaration
+  error - Directives must appear before any declarations - AD_INTEGRATION_EXAMPLES.dart:191:1 - directive_after_declaration
+  error - Directives must appear before any declarations - AD_INTEGRATION_EXAMPLES.dart:192:1 - directive_after_declaration
+  error - The method 'addPlacement' isn't defined for the type 'AdProvider' - AD_INTEGRATION_EXAMPLES.dart:199:16 - undefined_method
+  error - The method 'addPlacement' isn't defined for the type 'AdProvider' - AD_INTEGRATION_EXAMPLES.dart:213:16 - undefined_method
+  error - The method 'addPlacement' isn't defined for the type 'AdProvider' - AD_INTEGRATION_EXAMPLES.dart:227:16 - undefined_method
+  error - Directives must appear before any declarations - AD_INTEGRATION_EXAMPLES.dart:246:1 - directive_after_declaration
+  error - Undefined name 'items' - AD_INTEGRATION_EXAMPLES.dart:358:30 - undefined_identifier
+  error - Undefined name 'items' - AD_INTEGRATION_EXAMPLES.dart:366:43 - undefined_identifier
+  error - Directives must appear before any declarations - AD_INTEGRATION_EXAMPLES.dart:394:1 - directive_after_declaration
+  error - Undefined name 'PaymentStatus' - lib\core\database\repositories\order_repository.dart:50:22 - undefined_identifier
+  error - Undefined name 'PaymentStatus' - lib\core\database\repositories\order_repository.dart:52:23 - undefined_identifier
+  error - Undefined name 'PaymentStatus' - lib\core\database\repositories\order_repository.dart:232:22 - undefined_identifier
+  error - Undefined class 'PaymentStatus' - lib\core\database\repositories\order_repository.dart:263:52 - undefined_class
+  error - Undefined class 'PaymentStatus' - lib\core\database\repositories\order_repository.dart:290:7 - undefined_class
+  error - The argument type 'List<String>?' can't be assigned to the parameter type 'Map<String, dynamic>?'.  - lib\core\database\repositories\vendor_repository.dart:109:21 - argument_type_not_assignable
+  error - The named parameter 'type' isn't defined - lib\core\database\repositories\vendor_service_repository.dart:91:7 - undefined_named_parameter
+  error - The getter 'platform' isn't defined for the type 'FilePicker' - lib\core\services\document_upload_service.dart:138:51 - undefined_getter
+  error - The named parameter 'settings' is required, but there's no corresponding argument - lib\core\services\notification_service.dart:36:44 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 1 found - lib\core\services\notification_service.dart:37:7 - extra_positional_arguments_could_be_named
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\core\services\notification_service.dart:618:44 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 4 found - lib\core\services\notification_service.dart:619:7 - extra_positional_arguments_could_be_named
+  error - The named parameter 'androidScheduleMode' is required, but there's no corresponding argument - lib\core\services\notification_service.dart:645:44 - missing_required_argument
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\core\services\notification_service.dart:645:44 - missing_required_argument
+  error - The named parameter 'notificationDetails' is required, but there's no corresponding argument - lib\core\services\notification_service.dart:645:44 - missing_required_argument
+  error - The named parameter 'scheduledDate' is required, but there's no corresponding argument - lib\core\services\notification_service.dart:645:44 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 5 found - lib\core\services\notification_service.dart:646:7 - extra_positional_arguments_could_be_named
+  error - The named parameter 'androidAllowWhileIdle' isn't defined - lib\core\services\notification_service.dart:651:7 - undefined_named_parameter
+  error - The named parameter 'uiLocalNotificationDateInterpretation' isn't defined - lib\core\services\notification_service.dart:652:7 - undefined_named_parameter
+  error - Undefined name 'UILocalNotificationDateInterpretation' - lib\core\services\notification_service.dart:653:11 - undefined_identifier
+  error - The named parameter 'id' is required, but there's no corresponding argument - lib\core\services\notification_service.dart:934:44 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 1 found - lib\core\services\notification_service.dart:934:51 - extra_positional_arguments_could_be_named
+  error - The class 'GoogleSignIn' doesn't have an unnamed constructor - lib\core\services\supabase_service.dart:123:28 - new_with_undefined_constructor_default
+  error - The method 'signIn' isn't defined for the type 'GoogleSignIn' - lib\core\services\supabase_service.dart:133:45 - undefined_method
+  error - The argument type 'CardTheme' can't be assigned to the parameter type 'CardThemeData?'.  - lib\core\utils\app_theme.dart:39:18 - argument_type_not_assignable
+  error - The argument type 'CardTheme' can't be assigned to the parameter type 'CardThemeData?'.  - lib\core\utils\app_theme.dart:111:18 - argument_type_not_assignable
+  error - The method 'placemarkFromCoordinates' isn't defined for the type 'LocationHelper' - lib\core\utils\location_helper.dart:51:44 - undefined_method
+  error - The getter 'status' isn't defined for the type 'CollaborativePackage' - lib\features\admin\data\providers\admin_marketplace_provider.dart:683:21 - undefined_getter
+  error - The getter 'status' isn't defined for the type 'DuplicateMatch' - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:243:92 - undefined_getter
+  error - The named parameter 'entityName' isn't defined - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:503:23 - undefined_named_parameter
+  error - The named parameter 'vendorName' isn't defined - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:504:23 - undefined_named_parameter
+  error - The named parameter 'price' isn't defined - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:505:23 - undefined_named_parameter
+  error - The named parameter 'status' isn't defined - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:506:23 - undefined_named_parameter
+  error - The getter 'status' isn't defined for the type 'DuplicateMatch' - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:582:29 - undefined_getter
+  error - The getter 'status' isn't defined for the type 'DuplicateMatch' - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:617:27 - undefined_getter
+  error - The getter 'entityAName' isn't defined for the type 'DuplicateMatch' - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:637:36 - undefined_getter
+  error - The getter 'vendorA' isn't defined for the type 'DuplicateMatch' - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:638:47 - undefined_getter
+  error - The getter 'phoneA' isn't defined for the type 'DuplicateMatch' - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:639:46 - undefined_getter
+  error - The getter 'locationA' isn't defined for the type 'DuplicateMatch' - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:639:64 - undefined_getter
+  error - The getter 'entityBName' isn't defined for the type 'DuplicateMatch' - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:650:36 - undefined_getter
+  error - The getter 'vendorB' isn't defined for the type 'DuplicateMatch' - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:651:47 - undefined_getter
+  error - The getter 'phoneB' isn't defined for the type 'DuplicateMatch' - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:652:46 - undefined_getter
+  error - The getter 'locationB' isn't defined for the type 'DuplicateMatch' - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:652:64 - undefined_getter
+  error - The getter 'matchedFields' isn't defined for the type 'DuplicateMatch' - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:660:39 - undefined_getter
+  error - The getter 'entityBName' isn't defined for the type 'DuplicateMatch' - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:670:64 - undefined_getter
+  error - The getter 'entityBName' isn't defined for the type 'DuplicateMatch' - lib\features\admin\presentation\views\admin\admin_catalog_monitor_screen.dart:682:64 - undefined_getter
+  error - The method '_MarketOverviewItem' isn't defined for the type '_AdminHomeContentState' - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:758:7 - undefined_method
+  error - The method '_MarketOverviewItem' isn't defined for the type '_AdminHomeContentState' - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:759:7 - undefined_method
+  error - The method '_MarketOverviewItem' isn't defined for the type '_AdminHomeContentState' - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:760:7 - undefined_method
+  error - The method '_MarketOverviewItem' isn't defined for the type '_AdminHomeContentState' - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:761:7 - undefined_method
+  error - The method '_MarketOverviewItem' isn't defined for the type '_AdminHomeContentState' - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:762:7 - undefined_method
+  error - The method '_MarketOverviewItem' isn't defined for the type '_AdminHomeContentState' - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:763:7 - undefined_method
+  error - The method '_MarketOverviewItem' isn't defined for the type '_AdminHomeContentState' - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:764:7 - undefined_method
+  error - The method '_MarketOverviewItem' isn't defined for the type '_AdminHomeContentState' - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:765:7 - undefined_method
+  error - The method '_MarketOverviewItem' isn't defined for the type '_AdminHomeContentState' - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:766:7 - undefined_method
+  error - The method '_MarketOverviewItem' isn't defined for the type '_AdminHomeContentState' - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:767:7 - undefined_method
+  error - The getter 'emeraldAccent' isn't defined for the type 'Colors' - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:767:94 - undefined_getter
+  error - The method '_MarketOverviewItem' isn't defined for the type '_AdminHomeContentState' - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:768:7 - undefined_method
+  error - The method '_MarketOverviewItem' isn't defined for the type '_AdminHomeContentState' - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:769:7 - undefined_method
+  error - Classes can't be declared inside other classes - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:880:1 - class_in_class
+  error - The named parameter 'badgeColor' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2128:22 - missing_required_argument
+  error - The named parameter 'icon' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2128:22 - missing_required_argument
+  error - The named parameter 'onTap' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2128:22 - missing_required_argument
+  error - The named parameter 'subtitle' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2128:22 - missing_required_argument
+  error - The named parameter 'title' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2128:22 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 4 found - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2129:17 - extra_positional_arguments_could_be_named
+  error - The named parameter 'badgeColor' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2142:22 - missing_required_argument
+  error - The named parameter 'icon' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2142:22 - missing_required_argument
+  error - The named parameter 'onTap' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2142:22 - missing_required_argument
+  error - The named parameter 'subtitle' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2142:22 - missing_required_argument
+  error - The named parameter 'title' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2142:22 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 4 found - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2143:17 - extra_positional_arguments_could_be_named
+  error - The named parameter 'badgeColor' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2162:22 - missing_required_argument
+  error - The named parameter 'icon' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2162:22 - missing_required_argument
+  error - The named parameter 'onTap' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2162:22 - missing_required_argument
+  error - The named parameter 'subtitle' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2162:22 - missing_required_argument
+  error - The named parameter 'title' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2162:22 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 4 found - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2163:17 - extra_positional_arguments_could_be_named
+  error - The named parameter 'badgeColor' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2176:22 - missing_required_argument
+  error - The named parameter 'icon' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2176:22 - missing_required_argument
+  error - The named parameter 'onTap' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2176:22 - missing_required_argument
+  error - The named parameter 'subtitle' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2176:22 - missing_required_argument
+  error - The named parameter 'title' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2176:22 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 4 found - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2177:17 - extra_positional_arguments_could_be_named
+  error - The named parameter 'badgeColor' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2196:22 - missing_required_argument
+  error - The named parameter 'icon' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2196:22 - missing_required_argument
+  error - The named parameter 'onTap' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2196:22 - missing_required_argument
+  error - The named parameter 'subtitle' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2196:22 - missing_required_argument
+  error - The named parameter 'title' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2196:22 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 4 found - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2197:17 - extra_positional_arguments_could_be_named
+  error - The named parameter 'badgeColor' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2212:22 - missing_required_argument
+  error - The named parameter 'icon' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2212:22 - missing_required_argument
+  error - The named parameter 'onTap' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2212:22 - missing_required_argument
+  error - The named parameter 'subtitle' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2212:22 - missing_required_argument
+  error - The named parameter 'title' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2212:22 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 4 found - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2213:17 - extra_positional_arguments_could_be_named
+  error - The named parameter 'badgeColor' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2232:22 - missing_required_argument
+  error - The named parameter 'icon' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2232:22 - missing_required_argument
+  error - The named parameter 'onTap' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2232:22 - missing_required_argument
+  error - The named parameter 'subtitle' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2232:22 - missing_required_argument
+  error - The named parameter 'title' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2232:22 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 4 found - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2233:17 - extra_positional_arguments_could_be_named
+  error - The named parameter 'badgeColor' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2248:22 - missing_required_argument
+  error - The named parameter 'icon' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2248:22 - missing_required_argument
+  error - The named parameter 'onTap' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2248:22 - missing_required_argument
+  error - The named parameter 'subtitle' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2248:22 - missing_required_argument
+  error - The named parameter 'title' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2248:22 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 4 found - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2249:17 - extra_positional_arguments_could_be_named
+  error - The named parameter 'badgeColor' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2268:22 - missing_required_argument
+  error - The named parameter 'icon' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2268:22 - missing_required_argument
+  error - The named parameter 'onTap' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2268:22 - missing_required_argument
+  error - The named parameter 'subtitle' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2268:22 - missing_required_argument
+  error - The named parameter 'title' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2268:22 - missing_required_argument
+  error - Too many positional arguments: 0 expected, but 4 found - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2269:17 - extra_positional_arguments_could_be_named
+  error - The name '_buildActionCard' is already defined - lib\features\admin\presentation\views\admin\admin_dashboard_screen.dart:2290:10 - duplicate_definition
+  error - The named parameter 'entityName' isn't defined - lib\features\admin\presentation\views\admin\admin_package_approval_screen.dart:419:29 - undefined_named_parameter
+  error - The named parameter 'vendorName' isn't defined - lib\features\admin\presentation\views\admin\admin_package_approval_screen.dart:420:29 - undefined_named_parameter
+  error - The named parameter 'status' isn't defined - lib\features\admin\presentation\views\admin\admin_package_approval_screen.dart:421:29 - undefined_named_parameter
+  error - The method 'toLowerCase' can't be unconditionally invoked because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:112:28 - unchecked_use_of_nullable_value
+  error - The method 'toLowerCase' can't be unconditionally invoked because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:113:27 - unchecked_use_of_nullable_value
+  error - The argument type 'String?' can't be assigned to the parameter type 'String'.  - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:304:63 - argument_type_not_assignable
+  error - The argument type 'String?' can't be assigned to the parameter type 'String'.  - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:305:60 - argument_type_not_assignable
+  error - The argument type 'String?' can't be assigned to the parameter type 'String'.  - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:306:58 - argument_type_not_assignable
+  error - The named parameter 'entityName' isn't defined - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:358:25 - undefined_named_parameter
+  error - The named parameter 'customerName' isn't defined - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:359:25 - undefined_named_parameter
+  error - The named parameter 'vendorName' isn't defined - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:360:25 - undefined_named_parameter
+  error - The named parameter 'bookingId' isn't defined - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:361:25 - undefined_named_parameter
+  error - The named parameter 'status' isn't defined - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:362:25 - undefined_named_parameter
+  error - The named parameter 'entityName' isn't defined - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:401:11 - undefined_named_parameter
+  error - The method 'addCaseTimelineItem' isn't defined for the type 'AdminMarketplaceProvider' - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:566:91 - undefined_method
+  error - The named parameter 'entityName' isn't defined - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:600:21 - undefined_named_parameter
+  error - The named parameter 'customerName' isn't defined - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:601:21 - undefined_named_parameter
+  error - The named parameter 'vendorName' isn't defined - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:602:21 - undefined_named_parameter
+  error - The named parameter 'bookingId' isn't defined - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:603:21 - undefined_named_parameter
+  error - The named parameter 'status' isn't defined - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:604:21 - undefined_named_parameter
+  error - 3 positional arguments expected by 'updateCaseStatus', but 2 found - lib\features\admin\presentation\views\admin\modules\admin_request_management_screen.dart:612:123 - not_enough_positional_arguments
+  error - The named parameter 'configurations' isn't defined - lib\features\admin\presentation\views\admin\modules\article_editor_dialog.dart:190:27 - undefined_named_parameter
+  error - The name 'QuillSimpleToolbarConfigurations' isn't a class - lib\features\admin\presentation\views\admin\modules\article_editor_dialog.dart:190:55 - creation_with_non_type
+  error - The named parameter 'configurations' isn't defined - lib\features\admin\presentation\views\admin\modules\article_editor_dialog.dart:215:25 - undefined_named_parameter
+  error - The name 'QuillEditorConfigurations' isn't a class - lib\features\admin\presentation\views\admin\modules\article_editor_dialog.dart:215:53 - creation_with_non_type
+  error - The named parameter 'configurations' isn't defined - lib\features\admin\presentation\views\admin\modules\article_editor_dialog.dart:386:21 - undefined_named_parameter
+  error - The name 'QuillEditorConfigurations' isn't a class - lib\features\admin\presentation\views\admin\modules\article_editor_dialog.dart:386:49 - creation_with_non_type
+  error - The getter 'badgeColor' isn't defined for the type 'ServiceAppointmentStatus' - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:490:54 - undefined_getter
+  error - The getter 'badgeColor' isn't defined for the type 'ServiceAppointmentStatus' - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:492:73 - undefined_getter
+  error - The getter 'badgeColor' isn't defined for the type 'ServiceAppointmentStatus' - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:497:56 - undefined_getter
+  error - The named parameter 'entityName' isn't defined - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:3702:25 - undefined_named_parameter
+  error - The named parameter 'vendorName' isn't defined - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:3703:25 - undefined_named_parameter
+  error - The named parameter 'price' isn't defined - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:3704:25 - undefined_named_parameter
+  error - The named parameter 'status' isn't defined - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:3705:25 - undefined_named_parameter
+  error - The named parameter 'entityName' isn't defined - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:3866:17 - undefined_named_parameter
+  error - The named parameter 'vendorName' isn't defined - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:3867:17 - undefined_named_parameter
+  error - The named parameter 'price' isn't defined - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:3868:17 - undefined_named_parameter
+  error - The named parameter 'status' isn't defined - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:3869:17 - undefined_named_parameter
+  error - The method 'getCategoryConfig' isn't defined for the type 'AdminMarketplaceProvider' - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:4542:27 - undefined_method
+  error - There's no constant named 'category' in 'MarketplaceEntityType' - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:4665:53 - undefined_enum_constant
+  error - The named parameter 'entityName' isn't defined - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:4667:25 - undefined_named_parameter
+  error - The named parameter 'status' isn't defined - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:4668:25 - undefined_named_parameter
+  error - The method 'getCategoryConfig' isn't defined for the type 'AdminMarketplaceProvider' - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:4799:27 - undefined_method
+  error - The method 'publishNewVersion' isn't defined for the type 'AdminMarketplaceProvider' - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:5030:41 - undefined_method
+  error - The method 'migrateServicesToLatestVersion' isn't defined for the type 'AdminMarketplaceProvider' - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:5102:39 - undefined_method
+  error - There's no constant named 'category' in 'MarketplaceEntityType' - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:5131:47 - undefined_enum_constant
+  error - The named parameter 'entityName' isn't defined - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:5133:19 - undefined_named_parameter
+  error - The named parameter 'status' isn't defined - lib\features\admin\presentation\views\admin\modules\booking_service_management_screen.dart:5134:19 - undefined_named_parameter
+  error - The named parameter 'type' is required, but there's no corresponding argument - lib\features\admin\presentation\views\admin\modules\financial_management_screen.dart:1157:44 - missing_required_argument
+  error - The named parameter 'entityType' isn't defined - lib\features\admin\presentation\views\admin\modules\financial_management_screen.dart:1159:9 - undefined_named_parameter
+  error - The named parameter 'entityName' isn't defined - lib\features\admin\presentation\views\admin\modules\financial_management_screen.dart:1161:9 - undefined_named_parameter
+  error - Target of URI doesn't exist: 'package:eventease/features/admin/presentation/views/admin/admin_vendor_management_screen.dart' - lib\features\admin\presentation\views\admin\modules\tabs\all_documents_tab.dart:5:8 - uri_does_not_exist
+  error - Undefined class 'AdminVendorManagementScreenState' - lib\features\admin\presentation\views\admin\modules\tabs\all_documents_tab.dart:10:9 - undefined_class
+  error - The named parameter 'entityName' isn't defined - lib\features\admin\presentation\views\admin\modules\tabs\all_documents_tab.dart:188:49 - undefined_named_parameter
+  error - The named parameter 'vendorName' isn't defined - lib\features\admin\presentation\views\admin\modules\tabs\all_documents_tab.dart:189:49 - undefined_named_parameter
+  error - Classes can only extend other classes - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:3:28 - extends_non_class
+  error - The name 'AdminVendor' isn't a type, so it can't be used as a type argument - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:4:14 - non_type_as_type_argument
+  error - Undefined class 'AdminProvider' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:5:9 - undefined_class
+  error - Undefined class '_VendorManagementScreenState' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:6:9 - undefined_class
+  error - No associated named super constructor parameter - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:9:11 - super_formal_parameter_without_associated_named
+  error - Undefined class 'Widget' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:16:3 - undefined_class
+  error - Undefined class 'BuildContext' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:16:16 - undefined_class
+  error - The property 'suspended' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:18:51 - unchecked_use_of_nullable_value
+  error - The property 'verified' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:18:66 - unchecked_use_of_nullable_value
+  error - The returned type 'double' isn't returnable from a 'int' function, as required by the closure's context - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:19:60 - return_of_invalid_type_from_closure
+  error - The property 'bookings' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:19:68 - unchecked_use_of_nullable_value
+  error - The property 'rating' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:20:72 - unchecked_use_of_nullable_value
+  error - The operator '+' can't be unconditionally invoked because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:20:99 - unchecked_use_of_nullable_value
+  error - The property 'bookings' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:21:81 - unchecked_use_of_nullable_value
+  error - The method 'SingleChildScrollView' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:40:12 - undefined_method
+  error - The name 'all' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:41:22 - creation_with_non_type
+  error - The method 'Column' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:42:14 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:43:29 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:46:17 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:48:20 - undefined_method
+  error - Undefined name 'FontWeight' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:50:27 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:53:17 - creation_with_non_type
+  error - The method 'Row' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:56:11 - undefined_method
+  error - The method 'Expanded' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:58:15 - undefined_method
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:62:19 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:63:19 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:66:21 - creation_with_non_type
+  error - The method 'Expanded' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:67:15 - undefined_method
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:71:19 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:72:19 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:77:17 - creation_with_non_type
+  error - The method 'Row' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:78:11 - undefined_method
+  error - The method 'Expanded' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:80:15 - undefined_method
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:84:19 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:85:19 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:88:21 - creation_with_non_type
+  error - The method 'Expanded' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:89:15 - undefined_method
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:93:19 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:94:19 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:100:17 - creation_with_non_type
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:103:17 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:105:20 - undefined_method
+  error - Undefined name 'FontWeight' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:107:27 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:110:17 - creation_with_non_type
+  error - The method 'Card' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:117:20 - undefined_method
+  error - The name 'only' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:118:29 - creation_with_non_type
+  error - The method 'Padding' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:119:22 - undefined_method
+  error - The name 'all' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:120:32 - creation_with_non_type
+  error - The method 'Column' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:121:24 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:122:39 - undefined_identifier
+  error - The method 'Row' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:124:21 - undefined_method
+  error - Undefined name 'MainAxisAlignment' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:125:42 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:127:25 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:129:40 - creation_with_non_type
+  error - Undefined name 'FontWeight' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:131:41 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:134:25 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:136:34 - undefined_method
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:137:36 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:143:27 - creation_with_non_type
+  error - The method 'Row' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:144:21 - undefined_method
+  error - The method 'Expanded' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:146:25 - undefined_method
+  error - The method 'Column' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:147:34 - undefined_method
+  error - The method 'Text' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:149:31 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:151:40 - undefined_method
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:152:42 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:156:31 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:158:46 - creation_with_non_type
+  error - Undefined name 'FontWeight' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:160:47 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:161:42 - undefined_identifier
+  error - The method 'Expanded' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:167:25 - undefined_method
+  error - The method 'Column' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:168:34 - undefined_method
+  error - The method 'Text' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:170:31 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:172:40 - undefined_method
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:173:42 - undefined_identifier
+  error - The method 'Row' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:177:31 - undefined_method
+  error - Undefined name 'MainAxisAlignment' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:178:52 - undefined_identifier
+  error - The method 'Icon' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:180:35 - undefined_method
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:180:40 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:180:59 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:181:35 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:183:50 - creation_with_non_type
+  error - Undefined name 'FontWeight' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:185:51 - undefined_identifier
+  error - The method 'Expanded' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:193:25 - undefined_method
+  error - The method 'Column' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:194:34 - undefined_method
+  error - The method 'Text' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:196:31 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:198:40 - undefined_method
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:199:42 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:203:31 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:205:46 - creation_with_non_type
+  error - Undefined name 'FontWeight' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:207:47 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:208:42 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:222:17 - creation_with_non_type
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:225:17 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:227:20 - undefined_method
+  error - Undefined name 'FontWeight' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:229:27 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:232:17 - creation_with_non_type
+  error - The method 'Card' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:233:11 - undefined_method
+  error - The method 'Padding' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:234:20 - undefined_method
+  error - The name 'all' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:235:30 - creation_with_non_type
+  error - The method 'Column' isn't defined for the type 'AnalyticsTab' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:236:22 - undefined_method
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:245:21 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:246:21 - undefined_identifier
+  error - The name 'Divider' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:248:25 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:256:21 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:257:21 - undefined_identifier
+  error - The name 'Divider' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:259:25 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:267:21 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\analytics_tab.dart:268:21 - undefined_identifier
+  error - Classes can only extend other classes - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:3:33 - extends_non_class
+  error - The name 'AdminVendor' isn't a type, so it can't be used as a type argument - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:4:14 - non_type_as_type_argument
+  error - Undefined class 'AdminProvider' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:5:9 - undefined_class
+  error - Undefined class '_VendorManagementScreenState' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:6:9 - undefined_class
+  error - No associated named super constructor parameter - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:9:11 - super_formal_parameter_without_associated_named
+  error - Undefined class 'Widget' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:16:3 - undefined_class
+  error - Undefined class 'BuildContext' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:16:16 - undefined_class
+  error - The property 'documents' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:18:11 - unchecked_use_of_nullable_value
+  error - The property 'documentsVerified' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:19:12 - unchecked_use_of_nullable_value
+  error - The property 'documents' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:20:11 - unchecked_use_of_nullable_value
+  error - Undefined name 'ListView' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:22:12 - undefined_identifier
+  error - The name 'all' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:23:22 - creation_with_non_type
+  error - The method 'Card' isn't defined for the type 'DocumentReviewTab' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:27:16 - undefined_method
+  error - The name 'only' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:28:25 - creation_with_non_type
+  error - The method 'Padding' isn't defined for the type 'DocumentReviewTab' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:30:18 - undefined_method
+  error - The name 'all' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:31:28 - creation_with_non_type
+  error - The method 'Column' isn't defined for the type 'DocumentReviewTab' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:32:20 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:33:35 - undefined_identifier
+  error - The method 'Row' isn't defined for the type 'DocumentReviewTab' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:36:17 - undefined_method
+  error - The method 'CircleAvatar' isn't defined for the type 'DocumentReviewTab' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:38:21 - undefined_method
+  error - Undefined name 'AppTheme' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:40:40 - undefined_identifier
+  error - The method 'Icon' isn't defined for the type 'DocumentReviewTab' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:41:30 - undefined_method
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:42:25 - undefined_identifier
+  error - Undefined name 'AppTheme' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:43:32 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:47:27 - creation_with_non_type
+  error - The method 'Expanded' isn't defined for the type 'DocumentReviewTab' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:48:21 - undefined_method
+  error - The method 'Column' isn't defined for the type 'DocumentReviewTab' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:49:30 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:50:45 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'DocumentReviewTab' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:52:27 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:54:42 - creation_with_non_type
+  error - Undefined name 'FontWeight' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:56:43 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'DocumentReviewTab' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:59:27 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type 'DocumentReviewTab' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:61:36 - undefined_method
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:62:38 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'DocumentReviewTab' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:66:27 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:68:42 - creation_with_non_type
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:70:38 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:79:23 - creation_with_non_type
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:82:23 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type 'DocumentReviewTab' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:84:26 - undefined_method
+  error - Undefined name 'FontWeight' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:84:48 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:86:23 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:89:23 - creation_with_non_type
+  error - The method 'Row' isn't defined for the type 'DocumentReviewTab' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:92:17 - undefined_method
+  error - The method 'Expanded' isn't defined for the type 'DocumentReviewTab' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:94:21 - undefined_method
+  error - Undefined name 'ElevatedButton' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:95:30 - undefined_identifier
+  error - The name 'Icon' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:97:37 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:97:42 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:98:38 - creation_with_non_type
+  error - Undefined name 'ElevatedButton' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:99:32 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:100:44 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:101:44 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:105:27 - creation_with_non_type
+  error - The method 'Expanded' isn't defined for the type 'DocumentReviewTab' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:106:21 - undefined_method
+  error - Undefined name 'ElevatedButton' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:107:30 - undefined_identifier
+  error - The name 'Icon' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:109:37 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:109:42 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:110:38 - creation_with_non_type
+  error - Undefined name 'ElevatedButton' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:111:32 - undefined_identifier
+  error - Undefined name 'AppTheme' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:112:44 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\document_review_tab.dart:113:44 - undefined_identifier
+  error - Classes can only extend other classes - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:3:30 - extends_non_class
+  error - The name 'AdminVendor' isn't a type, so it can't be used as a type argument - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:4:14 - non_type_as_type_argument
+  error - Undefined class 'AdminProvider' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:5:9 - undefined_class
+  error - Undefined class '_VendorManagementScreenState' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:6:9 - undefined_class
+  error - No associated named super constructor parameter - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:9:11 - super_formal_parameter_without_associated_named
+  error - Undefined class 'Widget' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:16:3 - undefined_class
+  error - Undefined class 'BuildContext' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:16:16 - undefined_class
+  error - The name 'AdminVendor' isn't a type, so it can't be used as a type argument - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:18:32 - non_type_as_type_argument
+  error - The property 'rating' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:20:24 - unchecked_use_of_nullable_value
+  error - The property 'bookings' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:20:35 - unchecked_use_of_nullable_value
+  error - The property 'rating' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:20:57 - unchecked_use_of_nullable_value
+  error - The property 'bookings' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:20:68 - unchecked_use_of_nullable_value
+  error - The name 'Center' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:23:20 - creation_with_non_type
+  error - The method 'Text' isn't defined for the type 'PerformanceTab' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:24:16 - undefined_method
+  error - The method 'TextStyle' isn't defined for the type 'PerformanceTab' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:26:18 - undefined_method
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:26:49 - undefined_identifier
+  error - The method 'Column' isn't defined for the type 'PerformanceTab' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:31:12 - undefined_method
+  error - The method 'Padding' isn't defined for the type 'PerformanceTab' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:34:9 - undefined_method
+  error - The name 'all' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:35:26 - creation_with_non_type
+  error - The method 'Row' isn't defined for the type 'PerformanceTab' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:36:18 - undefined_method
+  error - The method 'Expanded' isn't defined for the type 'PerformanceTab' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:38:15 - undefined_method
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:43:19 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:46:21 - creation_with_non_type
+  error - The method 'Expanded' isn't defined for the type 'PerformanceTab' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:47:15 - undefined_method
+  error - The property 'bookings' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:51:43 - unchecked_use_of_nullable_value
+  error - The property 'bookings' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:51:56 - unchecked_use_of_nullable_value
+  error - The property 'bookings' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:53:55 - unchecked_use_of_nullable_value
+  error - The property 'bookings' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:53:68 - unchecked_use_of_nullable_value
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:54:19 - undefined_identifier
+  error - The method 'Expanded' isn't defined for the type 'PerformanceTab' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:62:9 - undefined_method
+  error - Undefined name 'ListView' - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:63:18 - undefined_identifier
+  error - The name 'symmetric' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\performance_tab.dart:64:28 - creation_with_non_type
+  error - Classes can only extend other classes - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:3:26 - extends_non_class
+  error - The name 'AdminVendor' isn't a type, so it can't be used as a type argument - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:4:14 - non_type_as_type_argument
+  error - Undefined class 'AdminProvider' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:5:9 - undefined_class
+  error - Undefined class '_VendorManagementScreenState' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:6:9 - undefined_class
+  error - No associated named super constructor parameter - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:9:11 - super_formal_parameter_without_associated_named
+  error - Undefined class 'Widget' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:16:3 - undefined_class
+  error - Undefined class 'BuildContext' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:16:16 - undefined_class
+  error - The property 'suspended' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:18:51 - unchecked_use_of_nullable_value
+  error - The property 'verified' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:18:66 - unchecked_use_of_nullable_value
+  error - The property 'suspended' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:19:53 - unchecked_use_of_nullable_value
+  error - The returned type 'double' isn't returnable from a 'int' function, as required by the closure's context - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:21:60 - return_of_invalid_type_from_closure
+  error - The property 'bookings' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:21:68 - unchecked_use_of_nullable_value
+  error - The property 'rating' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:22:72 - unchecked_use_of_nullable_value
+  error - The operator '+' can't be unconditionally invoked because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:22:99 - unchecked_use_of_nullable_value
+  error - The method 'SingleChildScrollView' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:24:12 - undefined_method
+  error - The name 'all' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:25:22 - creation_with_non_type
+  error - The method 'Column' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:26:14 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:27:29 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:30:17 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:32:20 - undefined_method
+  error - Undefined name 'FontWeight' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:34:27 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:37:17 - creation_with_non_type
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:40:17 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:42:20 - undefined_method
+  error - Undefined name 'FontWeight' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:44:27 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:47:17 - creation_with_non_type
+  error - Undefined name 'GridView' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:48:11 - undefined_identifier
+  error - The name 'NeverScrollableScrollPhysics' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:53:28 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:58:17 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:59:17 - undefined_identifier
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:64:17 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:65:17 - undefined_identifier
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:70:17 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:71:17 - undefined_identifier
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:76:17 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:77:17 - undefined_identifier
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:82:17 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:83:17 - undefined_identifier
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:88:17 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:89:17 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:94:17 - creation_with_non_type
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:97:17 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:99:20 - undefined_method
+  error - Undefined name 'FontWeight' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:101:27 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:104:17 - creation_with_non_type
+  error - The method 'Card' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:105:11 - undefined_method
+  error - The method 'Padding' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:107:20 - undefined_method
+  error - The name 'all' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:108:30 - creation_with_non_type
+  error - The method 'Column' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:109:22 - undefined_method
+  error - The method 'ListTile' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:111:19 - undefined_method
+  error - The name 'Icon' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:112:36 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:112:41 - undefined_identifier
+  error - Undefined name 'AppTheme' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:112:64 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:113:34 - creation_with_non_type
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:114:37 - creation_with_non_type
+  error - The method 'ElevatedButton' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:115:31 - undefined_method
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:117:36 - creation_with_non_type
+  error - The name 'Divider' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:120:25 - creation_with_non_type
+  error - The method 'ListTile' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:121:19 - undefined_method
+  error - The name 'Icon' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:122:36 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:122:41 - undefined_identifier
+  error - Undefined name 'AppTheme' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:122:65 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:123:34 - creation_with_non_type
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:124:37 - creation_with_non_type
+  error - The method 'ElevatedButton' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:125:31 - undefined_method
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:127:36 - creation_with_non_type
+  error - The name 'Divider' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:130:25 - creation_with_non_type
+  error - The method 'ListTile' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:131:19 - undefined_method
+  error - The name 'Icon' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:132:36 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:132:41 - undefined_identifier
+  error - Undefined name 'AppTheme' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:132:66 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:133:34 - creation_with_non_type
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:134:37 - creation_with_non_type
+  error - The method 'ElevatedButton' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:135:31 - undefined_method
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:137:36 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:145:17 - creation_with_non_type
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:148:17 - creation_with_non_type
+  error - The method 'TextStyle' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:150:20 - undefined_method
+  error - Undefined name 'FontWeight' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:152:27 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:155:17 - creation_with_non_type
+  error - The method 'Card' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:156:11 - undefined_method
+  error - The method 'Padding' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:158:20 - undefined_method
+  error - The name 'all' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:159:30 - creation_with_non_type
+  error - The method 'Column' isn't defined for the type 'ReportsTab' - lib\features\admin\presentation\views\admin\modules\tabs\reports_tab.dart:160:22 - undefined_method
+  error - Classes can only extend other classes - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:3:35 - extends_non_class
+  error - The name 'AdminVendor' isn't a type, so it can't be used as a type argument - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:4:14 - non_type_as_type_argument
+  error - Undefined class 'AdminProvider' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:5:9 - undefined_class
+  error - Undefined class '_VendorManagementScreenState' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:6:9 - undefined_class
+  error - No associated named super constructor parameter - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:9:11 - super_formal_parameter_without_associated_named
+  error - Undefined class 'Widget' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:16:3 - undefined_class
+  error - Undefined class 'BuildContext' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:16:16 - undefined_class
+  error - Undefined name 'VendorServicesData' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:17:25 - undefined_identifier
+  error - The name 'VendorService' isn't a type, so it can't be used as a type argument - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:20:28 - non_type_as_type_argument
+  error - The property 'id' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:30:45 - unchecked_use_of_nullable_value
+  error - The property 'id' can't be unconditionally accessed because the receiver can be 'null' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:31:33 - unchecked_use_of_nullable_value
+  error - The method 'Column' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:33:12 - undefined_method
+  error - The method 'Padding' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:36:9 - undefined_method
+  error - The name 'all' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:37:26 - creation_with_non_type
+  error - The method 'Row' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:38:18 - undefined_method
+  error - The method 'Expanded' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:40:15 - undefined_method
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:44:19 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:45:19 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:48:21 - creation_with_non_type
+  error - The method 'Expanded' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:49:15 - undefined_method
+  error - The name 'VendorService' isn't a type, so it can't be used as a type argument - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:52:41 - non_type_as_type_argument
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:53:19 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:54:19 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:57:21 - creation_with_non_type
+  error - The method 'Expanded' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:58:15 - undefined_method
+  error - The name 'VendorService' isn't a type, so it can't be used as a type argument - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:61:41 - non_type_as_type_argument
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:62:19 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:63:19 - undefined_identifier
+  error - The method 'Expanded' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:71:9 - undefined_method
+  error - Undefined name 'ListView' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:72:18 - undefined_identifier
+  error - The name 'symmetric' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:73:28 - creation_with_non_type
+  error - The method 'Card' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:79:22 - undefined_method
+  error - The name 'only' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:80:31 - creation_with_non_type
+  error - The method 'ExpansionTile' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:82:24 - undefined_method
+  error - The method 'CircleAvatar' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:83:28 - undefined_method
+  error - Undefined name 'AppTheme' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:85:38 - undefined_identifier
+  error - The method 'Icon' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:86:28 - undefined_method
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:87:23 - undefined_identifier
+  error - Undefined name 'AppTheme' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:88:30 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:92:26 - undefined_method
+  error - The name 'TextStyle' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:94:34 - creation_with_non_type
+  error - Undefined name 'FontWeight' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:96:35 - undefined_identifier
+  error - The method 'Column' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:99:29 - undefined_method
+  error - Undefined name 'CrossAxisAlignment' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:100:41 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:102:23 - undefined_method
+  error - The method 'Row' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:103:23 - undefined_method
+  error - The method 'Icon' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:105:27 - undefined_method
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:105:32 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:105:51 - undefined_identifier
+  error - The method 'Text' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:106:27 - undefined_method
+  error - The name 'SizedBox' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:107:33 - creation_with_non_type
+  error - The method 'Text' isn't defined for the type 'ServicesPackagesTab' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:108:27 - undefined_method
+  error - Undefined name 'ElevatedButton' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:113:29 - undefined_identifier
+  error - The name 'Icon' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:115:33 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:115:38 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:116:34 - creation_with_non_type
+  error - Undefined name 'ElevatedButton' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:117:28 - undefined_identifier
+  error - Undefined name 'AppTheme' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:118:40 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:119:40 - undefined_identifier
+  error - The name 'symmetric' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:120:38 - creation_with_non_type
+  error - The name 'TextStyle' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\services_packages_tab.dart:121:40 - creation_with_non_type
+  error - Classes can only extend other classes - lib\features\admin\presentation\views\admin\modules\tabs\suspended_tab.dart:3:28 - extends_non_class
+  error - The name 'AdminVendor' isn't a type, so it can't be used as a type argument - lib\features\admin\presentation\views\admin\modules\tabs\suspended_tab.dart:4:14 - non_type_as_type_argument
+  error - Undefined class 'AdminProvider' - lib\features\admin\presentation\views\admin\modules\tabs\suspended_tab.dart:5:9 - undefined_class
+  error - Undefined class '_VendorManagementScreenState' - lib\features\admin\presentation\views\admin\modules\tabs\suspended_tab.dart:6:9 - undefined_class
+  error - No associated named super constructor parameter - lib\features\admin\presentation\views\admin\modules\tabs\suspended_tab.dart:9:11 - super_formal_parameter_without_associated_named
+  error - Undefined class 'Widget' - lib\features\admin\presentation\views\admin\modules\tabs\suspended_tab.dart:16:3 - undefined_class
+  error - Undefined class 'BuildContext' - lib\features\admin\presentation\views\admin\modules\tabs\suspended_tab.dart:16:16 - undefined_class
+  error - Undefined name 'ListView' - lib\features\admin\presentation\views\admin\modules\tabs\suspended_tab.dart:17:12 - undefined_identifier
+  error - The name 'all' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\suspended_tab.dart:18:22 - creation_with_non_type
+  error - Classes can only extend other classes - lib\features\admin\presentation\views\admin\modules\tabs\vendor_users_tab.dart:3:30 - extends_non_class
+  error - The name 'AdminVendor' isn't a type, so it can't be used as a type argument - lib\features\admin\presentation\views\admin\modules\tabs\vendor_users_tab.dart:4:14 - non_type_as_type_argument
+  error - Undefined class 'AdminProvider' - lib\features\admin\presentation\views\admin\modules\tabs\vendor_users_tab.dart:5:9 - undefined_class
+  error - Undefined class '_VendorManagementScreenState' - lib\features\admin\presentation\views\admin\modules\tabs\vendor_users_tab.dart:6:9 - undefined_class
+  error - No associated named super constructor parameter - lib\features\admin\presentation\views\admin\modules\tabs\vendor_users_tab.dart:9:11 - super_formal_parameter_without_associated_named
+  error - Undefined class 'Widget' - lib\features\admin\presentation\views\admin\modules\tabs\vendor_users_tab.dart:16:3 - undefined_class
+  error - Undefined class 'BuildContext' - lib\features\admin\presentation\views\admin\modules\tabs\vendor_users_tab.dart:16:16 - undefined_class
+  error - Undefined name 'ListView' - lib\features\admin\presentation\views\admin\modules\tabs\vendor_users_tab.dart:19:12 - undefined_identifier
+  error - The name 'all' isn't a class - lib\features\admin\presentation\views\admin\modules\tabs\vendor_users_tab.dart:20:22 - creation_with_non_type
+  error - The getter 'serviceId' isn't defined for the type 'PackageComponent' - lib\features\admin\presentation\widgets\admin_entity_detail_dialog.dart:201:40 - undefined_getter
+  error - The getter 'type' isn't defined for the type 'PackageComponent' - lib\features\admin\presentation\widgets\admin_entity_detail_dialog.dart:453:37 - undefined_getter
+  error - Undefined name 'PackageComponentType' - lib\features\admin\presentation\widgets\admin_entity_detail_dialog.dart:453:45 - undefined_identifier
+  error - The getter 'type' isn't defined for the type 'PackageComponent' - lib\features\admin\presentation\widgets\admin_entity_detail_dialog.dart:457:30 - undefined_getter
+  error - The getter 'type' isn't defined for the type 'PackageComponent' - lib\features\admin\presentation\widgets\admin_entity_detail_dialog.dart:461:39 - undefined_getter
+  error - Undefined name 'PackageComponentType' - lib\features\admin\presentation\widgets\admin_entity_detail_dialog.dart:461:47 - undefined_identifier
+  error - The getter 'collaborators' isn't defined for the type 'PackageComponent' - lib\features\admin\presentation\widgets\admin_entity_detail_dialog.dart:472:26 - undefined_getter
+  error - The getter 'collaborators' isn't defined for the type 'PackageComponent' - lib\features\admin\presentation\widgets\admin_entity_detail_dialog.dart:479:36 - undefined_getter
+  error - The getter 'badgeColor' isn't defined for the type 'ServiceAppointmentStatus' - lib\features\admin\presentation\widgets\admin_entity_detail_dialog.dart:544:81 - undefined_getter
+  error - The getter 'emeraldAccent' isn't defined for the type 'Colors' - lib\features\admin\presentation\widgets\admin_entity_detail_dialog.dart:790:79 - undefined_getter
+  error - The name 'SignInScreen' isn't a class - lib\features\auth\presentation\onboarding_screen.dart:70:53 - creation_with_non_type
+  error - The named parameter 'configurations' isn't defined - lib\features\blog\presentation\views\blog_detail_screen.dart:227:7 - undefined_named_parameter
+  error - The name 'QuillEditorConfigurations' isn't a class - lib\features\blog\presentation\views\blog_detail_screen.dart:227:35 - creation_with_non_type
+  error - Undefined name 'PricingModelType' - lib\features\booking\presentation\views\booking\booking_screen_enhanced_fixed.dart:974:74 - undefined_identifier
+  error - 'ChatConversation' isn't a function - lib\features\chat\data\providers\chat_provider_supabase.dart:162:14 - invocation_of_non_function
+  error - The name 'ChatConversation' is defined in the libraries 'package:eventease/features/chat/data/models/chat_message.dart' and 'package:eventease/shared/models/chat_conversation.dart' - lib\features\chat\data\providers\chat_provider_supabase.dart:162:14 - ambiguous_import
+  error - 'ChatConversation' isn't a function - lib\features\chat\data\providers\chat_provider_supabase.dart:190:15 - invocation_of_non_function
+  error - The name 'ChatConversation' is defined in the libraries 'package:eventease/features/chat/data/models/chat_message.dart' and 'package:eventease/shared/models/chat_conversation.dart' - lib\features\chat\data\providers\chat_provider_supabase.dart:190:15 - ambiguous_import
+  error - The name 'ChatConversation' is defined in the libraries 'package:eventease/features/chat/data/models/chat_message.dart' and 'package:eventease/shared/models/chat_conversation.dart' - lib\features\chat\data\providers\chat_provider_supabase.dart:290:19 - ambiguous_import
+  error - 'ChatConversation' isn't a function - lib\features\chat\data\providers\chat_provider_supabase.dart:324:28 - invocation_of_non_function
+  error - The name 'ChatConversation' is defined in the libraries 'package:eventease/features/chat/data/models/chat_message.dart' and 'package:eventease/shared/models/chat_conversation.dart' - lib\features\chat\data\providers\chat_provider_supabase.dart:324:28 - ambiguous_import
+  error - The name 'ChatConversation' is defined in the libraries 'package:eventease/features/chat/data/models/chat_message.dart' and 'package:eventease/shared/models/chat_conversation.dart' - lib\features\chat\data\providers\chat_provider_supabase.dart:354:22 - ambiguous_import
+  error - 'ChatConversation' isn't a function - lib\features\chat\data\providers\chat_provider_supabase.dart:381:29 - invocation_of_non_function
+  error - The name 'ChatConversation' is defined in the libraries 'package:eventease/features/chat/data/models/chat_message.dart' and 'package:eventease/shared/models/chat_conversation.dart' - lib\features\chat\data\providers\chat_provider_supabase.dart:381:29 - ambiguous_import
+  error - The name 'ChatConversation' is defined in the libraries 'package:eventease/features/chat/data/models/chat_message.dart' and 'package:eventease/shared/models/chat_conversation.dart' - lib\features\chat\data\providers\chat_provider_supabase.dart:421:22 - ambiguous_import
+  error - The name 'ChatConversation' is defined in the libraries 'package:eventease/features/chat/data/models/chat_message.dart' and 'package:eventease/shared/models/chat_conversation.dart' - lib\features\chat\data\providers\chat_provider_supabase.dart:464:26 - ambiguous_import
+  error - The name 'ChatConversation' is defined in the libraries 'package:eventease/features/chat/data/models/chat_message.dart' and 'package:eventease/shared/models/chat_conversation.dart' - lib\features\chat\data\providers\chat_provider_supabase.dart:487:19 - ambiguous_import
+  error - The method 'requestPermission' isn't defined for the type 'FlutterContacts' - lib\features\customer\presentation\views\customer\guest_list_screen.dart:1546:48 - undefined_method
+  error - The method 'getContacts' isn't defined for the type 'FlutterContacts' - lib\features\customer\presentation\views\customer\guest_list_screen.dart:1566:46 - undefined_method
+  error - The argument type 'String?' can't be assigned to the parameter type 'String'.  - lib\features\customer\presentation\views\customer\guest_list_screen.dart:1622:17 - argument_type_not_assignable
+  error - The getter 'platform' isn't defined for the type 'FilePicker' - lib\features\customer\presentation\views\customer\guest_list_screen.dart:1656:39 - undefined_getter
+  error - The method 'toLowerCase' can't be unconditionally invoked because the receiver can be 'null' - lib\features\customer\presentation\views\customer\guest_list_screen.dart:1876:36 - unchecked_use_of_nullable_value
+  error - The argument type 'String?' can't be assigned to the parameter type 'String'.  - lib\features\customer\presentation\views\customer\guest_list_screen.dart:1930:33 - argument_type_not_assignable
+  error - The method 'placemarkFromCoordinates' isn't defined for the type '_EditProfileScreenState' - lib\features\customer\presentation\views\user\edit_profile_screen.dart:699:42 - undefined_method
+  error - The getter 'platform' isn't defined for the type 'FilePicker' - lib\features\event\presentation\widgets\digital_invite_card_dialog.dart:117:39 - undefined_getter
+  error - Undefined class 'VendorServiceEnhanced' - lib\features\vendor\data\providers\provider_helpers.dart:2:61 - undefined_class
+  error - Undefined name 'Supabase' - lib\features\vendor\data\providers\provider_helpers.dart:3:20 - undefined_identifier
+  error - The name 'VendorServiceEnhanced' isn't a type, so it can't be used as a type argument - lib\features\vendor\data\providers\provider_helpers.dart:46:10 - non_type_as_type_argument
+  error - Undefined class 'VendorServiceEnhanced' - lib\features\vendor\data\providers\provider_helpers.dart:46:60 - undefined_class
+  error - Undefined name 'Supabase' - lib\features\vendor\data\providers\provider_helpers.dart:47:20 - undefined_identifier
+  error - The function 'ServicePricingTier' isn't defined - lib\features\vendor\data\providers\provider_helpers.dart:51:50 - undefined_function
+  error - The function 'ServiceItem' isn't defined - lib\features\vendor\data\providers\provider_helpers.dart:64:42 - undefined_function
+  error - The function 'ServiceComponent' isn't defined - lib\features\vendor\data\providers\provider_helpers.dart:72:14 - undefined_function
+  error - The getter 'platform' isn't defined for the type 'FilePicker' - lib\features\vendor\presentation\views\enhanced_service_creation_screen.dart:4259:49 - undefined_getter
+  error - The getter 'platform' isn't defined for the type 'FilePicker' - lib\features\vendor\presentation\views\enhanced_service_creation_screen.dart:7670:57 - undefined_getter
+  error - Undefined class 'Widget' - lib\features\vendor\presentation\views\temp_helpers.dart:4:3 - undefined_class
+  error - The function 'Column' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:5:12 - undefined_function
+  error - Undefined name 'CrossAxisAlignment' - lib\features\vendor\presentation\views\temp_helpers.dart:6:27 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:8:15 - creation_with_non_type
+  error - The function 'TextStyle' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:10:18 - undefined_function
+  error - Undefined name 'FontWeight' - lib\features\vendor\presentation\views\temp_helpers.dart:10:40 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:12:15 - creation_with_non_type
+  error - Undefined name '_pricingTiers' - lib\features\vendor\presentation\views\temp_helpers.dart:13:13 - undefined_identifier
+  error - The name 'Padding' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:14:17 - creation_with_non_type
+  error - Undefined name 'EdgeInsets' - lib\features\vendor\presentation\views\temp_helpers.dart:15:22 - undefined_identifier
+  error - The function 'Text' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:16:20 - undefined_function
+  error - The function 'TextStyle' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:16:142 - undefined_function
+  error - Undefined name 'Colors' - lib\features\vendor\presentation\views\temp_helpers.dart:16:159 - undefined_identifier
+  error - Undefined name '_pricingTiers' - lib\features\vendor\presentation\views\temp_helpers.dart:18:12 - undefined_identifier
+  error - The function 'Card' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:19:18 - undefined_function
+  error - The name 'only' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:20:27 - creation_with_non_type
+  error - The function 'ListTile' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:21:20 - undefined_function
+  error - The function 'Text' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:22:22 - undefined_function
+  error - The function 'Text' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:23:25 - undefined_function
+  error - The function 'IconButton' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:24:25 - undefined_function
+  error - The name 'Icon' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:25:29 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\features\vendor\presentation\views\temp_helpers.dart:25:34 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\vendor\presentation\views\temp_helpers.dart:25:55 - undefined_identifier
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:26:34 - undefined_function
+  error - Undefined name '_pricingTiers' - lib\features\vendor\presentation\views\temp_helpers.dart:26:49 - undefined_identifier
+  error - Undefined name 'OutlinedButton' - lib\features\vendor\presentation\views\temp_helpers.dart:31:9 - undefined_identifier
+  error - The name 'Icon' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:33:23 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\features\vendor\presentation\views\temp_helpers.dart:33:28 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:34:24 - creation_with_non_type
+  error - The function 'TextEditingController' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:41:24 - undefined_function
+  error - The function 'TextEditingController' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:42:24 - undefined_function
+  error - The function 'TextEditingController' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:43:23 - undefined_function
+  error - The function 'TextEditingController' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:44:22 - undefined_function
+  error - The function 'showDialog' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:46:11 - undefined_function
+  error - Undefined name 'context' - lib\features\vendor\presentation\views\temp_helpers.dart:47:16 - undefined_identifier
+  error - The function 'AlertDialog' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:48:23 - undefined_function
+  error - The name 'Text' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:49:22 - creation_with_non_type
+  error - The function 'SingleChildScrollView' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:50:18 - undefined_function
+  error - The function 'Column' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:51:18 - undefined_function
+  error - Undefined name 'MainAxisSize' - lib\features\vendor\presentation\views\temp_helpers.dart:52:27 - undefined_identifier
+  error - The function 'TextField' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:54:15 - undefined_function
+  error - The name 'InputDecoration' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:54:65 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:55:21 - creation_with_non_type
+  error - The function 'Row' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:56:15 - undefined_function
+  error - The function 'Expanded' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:58:19 - undefined_function
+  error - The function 'TextField' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:58:35 - undefined_function
+  error - Undefined name 'TextInputType' - lib\features\vendor\presentation\views\temp_helpers.dart:58:83 - undefined_identifier
+  error - The name 'InputDecoration' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:58:123 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:59:25 - creation_with_non_type
+  error - The function 'Expanded' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:60:19 - undefined_function
+  error - The function 'TextField' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:60:35 - undefined_function
+  error - Undefined name 'TextInputType' - lib\features\vendor\presentation\views\temp_helpers.dart:60:83 - undefined_identifier
+  error - The name 'InputDecoration' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:60:123 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:63:21 - creation_with_non_type
+  error - The function 'TextField' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:64:15 - undefined_function
+  error - The name 'numberWithOptions' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:64:68 - creation_with_non_type
+  error - The name 'InputDecoration' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:64:134 - creation_with_non_type
+  error - The function 'TextButton' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:69:11 - undefined_function
+  error - Undefined name 'Navigator' - lib\features\vendor\presentation\views\temp_helpers.dart:69:39 - undefined_identifier
+  error - Undefined name 'context' - lib\features\vendor\presentation\views\temp_helpers.dart:69:53 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:69:76 - creation_with_non_type
+  error - The function 'ElevatedButton' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:70:11 - undefined_function
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:73:17 - undefined_function
+  error - Undefined name '_pricingTiers' - lib\features\vendor\presentation\views\temp_helpers.dart:74:19 - undefined_identifier
+  error - The function 'ServicePricingTier' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:74:37 - undefined_function
+  error - Undefined name 'Navigator' - lib\features\vendor\presentation\views\temp_helpers.dart:82:17 - undefined_identifier
+  error - Undefined name 'context' - lib\features\vendor\presentation\views\temp_helpers.dart:82:31 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:85:26 - creation_with_non_type
+  error - Undefined class 'Widget' - lib\features\vendor\presentation\views\temp_helpers.dart:92:3 - undefined_class
+  error - The function 'Column' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:93:12 - undefined_function
+  error - Undefined name 'CrossAxisAlignment' - lib\features\vendor\presentation\views\temp_helpers.dart:94:27 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:96:15 - creation_with_non_type
+  error - The function 'TextStyle' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:98:18 - undefined_function
+  error - Undefined name 'FontWeight' - lib\features\vendor\presentation\views\temp_helpers.dart:98:40 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:100:15 - creation_with_non_type
+  error - The name 'Text' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:101:15 - creation_with_non_type
+  error - The function 'TextStyle' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:101:99 - undefined_function
+  error - Undefined name 'Colors' - lib\features\vendor\presentation\views\temp_helpers.dart:101:130 - undefined_identifier
+  error - The name 'SizedBox' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:102:15 - creation_with_non_type
+  error - Undefined name '_components' - lib\features\vendor\presentation\views\temp_helpers.dart:104:12 - undefined_identifier
+  error - The function 'Card' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:105:18 - undefined_function
+  error - The name 'only' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:106:27 - creation_with_non_type
+  error - The function 'ExpansionTile' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:107:20 - undefined_function
+  error - The function 'Text' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:108:22 - undefined_function
+  error - The function 'Text' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:109:25 - undefined_function
+  error - The function 'Padding' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:111:17 - undefined_function
+  error - The name 'all' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:112:34 - creation_with_non_type
+  error - The function 'Column' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:113:26 - undefined_function
+  error - The function 'ListTile' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:115:74 - undefined_function
+  error - The function 'Text' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:117:32 - undefined_function
+  error - The function 'Text' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:118:35 - undefined_function
+  error - The function 'IconButton' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:119:35 - undefined_function
+  error - The name 'Icon' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:120:39 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\features\vendor\presentation\views\temp_helpers.dart:120:44 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\vendor\presentation\views\temp_helpers.dart:120:75 - undefined_identifier
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:122:29 - undefined_function
+  error - The name 'Divider' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:128:29 - creation_with_non_type
+  error - The function 'Row' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:129:23 - undefined_function
+  error - Undefined name 'MainAxisAlignment' - lib\features\vendor\presentation\views\temp_helpers.dart:130:44 - undefined_identifier
+  error - Undefined name 'TextButton' - lib\features\vendor\presentation\views\temp_helpers.dart:132:27 - undefined_identifier
+  error - The name 'Icon' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:134:41 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\features\vendor\presentation\views\temp_helpers.dart:134:46 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:135:42 - creation_with_non_type
+  error - Undefined name 'TextButton' - lib\features\vendor\presentation\views\temp_helpers.dart:137:27 - undefined_identifier
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:139:31 - undefined_function
+  error - Undefined name '_components' - lib\features\vendor\presentation\views\temp_helpers.dart:140:33 - undefined_identifier
+  error - The name 'Icon' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:143:41 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\features\vendor\presentation\views\temp_helpers.dart:143:46 - undefined_identifier
+  error - Undefined name 'Colors' - lib\features\vendor\presentation\views\temp_helpers.dart:143:77 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:144:42 - creation_with_non_type
+  error - Undefined name 'OutlinedButton' - lib\features\vendor\presentation\views\temp_helpers.dart:156:9 - undefined_identifier
+  error - The name 'Icon' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:158:23 - creation_with_non_type
+  error - Undefined name 'Icons' - lib\features\vendor\presentation\views\temp_helpers.dart:158:28 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:159:24 - creation_with_non_type
+  error - The function 'TextEditingController' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:166:22 - undefined_function
+  error - The function 'showDialog' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:170:11 - undefined_function
+  error - Undefined name 'context' - lib\features\vendor\presentation\views\temp_helpers.dart:171:16 - undefined_identifier
+  error - The function 'StatefulBuilder' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:172:23 - undefined_function
+  error - The function 'AlertDialog' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:173:47 - undefined_function
+  error - The name 'Text' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:174:24 - creation_with_non_type
+  error - The function 'SingleChildScrollView' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:175:20 - undefined_function
+  error - The function 'Column' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:176:20 - undefined_function
+  error - Undefined name 'MainAxisSize' - lib\features\vendor\presentation\views\temp_helpers.dart:177:29 - undefined_identifier
+  error - The function 'DropdownButtonFormField' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:179:17 - undefined_function
+  error - The name 'InputDecoration' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:181:37 - creation_with_non_type
+  error - The function 'DropdownMenuItem' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:182:43 - undefined_function
+  error - The function 'Text' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:182:77 - undefined_function
+  error - The name 'SizedBox' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:185:23 - creation_with_non_type
+  error - The function 'TextField' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:186:17 - undefined_function
+  error - The name 'InputDecoration' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:186:67 - creation_with_non_type
+  error - The function 'TextButton' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:191:13 - undefined_function
+  error - Undefined name 'Navigator' - lib\features\vendor\presentation\views\temp_helpers.dart:191:41 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:191:78 - creation_with_non_type
+  error - The function 'ElevatedButton' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:192:13 - undefined_function
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:195:19 - undefined_function
+  error - Undefined name '_components' - lib\features\vendor\presentation\views\temp_helpers.dart:196:21 - undefined_identifier
+  error - The function 'ServiceComponent' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:196:37 - undefined_function
+  error - Undefined name 'Navigator' - lib\features\vendor\presentation\views\temp_helpers.dart:202:19 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:205:28 - creation_with_non_type
+  error - Undefined class 'ServiceComponent' - lib\features\vendor\presentation\views\temp_helpers.dart:213:31 - undefined_class
+  error - The function 'TextEditingController' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:214:22 - undefined_function
+  error - The function 'TextEditingController' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:215:21 - undefined_function
+  error - The function 'TextEditingController' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:216:22 - undefined_function
+  error - The function 'showDialog' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:218:11 - undefined_function
+  error - Undefined name 'context' - lib\features\vendor\presentation\views\temp_helpers.dart:219:16 - undefined_identifier
+  error - The function 'AlertDialog' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:220:23 - undefined_function
+  error - The function 'Text' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:221:16 - undefined_function
+  error - The function 'SingleChildScrollView' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:222:18 - undefined_function
+  error - The function 'Column' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:223:20 - undefined_function
+  error - Undefined name 'MainAxisSize' - lib\features\vendor\presentation\views\temp_helpers.dart:224:29 - undefined_identifier
+  error - The function 'TextField' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:226:17 - undefined_function
+  error - The name 'InputDecoration' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:226:67 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:227:23 - creation_with_non_type
+  error - The function 'TextField' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:228:17 - undefined_function
+  error - Undefined name 'TextInputType' - lib\features\vendor\presentation\views\temp_helpers.dart:228:62 - undefined_identifier
+  error - The name 'InputDecoration' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:228:102 - creation_with_non_type
+  error - The name 'SizedBox' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:229:23 - creation_with_non_type
+  error - The function 'TextField' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:230:17 - undefined_function
+  error - The name 'InputDecoration' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:230:67 - creation_with_non_type
+  error - The function 'TextButton' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:235:13 - undefined_function
+  error - Undefined name 'Navigator' - lib\features\vendor\presentation\views\temp_helpers.dart:235:41 - undefined_identifier
+  error - Undefined name 'context' - lib\features\vendor\presentation\views\temp_helpers.dart:235:55 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:235:78 - creation_with_non_type
+  error - The function 'ElevatedButton' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:236:13 - undefined_function
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:239:19 - undefined_function
+  error - The function 'ServiceItem' isn't defined - lib\features\vendor\presentation\views\temp_helpers.dart:240:41 - undefined_function
+  error - Undefined name 'Navigator' - lib\features\vendor\presentation\views\temp_helpers.dart:246:19 - undefined_identifier
+  error - Undefined name 'context' - lib\features\vendor\presentation\views\temp_helpers.dart:246:33 - undefined_identifier
+  error - The name 'Text' isn't a class - lib\features\vendor\presentation\views\temp_helpers.dart:249:28 - creation_with_non_type
+  error - The named parameter 'vendorId' is required, but there's no corresponding argument - lib\features\vendor\presentation\views\vendor_document_management_screen.dart:131:24 - missing_required_argument
+  error - The argument type 'List<DocumentType>' can't be assigned to the parameter type 'List<String>'.  - lib\features\vendor\presentation\views\vendor_document_management_screen.dart:132:34 - argument_type_not_assignable
+  error - The argument type 'Map<DocumentType, DocumentUploadResult>' can't be assigned to the parameter type 'Map<String, DocumentUploadResult>?'.  - lib\features\vendor\presentation\views\vendor_document_management_screen.dart:133:38 - argument_type_not_assignable
+  error - The getter 'type' isn't defined for the type 'DocumentUploadResult' - lib\features\vendor\presentation\views\vendor_document_management_screen.dart:139:48 - undefined_getter
+  error - The getter 'platform' isn't defined for the type 'FilePicker' - lib\features\vendor\presentation\views\vendor_document_management_screen_enhanced.dart:1778:51 - undefined_getter
+  error - The getter 'platform' isn't defined for the type 'FilePicker' - lib\features\vendor\presentation\views\vendor_onboarding_screen.dart:810:41 - undefined_getter
+  error - The getter 'platform' isn't defined for the type 'FilePicker' - lib\features\vendor\presentation\views\vendor_onboarding_screen.dart:1883:51 - undefined_getter
+  error - Can't define a const constructor for a class with non-final fields - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:11:9 - const_constructor_with_non_final_field
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:17:3 - expected_token
+  error - Variables must be declared using the keywords 'const', 'final', 'var' or a type name - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:17:3 - missing_const_final_var_or_type
+  error - Expected a class member - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:17:8 - expected_class_member
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:17:9 - expected_token
+  error - Variables must be declared using the keywords 'const', 'final', 'var' or a type name - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:17:9 - missing_const_final_var_or_type
+  error - Expected a class member - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:17:39 - expected_class_member
+  error - u003e isn't a type - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:17:40 - not_a_type
+  error - 'VendorOrderSettingsScreen.createState' ('dynamic Function()') isn't a valid override of 'StatefulWidget.createState' ('State<StatefulWidget> Function()') - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:17:46 - invalid_override
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:17:60 - expected_token
+  error - Only factory constructor can specify '=' redirection - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:17:60 - redirection_in_non_factory_constructor
+  error - Expected a class member - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:17:61 - expected_class_member
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:17:61 - missing_identifier
+  error - '_VendorOrderSettingsScreenState' must have a method body because 'VendorOrderSettingsScreen' isn't abstract - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:17:62 - concrete_class_with_abstract_member
+  error - u003e isn't a type - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:17:62 - not_a_type
+  error - Missing concrete implementation of 'abstract class State<T extends StatefulWidget> with Diagnosticable.build' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:20:7 - non_abstract_class_inherits_abstract_member
+  error - A class declaration must have a body, even if it is empty - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:20:47 - expected_body
+  error - Expected a method, getter, setter or operator declaration - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:20:52 - expected_executable
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:20:53 - expected_token
+  error - Variables must be declared using the keywords 'const', 'final', 'var' or a type name - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:20:53 - missing_const_final_var_or_type
+  error - Expected a method, getter, setter or operator declaration - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:20:83 - expected_executable
+  error - Functions must have an explicit list of parameters - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:20:84 - missing_function_parameters
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:39:3 - expected_token
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:39:7 - missing_identifier
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:39:7 - expected_token
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:39:8 - expected_token
+  error - Undefined name 'u003cCustomOrderField' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:39:8 - undefined_identifier
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:39:29 - missing_identifier
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:39:29 - expected_token
+  error - u003e isn't a type - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:39:30 - not_a_type
+  error - Invalid context for 'super' invocation - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:43:5 - super_in_invalid_context
+  error - Local variable '_loadSettings' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:44:5 - referenced_before_declaration
+  error - Invalid context for 'super' invocation - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:52:5 - super_in_invalid_context
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:55:3 - expected_token
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:55:9 - missing_identifier
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:55:9 - expected_token
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:55:10 - expected_token
+  error - Undefined name 'u003cvoid' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:55:10 - undefined_identifier
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:55:19 - missing_identifier
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:55:19 - expected_token
+  error - u003e isn't a type - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:55:20 - not_a_type
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:56:5 - undefined_function
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:56:18 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:56:19 - expected_token
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:56:25 - expected_token
+  error - Undefined name 'widget' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:61:28 - undefined_identifier
+  error - Local variable '_applySettingsToForm' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:66:9 - referenced_before_declaration
+  error - Undefined name 'widget' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:69:57 - undefined_identifier
+  error - Local variable '_applySettingsToForm' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:70:9 - referenced_before_declaration
+  error - Undefined name 'mounted' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:73:11 - undefined_identifier
+  error - Undefined name 'context' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:74:30 - undefined_identifier
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:79:7 - undefined_function
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:79:20 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:79:21 - expected_token
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:79:27 - expected_token
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:85:5 - undefined_function
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:101:3 - expected_token
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:101:9 - missing_identifier
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:101:9 - expected_token
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:101:10 - expected_token
+  error - Undefined name 'u003cvoid' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:101:10 - undefined_identifier
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:101:19 - missing_identifier
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:101:19 - expected_token
+  error - u003e isn't a type - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:101:20 - not_a_type
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:102:5 - undefined_function
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:102:18 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:102:19 - expected_token
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:102:25 - expected_token
+  error - Undefined name 'widget' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:105:19 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:128:11 - undefined_identifier
+  error - Undefined name 'context' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:129:30 - undefined_identifier
+  error - Undefined name 'context' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:135:23 - undefined_identifier
+  error - Undefined name 'mounted' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:138:11 - undefined_identifier
+  error - Undefined name 'context' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:139:30 - undefined_identifier
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:147:7 - undefined_function
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:147:20 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:147:21 - expected_token
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:147:27 - expected_token
+  error - Local variable '_buildSectionHeader' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:190:19 - referenced_before_declaration
+  error - Local variable '_buildInstructionsField' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:191:19 - referenced_before_declaration
+  error - Local variable '_buildSectionHeader' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:194:19 - referenced_before_declaration
+  error - Local variable '_buildRequiredFieldsSection' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:195:19 - referenced_before_declaration
+  error - Local variable '_buildSectionHeader' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:198:19 - referenced_before_declaration
+  error - Local variable '_buildQuantitySettings' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:199:19 - referenced_before_declaration
+  error - Local variable '_buildSectionHeader' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:202:19 - referenced_before_declaration
+  error - Local variable '_buildDeliverySettings' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:203:19 - referenced_before_declaration
+  error - Local variable '_buildSectionHeader' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:206:19 - referenced_before_declaration
+  error - Local variable '_buildApprovalSettings' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:207:19 - referenced_before_declaration
+  error - Local variable '_buildSectionHeader' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:210:19 - referenced_before_declaration
+  error - Local variable '_buildCustomFieldsSection' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:211:19 - referenced_before_declaration
+  error - Undefined name 'value' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:279:25 - undefined_identifier
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:279:33 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:279:34 - expected_token
+  error - Too many positional arguments: 0 expected, but 2 found - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:279:34 - extra_positional_arguments_could_be_named
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:279:40 - expected_token
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:279:40 - undefined_function
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:279:53 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:279:54 - expected_token
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:279:60 - expected_token
+  error - Undefined name 'value' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:279:80 - undefined_identifier
+  error - Undefined name 'value' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:287:25 - undefined_identifier
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:287:33 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:287:34 - expected_token
+  error - Too many positional arguments: 0 expected, but 2 found - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:287:34 - extra_positional_arguments_could_be_named
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:287:40 - expected_token
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:287:40 - undefined_function
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:287:53 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:287:54 - expected_token
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:287:60 - expected_token
+  error - Undefined name 'value' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:287:80 - undefined_identifier
+  error - Undefined name 'value' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:295:25 - undefined_identifier
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:295:33 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:295:34 - expected_token
+  error - Too many positional arguments: 0 expected, but 2 found - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:295:34 - extra_positional_arguments_could_be_named
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:295:40 - expected_token
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:295:40 - undefined_function
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:295:53 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:295:54 - expected_token
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:295:60 - expected_token
+  error - Undefined name 'value' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:295:86 - undefined_identifier
+  error - Undefined name 'value' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:303:25 - undefined_identifier
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:303:33 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:303:34 - expected_token
+  error - Too many positional arguments: 0 expected, but 2 found - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:303:34 - extra_positional_arguments_could_be_named
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:303:40 - expected_token
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:303:40 - undefined_function
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:303:53 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:303:54 - expected_token
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:303:60 - expected_token
+  error - Undefined name 'value' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:303:90 - undefined_identifier
+  error - Undefined name 'value' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:331:25 - undefined_identifier
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:331:33 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:331:34 - expected_token
+  error - Too many positional arguments: 0 expected, but 2 found - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:331:34 - extra_positional_arguments_could_be_named
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:331:40 - expected_token
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:331:40 - undefined_function
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:331:53 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:331:54 - expected_token
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:331:60 - expected_token
+  error - Undefined name 'value' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:331:81 - undefined_identifier
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:334:39 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:334:40 - expected_token
+  error - Undefined name 'n' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:334:40 - undefined_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:334:53 - expected_token
+  error - Undefined name 'value' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:386:25 - undefined_identifier
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:386:33 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:386:34 - expected_token
+  error - Too many positional arguments: 0 expected, but 2 found - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:386:34 - extra_positional_arguments_could_be_named
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:386:40 - expected_token
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:386:40 - undefined_function
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:386:53 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:386:54 - expected_token
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:386:60 - expected_token
+  error - Undefined name 'value' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:386:82 - undefined_identifier
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:389:40 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:389:41 - expected_token
+  error - Undefined name 'n' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:389:41 - undefined_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:389:54 - expected_token
+  error - The element type 'Type' can't be assigned to the list type 'Widget' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:390:13 - list_element_type_not_assignable
+  error - Expected to find ']' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:390:36 - expected_token
+  error - Undefined name 'value' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:432:21 - undefined_identifier
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:432:29 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:432:30 - expected_token
+  error - Too many positional arguments: 0 expected, but 2 found - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:432:30 - extra_positional_arguments_could_be_named
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:432:36 - expected_token
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:432:36 - undefined_function
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:432:49 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:432:50 - expected_token
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:432:56 - expected_token
+  error - Undefined name 'value' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:432:77 - undefined_identifier
+  error - Local variable '_buildCustomFieldTile' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:474:22 - referenced_before_declaration
+  error - Local variable '_addCustomField' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:480:26 - referenced_before_declaration
+  error - Local variable '_getFieldIcon' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:498:23 - referenced_before_declaration
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:506:30 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:506:31 - expected_token
+  error - Too many positional arguments: 0 expected, but 2 found - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:506:31 - extra_positional_arguments_could_be_named
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:506:37 - expected_token
+  error - Local variable '_editCustomField' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:506:37 - referenced_before_declaration
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:510:30 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:510:31 - expected_token
+  error - Too many positional arguments: 0 expected, but 2 found - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:510:31 - extra_positional_arguments_could_be_named
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:510:37 - expected_token
+  error - Local variable '_deleteCustomField' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:510:37 - referenced_before_declaration
+  error - Local variable '_showCustomFieldDialog' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:536:5 - referenced_before_declaration
+  error - Local variable '_showCustomFieldDialog' can't be referenced before it is declared - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:540:5 - referenced_before_declaration
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:544:5 - undefined_function
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:557:5 - expected_token
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:557:9 - missing_identifier
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:557:9 - expected_token
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:557:10 - expected_token
+  error - Undefined name 'u003cString' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:557:10 - undefined_identifier
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:557:21 - missing_identifier
+  error - Expected to find ';' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:557:21 - expected_token
+  error - u003e isn't a type - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:557:22 - not_a_type
+  error - Undefined name 'context' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:560:16 - undefined_identifier
+  error - Undefined name 'context' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:561:17 - undefined_identifier
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:561:27 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:561:28 - expected_token
+  error - Too many positional arguments: 0 expected, but 2 found - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:561:28 - extra_positional_arguments_could_be_named
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:561:34 - expected_token
+  error - Undefined name 'context' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:562:19 - undefined_identifier
+  error - Undefined name 'setDialogState' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:562:28 - undefined_identifier
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:562:45 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:562:46 - expected_token
+  error - Too many positional arguments: 0 expected, but 2 found - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:562:46 - extra_positional_arguments_could_be_named
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:562:52 - expected_token
+  error - The element type 'Type' can't be assigned to the list type 'Widget' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:576:17 - list_element_type_not_assignable
+  error - Expected to find ']' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:576:40 - expected_token
+  error - Expected an identifier - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:664:30 - missing_identifier
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:664:31 - expected_token
+  error - Too many positional arguments: 0 expected, but 2 found - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:664:31 - extra_positional_arguments_could_be_named
+  error - Expected to find ',' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:664:37 - expected_token
+  error - Undefined name 'context' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:664:51 - undefined_identifier
+  error - The function 'setState' isn't defined - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:682:19 - undefined_function
+  error - Undefined name 'context' - lib\features\vendor\presentation\views\vendor_order_settings_screen.dart:689:33 - undefined_identifier
+  error - The method 'loadLeaderboard' isn't defined for the type 'ReferralProvider' - lib\features\vendor\presentation\views\vendor_referral_programs_screen.dart:37:30 - undefined_method
+  error - The method 'AddServiceDialog' isn't defined for the type '_VendorServiceManagementScreenFinalState' - lib\features\vendor\presentation\views\vendor_service_management_screen_final.dart:588:29 - undefined_method
+  error - The getter 'services' isn't defined for the type 'VendorProvider' - lib\features\vendor\presentation\views\vendor_service_management_screen_final.dart:730:44 - undefined_getter
+  error - The named parameter 'type' isn't defined - lib\features\vendor\presentation\views\vendor_services_screen.dart:63:11 - undefined_named_parameter
+  error - Target of URI doesn't exist: 'package:flutter_gen/gen_l10n/app_localizations.dart' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:3:8 - uri_does_not_exist
+  error - Undefined class 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:110:33 - undefined_class
+  error - Undefined class 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:123:28 - undefined_class
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:176:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:891:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:983:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1057:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1113:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1151:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1172:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1193:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1214:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1253:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1364:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1573:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1606:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1655:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1665:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1674:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1731:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1764:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1798:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1833:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1867:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1902:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1934:18 - undefined_identifier
+  error - Undefined class 'AppLocalizations' - lib\features\vendor\presentation\views\vendor_settings_screen_enhanced.dart:1970:9 - undefined_class
+  error - Target of URI doesn't exist: 'package:flutter_gen/gen_l10n/app_localizations.dart' - lib\main.dart:8:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:flutter_quill/translations.dart' - lib\main.dart:10:8 - uri_does_not_exist
+  error - The values in a const list literal must be constants - lib\main.dart:400:22 - non_constant_list_element
+  error - Undefined name 'AppLocalizations' - lib\main.dart:400:22 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\main.dart:403:35 - undefined_identifier
+  error - Target of URI doesn't exist: 'package:flutter_gen/gen_l10n/app_localizations.dart' - lib\main_admin.dart:38:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:flutter_quill/translations.dart' - lib\main_admin.dart:40:8 - uri_does_not_exist
+  error - The values in a const list literal must be constants - lib\main_admin.dart:202:18 - non_constant_list_element
+  error - Undefined name 'AppLocalizations' - lib\main_admin.dart:202:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\main_admin.dart:205:31 - undefined_identifier
+  error - Target of URI doesn't exist: 'package:flutter_gen/gen_l10n/app_localizations.dart' - lib\main_customer_vendor.dart:38:8 - uri_does_not_exist
+  error - Target of URI doesn't exist: 'package:flutter_quill/translations.dart' - lib\main_customer_vendor.dart:40:8 - uri_does_not_exist
+  error - The values in a const list literal must be constants - lib\main_customer_vendor.dart:196:18 - non_constant_list_element
+  error - Undefined name 'AppLocalizations' - lib\main_customer_vendor.dart:196:18 - undefined_identifier
+  error - Undefined name 'AppLocalizations' - lib\main_customer_vendor.dart:199:31 - undefined_identifier
+  error - The named parameter 'type' isn't defined - lib\shared\models\enhanced_sample_data.dart:18:7 - undefined_named_parameter
+  error - The named parameter 'type' isn't defined - lib\shared\models\enhanced_sample_data.dart:59:7 - undefined_named_parameter
+  error - The named parameter 'type' isn't defined - lib\shared\models\enhanced_sample_data.dart:100:7 - undefined_named_parameter
+  error - The named parameter 'type' isn't defined - lib\shared\models\services\makeup_services.dart:19:7 - undefined_named_parameter
+  error - The named parameter 'type' isn't defined - lib\shared\models\services\makeup_services.dart:81:7 - undefined_named_parameter
+  error - The named parameter 'type' isn't defined - lib\shared\models\services\makeup_services.dart:140:7 - undefined_named_parameter
+  error - The named parameter 'type' isn't defined - lib\shared\models\services\makeup_services.dart:196:7 - undefined_named_parameter
+  error - The named parameter 'type' isn't defined - lib\shared\models\services\makeup_services.dart:253:7 - undefined_named_parameter
+  error - The type 'PricingModel' isn't exhaustively matched by the switch cases since it doesn't match the pattern 'PricingModel.perTrip' - lib\shared\widgets\category_pricing_input.dart:71:5 - non_exhaustive_switch_statement
+  error - The type 'PricingModel' isn't exhaustively matched by the switch cases since it doesn't match the pattern 'PricingModel.perTrip' - lib\shared\widgets\category_pricing_input.dart:174:5 - non_exhaustive_switch_statement
+  error - The type 'PricingModel' isn't exhaustively matched by the switch cases since it doesn't match the pattern 'PricingModel.perTrip' - lib\shared\widgets\category_pricing_input.dart:189:5 - non_exhaustive_switch_statement
+  error - The type 'PricingModel' isn't exhaustively matched by the switch cases since it doesn't match the pattern 'PricingModel.perTrip' - lib\shared\widgets\category_pricing_input.dart:204:5 - non_exhaustive_switch_statement
+  error - The type 'PricingModel' isn't exhaustively matched by the switch cases since it doesn't match the pattern 'PricingModel.perTrip' - lib\shared\widgets\category_pricing_input.dart:221:5 - non_exhaustive_switch_statement
+  error - The getter 'type' isn't defined for the type 'DocumentUploadResult' - lib\shared\widgets\document_upload_widget.dart:180:155 - undefined_getter
+  error - The named parameter 'documentType' is required, but there's no corresponding argument - lib\shared\widgets\document_upload_widget.dart:303:50 - missing_required_argument
+  error - The named parameter 'vendorId' is required, but there's no corresponding argument - lib\shared\widgets\document_upload_widget.dart:303:50 - missing_required_argument
+  error - The named parameter 'type' isn't defined - lib\shared\widgets\document_upload_widget.dart:305:9 - undefined_named_parameter
+  error - This expression has a type of 'void' so its value can't be used - test\vendor_screens_screenshot_test.dart:48:18 - use_of_void_result
+  error - Too many positional arguments: 0 expected, but 1 found - test\vendor_screens_screenshot_test.dart:48:33 - extra_positional_arguments_could_be_named
+  error - The method 'testLoad' isn't defined for the type 'DotEnv' - test\widget_test.dart:10:18 - undefined_method

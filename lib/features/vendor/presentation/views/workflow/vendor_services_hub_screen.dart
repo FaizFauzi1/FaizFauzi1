@@ -4,7 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:eventease/core/utils/app_theme.dart';
 import 'package:eventease/features/vendor/models/vendor_service_workflow_models.dart';
 import 'package:eventease/features/vendor/data/providers/vendor_workflow_provider.dart';
-import 'vendor_service_creator_screen.dart';
+import 'package:eventease/features/vendor/data/providers/vendor_provider_updated.dart';
+import 'package:eventease/features/vendor/presentation/views/service_creation/open_vendor_service_creation.dart';
+import 'package:eventease/features/vendor/presentation/widgets/vendor_responsive_scaffold.dart';
 import 'appointment_detail_and_outcome_screen.dart';
 
 class VendorServicesHubScreen extends StatefulWidget {
@@ -25,6 +27,13 @@ class _VendorServicesHubScreenState extends State<VendorServicesHubScreen> with 
   void initState() {
     super.initState();
     _tabController = TabController(length: 5, vsync: this, initialIndex: widget.initialTabIndex);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final vendor = Provider.of<VendorProvider>(context, listen: false).currentVendor;
+      if (vendor != null) {
+        Provider.of<VendorWorkflowProvider>(context, listen: false)
+            .loadLiveData(vendor.id, vendor.name);
+      }
+    });
   }
 
   @override
@@ -35,20 +44,13 @@ class _VendorServicesHubScreenState extends State<VendorServicesHubScreen> with 
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
-      appBar: AppBar(
-        title: const Text('Services & Appointments', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-        actions: [
+    return VendorResponsiveScaffold(
+      title: 'Services & Appointments',
+      actions: [
           IconButton(
             icon: const Icon(Icons.add_circle, color: AppTheme.primaryColor),
             tooltip: 'Add New Service',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const VendorServiceCreatorScreen()),
-              );
-            },
+            onPressed: () => openVendorServiceCreation(context),
           ),
         ],
         bottom: TabBar(
@@ -68,11 +70,7 @@ class _VendorServicesHubScreenState extends State<VendorServicesHubScreen> with 
           ],
           onTap: (index) {
             if (index == 1) {
-              // Add Service tab triggers the creation wizard
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const VendorServiceCreatorScreen()),
-              );
+              openVendorServiceCreation(context);
               _tabController.index = 0;
             }
           },
@@ -170,12 +168,7 @@ class _VendorServicesHubScreenState extends State<VendorServicesHubScreen> with 
                               backgroundColor: AppTheme.primaryColor,
                               foregroundColor: Colors.white,
                             ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (_) => const VendorServiceCreatorScreen()),
-                              );
-                            },
+                            onPressed: () => openVendorServiceCreation(context),
                             icon: const Icon(Icons.add),
                             label: const Text('Add Service'),
                           ),
@@ -332,14 +325,7 @@ class _VendorServicesHubScreenState extends State<VendorServicesHubScreen> with 
                                           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                                           visualDensity: VisualDensity.compact,
                                         ),
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (_) => VendorServiceCreatorScreen(existingService: s),
-                                            ),
-                                          );
-                                        },
+                                        onPressed: () => openVendorServiceCreation(context, serviceId: s.id),
                                         icon: const Icon(Icons.edit, size: 14),
                                         label: const Text('Edit Service', style: TextStyle(fontSize: 11)),
                                       ),
@@ -432,14 +418,7 @@ class _VendorServicesHubScreenState extends State<VendorServicesHubScreen> with 
                         ],
                       ),
                       TextButton.icon(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => VendorServiceCreatorScreen(existingService: s),
-                            ),
-                          );
-                        },
+                        onPressed: () => openVendorServiceCreation(context, serviceId: s.id),
                         icon: const Icon(Icons.add, size: 16),
                         label: const Text('Add Package Tier', style: TextStyle(fontSize: 12)),
                       ),

@@ -1158,7 +1158,6 @@ class _FinancialManagementScreenState extends State<FinancialManagementScreen>
         context,
         type: type,
         entityId: id,
-        entityName: name,
       ),
       borderRadius: BorderRadius.circular(6),
       child: Container(

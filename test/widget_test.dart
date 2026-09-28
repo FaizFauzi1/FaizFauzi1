@@ -7,7 +7,7 @@ import 'package:eventease/core/services/supabase_service.dart';
 void main() {
   setUpAll(() async {
     SharedPreferences.setMockInitialValues({});
-    await dotenv.testLoad(fileInput: '''
+    dotenv.testLoad(fileInput: '''
       SUPABASE_URL=https://mock.supabase.co
       SUPABASE_ANON_KEY=mock-key
     ''');

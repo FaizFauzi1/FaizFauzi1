@@ -4257,7 +4257,7 @@ class _EnhancedServiceCreationScreenState
 
   Future<void> _pickPdf() async {
     print('PDF_UPLOAD: Starting PDF pick...');
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+    FilePickerResult? result = await FilePicker.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['pdf'],
       withData: true,
@@ -7676,7 +7676,7 @@ class _EnhancedServiceCreationScreenState
                       ),
                     OutlinedButton.icon(
                       onPressed: () async {
-                        final result = await FilePicker.platform.pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
+                        final result = await FilePicker.pickFiles(type: FileType.custom, allowedExtensions: ['pdf']);
                         if (result != null) {
                           setDialogState(() => selectedPdf = result.files.first);
                         }

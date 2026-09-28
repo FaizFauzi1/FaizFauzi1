@@ -854,78 +854,18 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
     final activeBookings = admin.activeBookings > 0 ? admin.activeBookings : 96;
 
     final metrics = [
-      _MarketOverviewItem(
-        'Total Customers',
-        totalCustomers.toString(),
-        Icons.people_outline,
-        Colors.blue,
-      ),
-      _MarketOverviewItem(
-        'Total Vendors',
-        totalVendors.toString(),
-        Icons.storefront_outlined,
-        Colors.purple,
-      ),
-      _MarketOverviewItem(
-        'Active Vendors',
-        activeVendors.toString(),
-        Icons.verified_outlined,
-        Colors.green,
-      ),
-      _MarketOverviewItem(
-        'Total Services',
-        '348',
-        Icons.design_services_outlined,
-        Colors.amber.shade800,
-      ),
-      _MarketOverviewItem(
-        'Total Products',
-        '84',
-        Icons.inventory_2_outlined,
-        Colors.cyan,
-      ),
-      _MarketOverviewItem(
-        'Total Rentals',
-        '62',
-        Icons.chair_outlined,
-        Colors.orange,
-      ),
-      _MarketOverviewItem(
-        'Total Packages',
-        '45',
-        Icons.all_inbox_outlined,
-        Colors.indigo,
-      ),
-      _MarketOverviewItem(
-        'Active Bookings',
-        activeBookings.toString(),
-        Icons.confirmation_number_outlined,
-        Colors.teal,
-      ),
-      _MarketOverviewItem(
-        'Upcoming Events',
-        '54',
-        Icons.event_outlined,
-        Colors.pink,
-      ),
-      _MarketOverviewItem(
-        'GMV',
-        'RM 348,200',
-        Icons.account_balance_wallet_outlined,
-        Colors.greenAccent,
-      ),
-      _MarketOverviewItem(
-        'Platform Revenue',
-        'RM 38,302',
-        Icons.attach_money,
-        Colors.green,
-      ),
-      _MarketOverviewItem(
-        'Pending Payouts',
-        'RM 28,450',
-        Icons.payments_outlined,
-        Colors.blueGrey,
-      ),
+      _MarketOverviewItem('Total Customers', totalCustomers.toString(), Icons.people_outline, Colors.blue),
+      _MarketOverviewItem('Total Vendors', totalVendors.toString(), Icons.storefront_outlined, Colors.purple),
+      _MarketOverviewItem('Active Vendors', activeVendors.toString(), Icons.verified_outlined, Colors.green),
+      _MarketOverviewItem('Total Services', '348', Icons.design_services_outlined, Colors.amber.shade800),
+      _MarketOverviewItem('Total Products', '84', Icons.inventory_2_outlined, Colors.cyan),
+      _MarketOverviewItem('Total Rentals', '62', Icons.chair_outlined, Colors.orange),
+      _MarketOverviewItem('Total Packages', '45', Icons.all_inbox_outlined, Colors.indigo),
+      _MarketOverviewItem('Active Bookings', activeBookings.toString(), Icons.confirmation_number_outlined, Colors.teal),
+      _MarketOverviewItem('Upcoming Events', '54', Icons.event_outlined, Colors.pink),
+      _MarketOverviewItem('GMV', 'RM 348,200', Icons.account_balance_wallet_outlined, Colors.emeraldAccent),
+      _MarketOverviewItem('Platform Revenue', 'RM 38,302', Icons.attach_money, Colors.green),
+      _MarketOverviewItem('Pending Payouts', 'RM 28,450', Icons.payments_outlined, Colors.blueGrey),
     ];
 
     return Container(
@@ -2296,10 +2236,10 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
           children: [
             Expanded(
               child: _buildActionCard(
-                title: 'Manage Users',
-                icon: Icons.people,
-                badgeColor: AppTheme.primaryColor,
-                onTap: () {
+                'Manage Users',
+                Icons.people,
+                AppTheme.primaryColor,
+                () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const AdminUsersScreen()),
@@ -2310,10 +2250,10 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
             const SizedBox(width: 12),
             Expanded(
               child: _buildActionCard(
-                title: 'Manage Vendors',
-                icon: Icons.business,
-                badgeColor: AppTheme.secondaryColor,
-                onTap: () {
+                'Manage Vendors',
+                Icons.business,
+                AppTheme.secondaryColor,
+                () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -2330,10 +2270,10 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
           children: [
             Expanded(
               child: _buildActionCard(
-                title: 'View Reports',
-                icon: Icons.analytics,
-                badgeColor: AppTheme.accentColor,
-                onTap: () {
+                'View Reports',
+                Icons.analytics,
+                AppTheme.accentColor,
+                () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const ReportsScreen()),
@@ -2344,10 +2284,10 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
             const SizedBox(width: 12),
             Expanded(
               child: _buildActionCard(
-                title: 'System Settings',
-                icon: Icons.settings,
-                badgeColor: AppTheme.successColor,
-                onTap: () {
+                'System Settings',
+                Icons.settings,
+                AppTheme.successColor,
+                () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -2364,10 +2304,10 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
           children: [
             Expanded(
               child: _buildActionCard(
-                title: 'Service Approval',
-                icon: Icons.fact_check,
-                badgeColor: Colors.orange,
-                onTap: () {
+                'Service Approval',
+                Icons.fact_check,
+                Colors.orange,
+                () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -2380,10 +2320,10 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
             const SizedBox(width: 12),
             Expanded(
               child: _buildActionCard(
-                title: 'Create Vendor',
-                icon: Icons.add_business,
-                badgeColor: Colors.teal,
-                onTap: () {
+                'Create Vendor',
+                Icons.add_business,
+                Colors.teal,
+                () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -2400,10 +2340,10 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
           children: [
             Expanded(
               child: _buildActionCard(
-                title: 'Catalog Monitor',
-                icon: Icons.auto_awesome_mosaic,
-                badgeColor: Colors.purple,
-                onTap: () {
+                'Catalog Monitor',
+                Icons.auto_awesome_mosaic,
+                Colors.purple,
+                () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -2416,10 +2356,10 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
             const SizedBox(width: 12),
             Expanded(
               child: _buildActionCard(
-                title: 'Organizer Mgmt',
-                icon: Icons.festival,
-                badgeColor: Colors.indigo,
-                onTap: () {
+                'Organizer Mgmt',
+                Icons.festival,
+                Colors.indigo,
+                () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -2435,7 +2375,7 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
         Row(
           children: [
             Expanded(
-              child: _buildActionCard(
+              child: _buildSimpleActionCard(
                 title: 'Expo Oversight',
                 icon: Icons.event_seat,
                 badgeColor: Colors.deepOrange,
@@ -2457,13 +2397,12 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
     );
   }
 
-  Widget _buildActionCard({
-    required String title,
-    String subtitle = '',
-    required IconData icon,
-    required Color badgeColor,
-    required VoidCallback onTap,
-  }) {
+  Widget _buildActionCard(
+    String title,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -3972,4 +3911,13 @@ class AdminApprovalsScreen extends StatelessWidget {
               ),
     );
   }
+}
+
+class _MarketOverviewItem {
+  final String label;
+  final String value;
+  final IconData icon;
+  final Color color;
+
+  const _MarketOverviewItem(this.label, this.value, this.icon, this.color);
 }

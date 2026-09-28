@@ -25,11 +25,21 @@ import 'package:eventease/features/admin/data/services/admin_impersonation_servi
 import 'package:eventease/features/auth/data/auth_provider.dart';
 import 'package:eventease/features/vendor/presentation/views/vendor_dashboard_screen.dart';
 import 'package:eventease/features/vendor/data/providers/vendor_provider_updated.dart';
+import 'package:intl/intl.dart';
+import 'package:eventease/features/admin/presentation/widgets/admin_entity_detail_dialog.dart';
+import 'package:eventease/features/admin/data/services/admin_marketplace_service.dart';
 
 
 part 'tabs/all_vendors_tab.dart';
 part 'tabs/pending_approval_tab.dart';
-  
+part 'tabs/document_review_tab.dart';
+part 'tabs/all_documents_tab.dart';
+part 'tabs/suspended_tab.dart';
+part 'tabs/performance_tab.dart';
+part 'tabs/services_packages_tab.dart';
+part 'tabs/reports_tab.dart';
+part 'tabs/analytics_tab.dart';
+part 'tabs/vendor_users_tab.dart';
 
 class VendorManagementScreen extends StatefulWidget {
   const VendorManagementScreen({super.key});

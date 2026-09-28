@@ -45,7 +45,7 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     
     // Initialize dotenv for testing environment
-    await dotenv.loadFromString('''
+    dotenv.testLoad(fileInput: '''
       SUPABASE_URL=https://mock.supabase.co
       SUPABASE_ANON_KEY=mock-key
     ''');

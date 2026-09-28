@@ -1774,18 +1774,15 @@ class _EnhancedDocumentUploadWidgetState extends State<EnhancedDocumentUploadWid
 
   Future<void> _uploadDocument() async {
     try {
-      // Pick a file using file_picker (similar to onboarding)
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
+      final pickedFile = await DocumentUploadService.pickDocument(
         allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx'],
-        allowMultiple: false,
       );
 
-      if (result == null || result.files.single.path == null) {
+      if (pickedFile == null || pickedFile.path == null) {
         return;
       }
 
-      final filePath = result.files.single.path!;
+      final filePath = pickedFile.path!;
       final file = File(filePath);
 
       // Validate file size (max 10MB)
@@ -1815,7 +1812,7 @@ class _EnhancedDocumentUploadWidgetState extends State<EnhancedDocumentUploadWid
       final uploadSuccess = await profileProvider.uploadDocument(
         filePath: filePath,
         documentType: documentType,
-        fileName: result.files.single.name,
+        fileName: pickedFile.name,
       );
 
       if (!uploadSuccess) {
@@ -1824,7 +1821,7 @@ class _EnhancedDocumentUploadWidgetState extends State<EnhancedDocumentUploadWid
 
       // Create enhanced result
       final enhancedResult = EnhancedDocumentUploadResult(
-        fileName: result.files.single.name,
+        fileName: pickedFile.name,
         fileSize: fileSize,
         documentType: documentType,
         fileUrl: 'uploaded', // Will be updated when profile is reloaded
