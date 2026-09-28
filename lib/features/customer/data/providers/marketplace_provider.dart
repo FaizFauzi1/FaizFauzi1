@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:eventease/core/services/supabase_service.dart';
 import 'package:eventease/features/customer/data/models/transfer_listing.dart';
 import 'package:eventease/features/customer/data/models/item_listing.dart';
 
 class MarketplaceProvider extends ChangeNotifier {
+  static const _transferListingsCacheKey = 'marketplace_transfer_listings';
+  static const _itemListingsCacheKey = 'marketplace_item_listings';
+
   List<TransferListing> _transferListings = [];
   List<ItemListing> _itemListings = [];
   List<TransferListing> _myTransferListings = [];
@@ -39,6 +45,7 @@ class MarketplaceProvider extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
+    await _restoreTransferListings();
     try {
       final response = await SupabaseService.select(
         table: 'transfer_listings',
@@ -50,11 +57,10 @@ class MarketplaceProvider extends ChangeNotifier {
           .map((data) => TransferListing.fromMap(data))
           .where((l) => l.listingStatus == TransferListingStatus.active)
           .toList();
+      await _cacheRows(_transferListingsCacheKey, response);
     } catch (e) {
       _errorMessage = e.toString();
       print('Error loading transfer listings: $e');
-      // Load fallback/sample data in case of DB connection issues
-      _loadSampleTransferListings();
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -67,6 +73,7 @@ class MarketplaceProvider extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
+    await _restoreItemListings();
     try {
       final response = await SupabaseService.select(
         table: 'item_listings',
@@ -78,10 +85,10 @@ class MarketplaceProvider extends ChangeNotifier {
           .map((data) => ItemListing.fromMap(data))
           .where((l) => l.listingStatus == ItemListingStatus.active)
           .toList();
+      await _cacheRows(_itemListingsCacheKey, response);
     } catch (e) {
       _errorMessage = e.toString();
       print('Error loading item listings: $e');
-      _loadSampleItemListings();
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -313,87 +320,51 @@ class MarketplaceProvider extends ChangeNotifier {
     }
   }
 
-  void _loadSampleTransferListings() {
-    _transferListings = [
-      TransferListing(
-        id: 'sample-t-1',
-        customerId: 'customer_sample',
-        vendorId: 'vendor_sample_1',
-        bookingId: 'booking_sample_1',
-        category: 'Wedding venue',
-        vendorName: 'The Grand Ballroom Hotel',
-        eventDate: DateTime.now().add(const Duration(days: 30)),
-        originalBookingPrice: 15000.0,
-        sellingPrice: 11000.0,
-        packageDescription: 'Includes grand hall rental for 5 hours, audio-visual system, and basic decoration package.',
-        images: ['https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=800&q=80'],
-        reason: 'Change of event location to another state.',
-        proofUrl: '',
-        transferApprovalStatus: TransferApprovalStatus.approved,
-        listingStatus: TransferListingStatus.active,
-        createdAt: DateTime.now().subtract(const Duration(days: 2)),
-        updatedAt: DateTime.now(),
-      ),
-      TransferListing(
-        id: 'sample-t-2',
-        customerId: 'customer_sample',
-        vendorId: null,
-        bookingId: null,
-        category: 'Catering package',
-        vendorName: 'Delicious Feast Catering (External)',
-        eventDate: DateTime.now().add(const Duration(days: 45)),
-        originalBookingPrice: 6500.0,
-        sellingPrice: 5000.0,
-        packageDescription: 'Premium buffet catering for 200 guests with Malaysian & Western fusion menu.',
-        images: ['https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&w=800&q=80'],
-        reason: 'Reduced guest list size.',
-        proofUrl: 'https://example.com/receipt.pdf',
-        transferApprovalStatus: TransferApprovalStatus.pending,
-        listingStatus: TransferListingStatus.active, // Shows as External Vendor
-        createdAt: DateTime.now().subtract(const Duration(days: 1)),
-        updatedAt: DateTime.now(),
-      )
-    ];
+  Future<void> _restoreTransferListings() async {
+    if (_transferListings.isNotEmpty) return;
+    final rows = await _readCachedRows(_transferListingsCacheKey);
+    if (rows == null) return;
+
+    _transferListings = rows
+        .map(TransferListing.fromMap)
+        .where((listing) =>
+            listing.listingStatus == TransferListingStatus.active)
+        .toList();
+    notifyListeners();
   }
 
-  void _loadSampleItemListings() {
-    _itemListings = [
-      ItemListing(
-        id: 'sample-i-1',
-        customerId: 'customer_sample',
-        category: 'Bridal wear',
-        itemName: 'Vintage Lace Wedding Dress',
-        description: 'Stunning vintage A-line wedding gown with full French lace overlay and sweetheart neckline. Worn once, dry cleaned immediately.',
-        condition: ItemCondition.likeNew,
-        quantity: 1,
-        size: 'M / UK 10',
-        brand: 'Lillian West',
-        price: 1800.0,
-        images: ['https://images.unsplash.com/photo-1594552072238-b8a33785b261?auto=format&fit=crop&w=800&q=80'],
-        location: 'Kuala Lumpur',
-        deliveryOption: 'both',
-        listingStatus: ItemListingStatus.active,
-        createdAt: DateTime.now().subtract(const Duration(days: 3)),
-        updatedAt: DateTime.now(),
-      ),
-      ItemListing(
-        id: 'sample-i-2',
-        customerId: 'customer_sample',
-        category: 'Wedding decorations',
-        itemName: 'Fairy Lights Backdrop with Metal Arch',
-        description: 'Complete 3m x 3m copper wedding arch with 40m LED warm fairy lights, artificial flower panels, and sheer white drapes.',
-        condition: ItemCondition.newCondition,
-        quantity: 1,
-        size: '3m x 3m',
-        brand: 'Handmade / Custom',
-        price: 350.0,
-        images: ['https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80'],
-        location: 'Petaling Jaya',
-        deliveryOption: 'pickup',
-        listingStatus: ItemListingStatus.active,
-        createdAt: DateTime.now().subtract(const Duration(days: 4)),
-        updatedAt: DateTime.now(),
-      )
-    ];
+  Future<void> _restoreItemListings() async {
+    if (_itemListings.isNotEmpty) return;
+    final rows = await _readCachedRows(_itemListingsCacheKey);
+    if (rows == null) return;
+
+    _itemListings = rows
+        .map(ItemListing.fromMap)
+        .where((listing) => listing.listingStatus == ItemListingStatus.active)
+        .toList();
+    notifyListeners();
+  }
+
+  Future<List<Map<String, dynamic>>?> _readCachedRows(String key) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final cachedRows = prefs.getString(key);
+      if (cachedRows == null) return null;
+      return (jsonDecode(cachedRows) as List)
+          .map((row) => Map<String, dynamic>.from(row as Map))
+          .toList();
+    } catch (e) {
+      debugPrint('Error reading marketplace cache: $e');
+      return null;
+    }
+  }
+
+  Future<void> _cacheRows(String key, List<Map<String, dynamic>> rows) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(key, jsonEncode(rows));
+    } catch (e) {
+      debugPrint('Error caching marketplace listings: $e');
+    }
   }
 }

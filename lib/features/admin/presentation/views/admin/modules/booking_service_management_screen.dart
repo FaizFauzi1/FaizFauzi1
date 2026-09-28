@@ -4662,7 +4662,7 @@ Service Categories:
                     onPressed: () {
                       AdminEntityDetailDialog.show(
                         context,
-                        type: MarketplaceEntityType.category,
+                        type: MarketplaceEntityType.service,
                         entityId: category.id,
                         entityName: category.name,
                         status: category.isActive ? 'Active' : 'Inactive',
@@ -5128,7 +5128,7 @@ Service Categories:
                 Navigator.pop(context);
                 AdminEntityDetailDialog.show(
                   context,
-                  type: MarketplaceEntityType.category,
+                  type: MarketplaceEntityType.service,
                   entityId: category.id,
                   entityName: category.name,
                   status: category.isActive ? 'Active' : 'Inactive',

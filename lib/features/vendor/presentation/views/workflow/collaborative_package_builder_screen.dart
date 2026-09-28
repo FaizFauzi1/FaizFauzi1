@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:eventease/core/utils/app_theme.dart';
 import 'package:eventease/features/vendor/models/vendor_service_workflow_models.dart';
 import 'package:eventease/features/vendor/data/providers/vendor_workflow_provider.dart';
+import 'package:eventease/features/vendor/data/providers/vendor_networking_provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CollaborativePackageBuilderScreen extends StatefulWidget {
   final CollaborativePackage? existingPackage;
@@ -16,15 +18,15 @@ class CollaborativePackageBuilderScreen extends StatefulWidget {
 class _CollaborativePackageBuilderScreenState extends State<CollaborativePackageBuilderScreen> {
   final _titleController = TextEditingController();
   final _descController = TextEditingController();
-  final _basePriceController = TextEditingController(text: '25000');
-  List<String> _selectedEventTypes = ['Wedding'];
+  final _basePriceController = TextEditingController();
+  List<String> _selectedEventTypes = [];
   final List<PackageComponent> _components = [];
-
-  final List<String> _eventOptions = ['Wedding', 'Corporate Gala', 'Birthday Celebration', 'Anniversary'];
+  List<String> _eventOptions = [];
 
   @override
   void initState() {
     super.initState();
+    _loadEventTypes();
     if (widget.existingPackage != null) {
       final p = widget.existingPackage!;
       _titleController.text = p.title;
@@ -32,202 +34,24 @@ class _CollaborativePackageBuilderScreenState extends State<CollaborativePackage
       _basePriceController.text = p.basePrice.toStringAsFixed(0);
       _selectedEventTypes = List.from(p.eventTypes);
       _components.addAll(p.components);
-    } else {
-      _titleController.text = 'Premium Royal Wedding Package';
-      _descController.text =
-          'Curated luxury wedding package featuring Grand Hall Ballroom, authentic 10-course banquet catering, stage decor, and handpicked customer choices for photography, makeup, and wedding cake.';
-      _initDefaultComponents();
     }
   }
 
-  void _initDefaultComponents() {
-    final provider = Provider.of<VendorWorkflowProvider>(context, listen: false);
-    _components.addAll([
-      PackageComponent(
-        id: 'comp-1-venue',
-        componentName: 'Grand Ballroom Venue',
-        category: ServiceCategoryType.venue,
-        description: 'Ballroom access for up to 500 guests with 4K LED Screen & AV.',
-        isFixedVendor: true,
-        selectionRule: ComponentSelectionRule.exactlyOne,
-        appointmentRule: ComponentAppointmentRule.requiredBeforeBooking,
-        packageAllowance: 6000.0,
-        approvedCollaborators: [
-          CollaboratorOption(
-            vendorId: provider.currentVendorId,
-            vendorName: provider.currentVendorName,
-            serviceId: 'srv-venue-1',
-            serviceName: 'The Grand Imperial Ballroom',
-            partnerPrice: 6000.0,
-            priceDelta: 0.0,
-            appointmentOptions: [
-              ServiceAppointmentType(
-                id: 'apt-sv-1',
-                serviceId: 'srv-venue-1',
-                name: 'Venue Site Visit',
-                description: 'Guided tour of ballroom, backstage, and AV equipment.',
-                purpose: AppointmentPurpose.visit,
-                durationMinutes: 60,
-                location: 'Grand Hall Level 2',
-              ),
-            ],
-          ),
-        ],
-        selectedCollaboratorId: provider.currentVendorId,
-      ),
-      PackageComponent(
-        id: 'comp-2-catering',
-        componentName: 'Banquet Catering (300 pax)',
-        category: ServiceCategoryType.catering,
-        description: '10-course authentic banquet buffet with servers and chafing dishes.',
-        isFixedVendor: true,
-        selectionRule: ComponentSelectionRule.exactlyOne,
-        appointmentRule: ComponentAppointmentRule.recommendedAppointment,
-        packageAllowance: 10000.0,
-        approvedCollaborators: [
-          CollaboratorOption(
-            vendorId: provider.currentVendorId,
-            vendorName: 'ABC Catering & Culinary Co.',
-            serviceId: 'srv-catering-1',
-            serviceName: 'Grand Royal Banquet Catering',
-            partnerPrice: 10000.0,
-            priceDelta: 0.0,
-            appointmentOptions: [
-              ServiceAppointmentType(
-                id: 'apt-taste-1',
-                serviceId: 'srv-catering-1',
-                name: 'Food Tasting Session',
-                description: 'Sample 6 signature dishes in Damansara studio.',
-                purpose: AppointmentPurpose.tasting,
-                durationMinutes: 60,
-                fee: 100.0,
-                isPaid: true,
-                creditTowardBooking: true,
-              ),
-            ],
-          ),
-        ],
-        selectedCollaboratorId: provider.currentVendorId,
-      ),
-      PackageComponent(
-        id: 'comp-3-photo',
-        componentName: 'Wedding Photography',
-        category: ServiceCategoryType.photography,
-        description: 'Full day photography coverage with edited high-res digital albums.',
-        isFixedVendor: false, // Customer Choice!
-        selectionRule: ComponentSelectionRule.exactlyOne,
-        appointmentRule: ComponentAppointmentRule.optionalAppointment,
-        packageAllowance: 3000.0,
-        approvedCollaborators: [
-          CollaboratorOption(
-            vendorId: 'v-201',
-            vendorName: 'Pixel & Lens Weddings',
-            rating: 4.9,
-            reviewsCount: 88,
-            serviceId: 'srv-photo-1',
-            serviceName: 'Essential Storyteller (8 hrs)',
-            partnerPrice: 3000.0,
-            priceDelta: 0.0,
-          ),
-          CollaboratorOption(
-            vendorId: 'v-202',
-            vendorName: 'Artisan Moments Co.',
-            rating: 5.0,
-            reviewsCount: 114,
-            serviceId: 'srv-photo-artisan',
-            serviceName: 'Dual Cinema Master (10 hrs)',
-            partnerPrice: 3300.0,
-            priceDelta: 300.0,
-          ),
-          CollaboratorOption(
-            vendorId: 'v-203',
-            vendorName: 'Lina Visuals',
-            rating: 4.8,
-            reviewsCount: 45,
-            serviceId: 'srv-photo-lina',
-            serviceName: 'Standard Wedding Coverage',
-            partnerPrice: 2800.0,
-            priceDelta: -200.0,
-          ),
-        ],
-        selectedCollaboratorId: 'v-201',
-      ),
-      PackageComponent(
-        id: 'comp-4-makeup',
-        componentName: 'Bridal Makeup & Styling',
-        category: ServiceCategoryType.makeupAndBeauty,
-        description: 'Professional bridal makeup and hairstyling on wedding day.',
-        isFixedVendor: false, // Customer Choice!
-        selectionRule: ComponentSelectionRule.exactlyOne,
-        appointmentRule: ComponentAppointmentRule.recommendedAppointment,
-        packageAllowance: 800.0,
-        approvedCollaborators: [
-          CollaboratorOption(
-            vendorId: 'v-401',
-            vendorName: 'Glam Studio & Hair Artistry',
-            rating: 4.9,
-            serviceId: 'srv-makeup-1',
-            serviceName: 'Bridal Makeup & Styling',
-            partnerPrice: 800.0,
-            priceDelta: 0.0,
-            appointmentOptions: [
-              ServiceAppointmentType(
-                id: 'apt-trial-glam',
-                serviceId: 'srv-makeup-1',
-                name: 'Makeup Trial',
-                description: 'Full airbrush & hair trial.',
-                purpose: AppointmentPurpose.trial,
-                durationMinutes: 90,
-                fee: 150.0,
-                isPaid: true,
-                creditTowardBooking: true,
-              ),
-            ],
-          ),
-          CollaboratorOption(
-            vendorId: 'v-402',
-            vendorName: 'Beauty by Sarah',
-            rating: 4.9,
-            serviceId: 'srv-sarah-makeup',
-            serviceName: 'Signature Airbrush Glam',
-            partnerPrice: 850.0,
-            priceDelta: 50.0,
-            appointmentOptions: [
-              ServiceAppointmentType(
-                id: 'apt-sarah-trial',
-                serviceId: 'srv-sarah-makeup',
-                name: 'Airbrush Makeup Trial',
-                description: 'Lash styling & airbrush session.',
-                purpose: AppointmentPurpose.trial,
-                durationMinutes: 90,
-                fee: 150.0,
-                isPaid: true,
-                creditTowardBooking: true,
-              ),
-            ],
-          ),
-          CollaboratorOption(
-            vendorId: 'v-403',
-            vendorName: 'Makeup Pro Studio',
-            rating: 5.0,
-            serviceId: 'srv-pro-makeup',
-            serviceName: 'Celebrity Bridal Glam',
-            partnerPrice: 1000.0,
-            priceDelta: 200.0,
-          ),
-          CollaboratorOption(
-            vendorId: 'v-404',
-            vendorName: 'Lina Beauty Studio',
-            rating: 4.7,
-            serviceId: 'srv-lina-makeup',
-            serviceName: 'Natural Glow Look',
-            partnerPrice: 750.0,
-            priceDelta: -50.0,
-          ),
-        ],
-        selectedCollaboratorId: 'v-401',
-      ),
-    ]);
+  Future<void> _loadEventTypes() async {
+    try {
+      final response = await Supabase.instance.client
+          .from('event_types')
+          .select()
+          .order('display_order');
+      final eventTypes = (response as List)
+          .where((row) => (row['is_enabled'] ?? row['is_active'] ?? true) == true)
+          .map((row) => (row['display_name'] ?? row['name'] ?? '').toString())
+          .where((name) => name.isNotEmpty)
+          .toList();
+      if (mounted) setState(() => _eventOptions = eventTypes);
+    } catch (e) {
+      debugPrint('Failed to load package event types: $e');
+    }
   }
 
   @override
@@ -248,7 +72,13 @@ class _CollaborativePackageBuilderScreenState extends State<CollaborativePackage
 
     final provider = Provider.of<VendorWorkflowProvider>(context, listen: false);
     final packageId = widget.existingPackage?.id ?? 'pkg-collab-${DateTime.now().millisecondsSinceEpoch}';
-    final basePrice = double.tryParse(_basePriceController.text) ?? 25000.0;
+    final basePrice = double.tryParse(_basePriceController.text.trim());
+    if (basePrice == null || basePrice < 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Enter a valid package price.')),
+      );
+      return;
+    }
 
     final pkg = CollaborativePackage(
       id: packageId,
@@ -279,7 +109,7 @@ class _CollaborativePackageBuilderScreenState extends State<CollaborativePackage
   void _showAddComponentDialog() {
     final nameCtrl = TextEditingController();
     final descCtrl = TextEditingController();
-    final allowanceCtrl = TextEditingController(text: '1500');
+    final allowanceCtrl = TextEditingController();
     ServiceCategoryType selectedCategory = ServiceCategoryType.decoration;
     bool isFixed = false;
     ComponentSelectionRule selRule = ComponentSelectionRule.exactlyOne;
@@ -360,7 +190,10 @@ class _CollaborativePackageBuilderScreenState extends State<CollaborativePackage
             TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')),
             ElevatedButton(
               onPressed: () {
-                if (nameCtrl.text.isNotEmpty) {
+                final allowance = double.tryParse(allowanceCtrl.text.trim());
+                if (nameCtrl.text.trim().isNotEmpty &&
+                    allowance != null &&
+                    allowance >= 0) {
                   setState(() {
                     _components.add(
                       PackageComponent(
@@ -371,11 +204,17 @@ class _CollaborativePackageBuilderScreenState extends State<CollaborativePackage
                         isFixedVendor: isFixed,
                         selectionRule: selRule,
                         appointmentRule: apptRule,
-                        packageAllowance: double.tryParse(allowanceCtrl.text) ?? 1000.0,
+                        packageAllowance: allowance,
                       ),
                     );
                   });
                   Navigator.pop(ctx);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Enter a component name and valid allowance.'),
+                    ),
+                  );
                 }
               },
               child: const Text('Add Component'),
@@ -386,7 +225,14 @@ class _CollaborativePackageBuilderScreenState extends State<CollaborativePackage
     );
   }
 
-  void _showAddCollaboratorModal(PackageComponent comp) {
+  Future<void> _showAddCollaboratorModal(PackageComponent comp) async {
+    final networkingProvider =
+        Provider.of<VendorNetworkingProvider>(context, listen: false);
+    if (networkingProvider.allVendors.isEmpty) {
+      await networkingProvider.loadDiscoveryVendors();
+    }
+    if (!mounted) return;
+
     final searchCtrl = TextEditingController();
     String query = '';
 
@@ -396,32 +242,12 @@ class _CollaborativePackageBuilderScreenState extends State<CollaborativePackage
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(20))),
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, setModalState) {
-          final sampleVendors = [
-            {
-              'id': 'v-801',
-              'name': 'Bloom Flora Artistry',
-              'rating': 4.9,
-              'category': comp.category.displayName,
-              'location': 'Kuala Lumpur',
-              'price': comp.packageAllowance,
-            },
-            {
-              'id': 'v-802',
-              'name': 'Elite Luxe Studio',
-              'rating': 5.0,
-              'category': comp.category.displayName,
-              'location': 'Petaling Jaya',
-              'price': comp.packageAllowance + 150,
-            },
-            {
-              'id': 'v-803',
-              'name': 'Urban Event Specialists',
-              'rating': 4.8,
-              'category': comp.category.displayName,
-              'location': 'Shah Alam',
-              'price': comp.packageAllowance - 100,
-            },
-          ];
+          final workflowProvider =
+              Provider.of<VendorWorkflowProvider>(ctx, listen: false);
+          final vendors = networkingProvider
+              .searchVendors(query)
+              .where((vendor) => vendor.id != workflowProvider.currentVendorId)
+              .toList();
 
           return Container(
             height: MediaQuery.of(context).size.height * 0.75,
@@ -460,12 +286,16 @@ class _CollaborativePackageBuilderScreenState extends State<CollaborativePackage
                 const SizedBox(height: 10),
                 Expanded(
                   child: ListView.separated(
-                    itemCount: sampleVendors.length,
+                    itemCount: vendors.isEmpty ? 1 : vendors.length,
                     separatorBuilder: (_, __) => const SizedBox(height: 10),
                     itemBuilder: (context, index) {
-                      final v = sampleVendors[index];
-                      final price = v['price'] as double;
-                      final delta = price - comp.packageAllowance;
+                      if (vendors.isEmpty) {
+                        return const Padding(
+                          padding: EdgeInsets.all(24),
+                          child: Center(child: Text('No other vendors found.')),
+                        );
+                      }
+                      final vendor = vendors[index];
 
                       return Container(
                         padding: const EdgeInsets.all(12),
@@ -485,34 +315,18 @@ class _CollaborativePackageBuilderScreenState extends State<CollaborativePackage
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(v['name'] as String, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                                  Text(vendor.name, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
                                   Row(
                                     children: [
                                       const Icon(Icons.star, size: 12, color: Colors.amber),
                                       const SizedBox(width: 4),
-                                      Text('${v['rating']} · ${v['location']}', style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
+                                      Text('${vendor.rating.toStringAsFixed(1)} · ${vendor.location}', style: TextStyle(fontSize: 11, color: Colors.grey.shade600)),
                                     ],
                                   ),
                                 ],
                               ),
                             ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  delta == 0
-                                      ? 'RM ${price.toStringAsFixed(0)} (Included)'
-                                      : delta > 0
-                                          ? 'RM ${price.toStringAsFixed(0)} (+RM${delta.toStringAsFixed(0)})'
-                                          : 'RM ${price.toStringAsFixed(0)} (-RM${delta.abs().toStringAsFixed(0)})',
-                                  style: TextStyle(
-                                    fontSize: 11,
-                                    fontWeight: FontWeight.bold,
-                                    color: delta > 0 ? Colors.amber.shade800 : Colors.green.shade800,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                ElevatedButton(
+                            ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                     backgroundColor: AppTheme.primaryColor,
                                     foregroundColor: Colors.white,
@@ -528,28 +342,26 @@ class _CollaborativePackageBuilderScreenState extends State<CollaborativePackage
                                         packageName: _titleController.text.trim(),
                                         ownerVendorId: provider.currentVendorId,
                                         ownerVendorName: provider.currentVendorName,
-                                        targetVendorId: v['id'] as String,
-                                        targetVendorName: v['name'] as String,
+                                        targetVendorId: vendor.id,
+                                        targetVendorName: vendor.name,
                                         roleCategory: comp.category,
                                         roleComponentName: comp.componentName,
-                                        eventDate: 'Flexible 2026',
-                                        location: 'Kuala Lumpur',
+                                        eventDate: '',
+                                        location: '',
                                         packageAllowance: comp.packageAllowance,
-                                        requestedAppointmentTypes: ['Consultation / Trial'],
+                                        requestedAppointmentTypes: const [],
                                       ),
                                     );
                                     Navigator.pop(ctx);
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
                                         backgroundColor: AppTheme.successColor,
-                                        content: Text('Collaboration invitation dispatched to ${v['name']}!'),
+                                        content: Text('Invitation created for ${vendor.name}.'),
                                       ),
                                     );
                                   },
                                   child: const Text('Send Invitation'),
                                 ),
-                              ],
-                            ),
                           ],
                         ),
                       );
@@ -670,6 +482,30 @@ class _CollaborativePackageBuilderScreenState extends State<CollaborativePackage
                     maxLines: 2,
                     decoration: const InputDecoration(labelText: 'Package Overview & Customer Value Proposition', border: OutlineInputBorder()),
                   ),
+                  if (_eventOptions.isNotEmpty) ...[
+                    const SizedBox(height: 12),
+                    const Text('Event Types', style: TextStyle(fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 4,
+                      children: _eventOptions.map((eventType) {
+                        return FilterChip(
+                          label: Text(eventType),
+                          selected: _selectedEventTypes.contains(eventType),
+                          onSelected: (selected) {
+                            setState(() {
+                              if (selected) {
+                                _selectedEventTypes.add(eventType);
+                              } else {
+                                _selectedEventTypes.remove(eventType);
+                              }
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ],
                 ],
               ),
             ),

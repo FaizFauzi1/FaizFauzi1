@@ -862,7 +862,7 @@ class _VendorJoinExhibitorScreenState extends State<VendorJoinExhibitorScreen>
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(
-                        'Booth ${exhibitor.boothNumber ?? "A-05"}',
+                        'Booth ${exhibitor.boothNumber ?? "Not assigned"}',
                         style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 13),
                       ),
                     ),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:eventease/core/utils/app_theme.dart';
-import 'package:eventease/core/utils/app_theme.dart';
 import 'package:intl/intl.dart';
 import 'package:eventease/shared/presentation/views/rescue_room_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class EventCommandCenterScreen extends StatefulWidget {
   const EventCommandCenterScreen({Key? key}) : super(key: key);
@@ -12,44 +12,158 @@ class EventCommandCenterScreen extends StatefulWidget {
 }
 
 class _EventCommandCenterScreenState extends State<EventCommandCenterScreen> {
-  // Temporary mock data to demonstrate the UI
-  final List<Map<String, dynamic>> _liveEvents = [
-    {
-      'id': 'E-1024',
-      'title': 'Sarah & John Wedding',
-      'date': DateTime.now().add(const Duration(minutes: 45)),
-      'location': 'Grand Ballroom, KL',
-      'priority': 'critical',
-      'services': [
-        {'type': 'Photographer', 'vendor': 'LensArt Studio', 'status': 'on_the_way', 'eta': '15 mins'},
-        {'type': 'Caterer', 'vendor': 'Royal Eats', 'status': 'arrived', 'eta': 'On Site'},
-        {'type': 'Makeup Artist', 'vendor': 'GlamByJane', 'status': 'no_show_suspected', 'eta': 'Overdue by 30m'},
-      ]
-    },
-    {
-      'id': 'E-1025',
-      'title': 'Tech Corp Annual Dinner',
-      'date': DateTime.now().add(const Duration(hours: 3)),
-      'location': 'Convention Center, PJ',
-      'priority': 'medium',
-      'services': [
-        {'type': 'Emcee', 'vendor': 'HostMaster', 'status': 'scheduled', 'eta': '1 hr'},
-        {'type': 'Audio/Visual', 'vendor': 'SoundBlast', 'status': 'started', 'eta': 'Running'}
-      ]
-    }
-  ];
+  final List<Map<String, dynamic>> _liveEvents = [];
+  final List<Map<String, dynamic>> _activeIncidents = [];
+  bool _isLoading = true;
+  String? _loadError;
 
-  final List<Map<String, dynamic>> _activeIncidents = [
-    {
-      'ticket': '#INC-889',
-      'event': 'Sarah & John Wedding',
-      'vendor': 'GlamByJane (Makeup)',
-      'issue': 'Vendor No-Show',
-      'status': 'searching_backup',
-      'time_elapsed': '12 mins',
-      'priority': 'high'
+  @override
+  void initState() {
+    super.initState();
+    _loadCommandCenterData();
+  }
+
+  Future<void> _loadCommandCenterData() async {
+    try {
+      final client = Supabase.instance.client;
+      final today = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      final responses = await Future.wait([
+        client
+            .from('bookings')
+            .select('*, vendor:vendor_profiles(business_name), service:vendor_services(name, category)')
+            .gte('booking_date', today)
+            .neq('status', 'cancelled')
+            .order('booking_date')
+            .order('booking_time'),
+        client
+            .from('event_incidents')
+            .select('*, vendor:vendor_profiles(business_name), booking:bookings(booking_date, booking_time, notes)')
+            .inFilter('status', ['open', 'investigating', 'searching_backup', 'backup_found'])
+            .order('created_at', ascending: false),
+      ]);
+
+      final bookings = (responses[0] as List)
+          .map((row) => Map<String, dynamic>.from(row as Map))
+          .toList();
+      final bookingIds = bookings
+          .map((booking) => booking['id']?.toString() ?? '')
+          .where((id) => id.isNotEmpty)
+          .toList();
+      final checkins = bookingIds.isEmpty
+          ? <Map<String, dynamic>>[]
+          : (await client
+                  .from('vendor_checkins')
+                  .select('booking_id, vendor_id, status, created_at')
+                  .inFilter('booking_id', bookingIds)
+                  .order('created_at', ascending: false) as List)
+              .map((row) => Map<String, dynamic>.from(row as Map))
+              .toList();
+      final latestCheckinByBooking = <String, Map<String, dynamic>>{};
+      for (final checkin in checkins) {
+        latestCheckinByBooking.putIfAbsent(
+          checkin['booking_id'].toString(),
+          () => checkin,
+        );
+      }
+
+      final incidents = (responses[1] as List)
+          .map((row) => Map<String, dynamic>.from(row as Map))
+          .toList();
+      final activeIncidents = incidents.map((incident) {
+        final booking = _asMap(incident['booking']);
+        final vendor = _asMap(incident['vendor']);
+        final bookingId = incident['booking_id']?.toString() ?? '';
+        final createdAt = DateTime.tryParse(
+              incident['created_at']?.toString() ?? '',
+            ) ??
+            DateTime.now();
+
+        return {
+          'ticket': incident['id']?.toString() ?? '',
+          'bookingId': bookingId,
+          'event': booking['event_name'] ??
+              booking['package_name'] ??
+              'Booking $bookingId',
+          'vendor': vendor['business_name'] ??
+              incident['vendor_id']?.toString() ??
+              '',
+          'issue': (incident['incident_type']?.toString() ?? 'incident')
+              .replaceAll('_', ' '),
+          'status': incident['status']?.toString() ?? '',
+          'time_elapsed': _elapsedTime(createdAt),
+          'priority': incident['priority']?.toString() ?? '',
+        };
+      }).toList();
+
+      final events = <Map<String, dynamic>>[];
+      for (final booking in bookings) {
+        final id = booking['id']?.toString() ?? '';
+        final dateValue = booking['event_date'] ?? booking['booking_date'];
+        if (dateValue == null) continue;
+
+        final dateText = dateValue.toString();
+        final timeText = booking['booking_time']?.toString() ?? '00:00:00';
+        final eventDate = DateTime.tryParse('${dateText}T$timeText') ??
+            DateTime.tryParse(dateText);
+        if (eventDate == null) continue;
+
+        final service = _asMap(booking['service']);
+        final vendor = _asMap(booking['vendor']);
+        final checkin = latestCheckinByBooking[id];
+        final status = checkin?['status']?.toString() ?? 'scheduled';
+        final hasIncident = activeIncidents.any(
+          (incident) => incident['bookingId'] == id,
+        );
+
+        events.add({
+          'id': id,
+          'title': booking['event_name'] ??
+              booking['package_name'] ??
+              service['name'] ??
+              'Booking $id',
+          'date': eventDate,
+          'priority': hasIncident ? 'critical' : 'medium',
+          'services': [
+            {
+              'type': service['category'] ?? service['name'] ?? 'Service',
+              'vendor': vendor['business_name'] ?? '',
+              'status': status,
+            }
+          ],
+        });
+      }
+
+      if (!mounted) return;
+      setState(() {
+        _liveEvents
+          ..clear()
+          ..addAll(events);
+        _activeIncidents
+          ..clear()
+          ..addAll(activeIncidents);
+        _loadError = null;
+        _isLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _loadError = e.toString();
+        _isLoading = false;
+      });
     }
-  ];
+  }
+
+  Map<String, dynamic> _asMap(dynamic value) {
+    if (value is Map) return Map<String, dynamic>.from(value);
+    if (value is List && value.isNotEmpty) return _asMap(value.first);
+    return {};
+  }
+
+  String _elapsedTime(DateTime createdAt) {
+    final minutes = DateTime.now().difference(createdAt).inMinutes;
+    if (minutes < 60) return '$minutes min';
+    return '${minutes ~/ 60} hr ${minutes % 60} min';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,11 +182,14 @@ class _EventCommandCenterScreenState extends State<EventCommandCenterScreen> {
               color: Colors.redAccent,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: const Row(
+            child: Row(
               children: [
-                Icon(Icons.warning_amber_rounded, color: Colors.white, size: 16),
-                SizedBox(width: 4),
-                Text('1 Active Alert', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 16),
+                const SizedBox(width: 4),
+                Text(
+                  '${_activeIncidents.length} Active Alerts',
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                ),
               ],
             ),
           )
@@ -85,6 +202,13 @@ class _EventCommandCenterScreenState extends State<EventCommandCenterScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildKPIHeader(),
+              if (_loadError != null) ...[
+                const SizedBox(height: 12),
+                Text(
+                  'Could not refresh command-center data: $_loadError',
+                  style: const TextStyle(color: Colors.redAccent),
+                ),
+              ],
               const SizedBox(height: 32),
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -108,15 +232,31 @@ class _EventCommandCenterScreenState extends State<EventCommandCenterScreen> {
   }
 
   Widget _buildKPIHeader() {
+    final now = DateTime.now();
+    final eventsToday = _liveEvents.where((event) {
+      final date = event['date'] as DateTime;
+      return DateUtils.isSameDay(date, now);
+    }).length;
+    var vendorsDispatched = 0;
+    var successfulCheckins = 0;
+    for (final event in _liveEvents) {
+      final services = event['services'] as List;
+      vendorsDispatched += services.length;
+      successfulCheckins += services.where((service) {
+        return const {'arrived', 'started', 'completed'}
+            .contains((service as Map)['status']);
+      }).length;
+    }
+
     return Row(
       children: [
-        _buildKPIBox('Events Today', '14', Icons.event),
+        _buildKPIBox('Events Today', '$eventsToday', Icons.event),
         const SizedBox(width: 16),
-        _buildKPIBox('Vendors Dispatched', '42', Icons.local_shipping),
+        _buildKPIBox('Vendors Dispatched', '$vendorsDispatched', Icons.local_shipping),
         const SizedBox(width: 16),
-        _buildKPIBox('Successful Check-ins', '39', Icons.check_circle, color: Colors.green),
+        _buildKPIBox('Successful Check-ins', '$successfulCheckins', Icons.check_circle, color: Colors.green),
         const SizedBox(width: 16),
-        _buildKPIBox('Active Rescues', '1', Icons.emergency, color: Colors.redAccent),
+        _buildKPIBox('Active Rescues', '${_activeIncidents.length}', Icons.emergency, color: Colors.redAccent),
       ],
     );
   }
@@ -166,6 +306,9 @@ class _EventCommandCenterScreenState extends State<EventCommandCenterScreen> {
           const Text('Live Events Radar', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           const Text('Tracking vendor check-ins for upcoming events.', style: TextStyle(color: Colors.grey)),
           const SizedBox(height: 24),
+          if (_isLoading) const LinearProgressIndicator(),
+          if (!_isLoading && _liveEvents.isEmpty)
+            const Text('No upcoming bookings found.'),
           ..._liveEvents.map((event) => _buildEventCard(event)).toList(),
         ],
       ),
@@ -281,6 +424,13 @@ class _EventCommandCenterScreenState extends State<EventCommandCenterScreen> {
             ],
           ),
           const SizedBox(height: 24),
+          if (_isLoading)
+            const Center(child: CircularProgressIndicator(color: Colors.white)),
+          if (!_isLoading && _activeIncidents.isEmpty)
+            const Text(
+              'No active rescues',
+              style: TextStyle(color: Colors.white70),
+            ),
           ..._activeIncidents.map((incident) => Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(

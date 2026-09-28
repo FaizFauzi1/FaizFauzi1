@@ -5,6 +5,7 @@ import 'package:eventease/features/finance/data/providers/commission_provider.da
 import 'package:eventease/features/vendor/presentation/views/vendor_document_management_screen_fixed.dart';
 import 'package:eventease/features/vendor/presentation/widgets/vendor_drawer.dart';
 import 'package:eventease/features/vendor/data/providers/vendor_provider_updated.dart';
+import 'package:eventease/features/vendor/data/models/vendor.dart';
 import 'package:eventease/features/customer/data/providers/review_provider.dart';
 import 'package:eventease/features/vendor/data/providers/vendor_networking_provider.dart';
 import 'package:eventease/shared/models/vendor_marketplace_item.dart';
@@ -36,7 +37,9 @@ import 'package:eventease/core/services/analytics_service.dart';
 import 'package:eventease/features/admin/data/services/admin_impersonation_service.dart';
 
 class VendorDashboardScreen extends StatefulWidget {
-  const VendorDashboardScreen({super.key});
+  final Vendor? previewVendor;
+
+  const VendorDashboardScreen({super.key, this.previewVendor});
 
   @override
   State<VendorDashboardScreen> createState() => _VendorDashboardScreenState();
@@ -47,16 +50,24 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
   String? _cachedVendorId;
   List<Widget> _screens = const [];
 
-  List<Widget> _screensFor(dynamic vendor) {
-    final id = vendor?.id as String?;
+  List<Widget> _screensFor(Vendor? vendor) {
+    final id = vendor?.id;
     if (_screens.isNotEmpty && _cachedVendorId == id) return _screens;
     _cachedVendorId = id;
     _screens = [
-      VendorHomeContent(onTabChange: (index) => setState(() => _currentIndex = index)),
+      VendorHomeContent(
+        onTabChange: (index) => setState(() => _currentIndex = index),
+        previewVendor: widget.previewVendor,
+      ),
       vendor != null
-          ? VendorBookingManagementScreenFixed(vendor: vendor, embeddedInDashboard: true)
+          ? VendorBookingManagementScreenFixed(
+            vendor: vendor,
+            embeddedInDashboard: true,
+          )
           : const Center(child: CircularProgressIndicator()),
-      vendor != null ? VendorServiceManagementScreen(vendor: vendor) : const Center(child: CircularProgressIndicator()),
+      vendor != null
+          ? VendorServiceManagementScreen(vendor: vendor)
+          : const Center(child: CircularProgressIndicator()),
       const VendorChatScreen(),
       const VendorProfileScreen(),
     ];
@@ -66,21 +77,28 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Provider.of<VendorProvider>(context, listen: false).loadCurrentVendorFromSupabase(force: true);
-    });
+    if (widget.previewVendor == null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Provider.of<VendorProvider>(
+          context,
+          listen: false,
+        ).loadCurrentVendorFromSupabase(force: true);
+      });
+    }
   }
 
   Widget _buildImpersonationBanner(BuildContext context, dynamic vendor) {
     final impersonation = AdminImpersonationService.instance;
-    final vendorName = vendor?.name ??
+    final vendorName =
+        vendor?.name ??
         impersonation.impersonatingVendorName ??
         impersonation.impersonatingUserId ??
         'Vendor';
-    final adminInfo = impersonation.originalAdminEmail != null &&
-            impersonation.originalAdminEmail!.isNotEmpty
-        ? 'Admin: ${impersonation.originalAdminEmail}'
-        : 'Admin Mode';
+    final adminInfo =
+        impersonation.originalAdminEmail != null &&
+                impersonation.originalAdminEmail!.isNotEmpty
+            ? 'Admin: ${impersonation.originalAdminEmail}'
+            : 'Admin Mode';
 
     return Material(
       color: Colors.amber.shade900,
@@ -97,7 +115,11 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
                   color: Colors.black26,
                   borderRadius: BorderRadius.circular(6),
                 ),
-                child: const Icon(Icons.security, color: Colors.white, size: 18),
+                child: const Icon(
+                  Icons.security,
+                  color: Colors.white,
+                  size: 18,
+                ),
               ),
               const SizedBox(width: 10),
               Expanded(
@@ -132,7 +154,10 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
                   backgroundColor: Colors.white,
                   foregroundColor: Colors.amber.shade900,
                   elevation: 0,
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 6,
+                  ),
                   minimumSize: Size.zero,
                   tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   shape: RoundedRectangleBorder(
@@ -142,7 +167,10 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
                 onPressed: () async {
                   await AdminImpersonationService.instance.endImpersonation();
                   if (context.mounted) {
-                    Provider.of<VendorProvider>(context, listen: false).clearCurrentVendor();
+                    Provider.of<VendorProvider>(
+                      context,
+                      listen: false,
+                    ).clearCurrentVendor();
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text('Returned to Admin Control Panel'),
@@ -167,29 +195,35 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final vendor = Provider.of<VendorProvider>(context).currentVendor;
+    final vendor =
+        widget.previewVendor ??
+        Provider.of<VendorProvider>(context).currentVendor;
     final screens = _screensFor(vendor);
-    
+
     return ListenableBuilder(
       listenable: AdminImpersonationService.instance,
       builder: (context, child) {
-        final isImpersonating = AdminImpersonationService.instance.isImpersonating;
+        final isImpersonating =
+            AdminImpersonationService.instance.isImpersonating;
         return Scaffold(
           body: Column(
             children: [
               if (isImpersonating) _buildImpersonationBanner(context, vendor),
               Expanded(
-                child: IndexedStack(
-                  index: _currentIndex,
-                  children: screens,
-                ),
+                child: IndexedStack(index: _currentIndex, children: screens),
               ),
             ],
           ),
           bottomNavigationBar: BottomNavigationBar(
             currentIndex: _currentIndex,
             onTap: (index) {
-              const tabNames = ['Dashboard', 'Bookings', 'Management', 'Messages', 'Profile'];
+              const tabNames = [
+                'Dashboard',
+                'Bookings',
+                'Management',
+                'Messages',
+                'Profile',
+              ];
               AnalyticsService().trackTabChanged(
                 tabName: tabNames[index],
                 tabIndex: index,
@@ -239,7 +273,9 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
 
 class VendorHomeContent extends StatefulWidget {
   final Function(int)? onTabChange;
-  const VendorHomeContent({super.key, this.onTabChange});
+  final Vendor? previewVendor;
+
+  const VendorHomeContent({super.key, this.onTabChange, this.previewVendor});
 
   @override
   State<VendorHomeContent> createState() => _VendorHomeContentState();
@@ -256,20 +292,31 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
 
   void _loadData() async {
     final vendorProvider = Provider.of<VendorProvider>(context, listen: false);
-    
+
     // First check if we have a current user but no vendor
     final currentUser = Supabase.instance.client.auth.currentUser;
-    if (currentUser != null && vendorProvider.currentVendor == null) {
+    if (widget.previewVendor == null &&
+        currentUser != null &&
+        vendorProvider.currentVendor == null) {
       await vendorProvider.loadCurrentVendorFromSupabase(force: true);
     }
-    
-    final vendor = vendorProvider.currentVendor;
+
+    final vendor = widget.previewVendor ?? vendorProvider.currentVendor;
     if (vendor != null && mounted) {
       // Load related data in parallel
       Future.wait([
-        Provider.of<ReviewProvider>(context, listen: false).loadReviewsForVendor(vendor.id),
-        Provider.of<BookingProvider>(context, listen: false).loadVendorBookings(vendor.id),
-        Provider.of<VendorAnalyticsProvider>(context, listen: false).loadAnalyticsData(),
+        Provider.of<ReviewProvider>(
+          context,
+          listen: false,
+        ).loadReviewsForVendor(vendor.id),
+        Provider.of<BookingProvider>(
+          context,
+          listen: false,
+        ).loadVendorBookings(vendor.id),
+        Provider.of<VendorAnalyticsProvider>(
+          context,
+          listen: false,
+        ).loadAnalyticsData(),
       ]);
     }
   }
@@ -277,37 +324,60 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
   @override
   Widget build(BuildContext context) {
     final vendorProvider = Provider.of<VendorProvider>(context);
-    final vendor = vendorProvider.currentVendor;
+    final vendor = widget.previewVendor ?? vendorProvider.currentVendor;
     final reviewProvider = Provider.of<ReviewProvider>(context);
-    final List<ServiceReview> reviews = vendor != null ? List<ServiceReview>.from(reviewProvider.getReviewsForVendor(vendor.id)) : [];
-    
-    double avgRating = reviews.isEmpty 
-        ? 0.0 
-        : reviews.map((r) => r.rating).reduce((a, b) => a + b) / reviews.length;
+    final List<ServiceReview> reviews =
+        vendor != null
+            ? List<ServiceReview>.from(
+              reviewProvider.getReviewsForVendor(vendor.id),
+            )
+            : [];
+
+    double avgRating =
+        reviews.isEmpty
+            ? 0.0
+            : reviews.map((r) => r.rating).reduce((a, b) => a + b) /
+                reviews.length;
 
     final bookingProvider = Provider.of<BookingProvider>(context);
     final bookings = bookingProvider.vendorBookings;
     final totalBookings = bookings.length;
-    final pendingBookings = bookings.where((b) => b.status == BookingStatus.pendingVendor).length;
-    final confirmedBookings = bookings.where((b) => b.status == BookingStatus.confirmed || b.status == BookingStatus.completed);
-    final monthlyRevenue = confirmedBookings.fold(0.0, (sum, b) => sum + b.amount);
+    final pendingBookings =
+        bookings.where((b) => b.status == BookingStatus.pendingVendor).length;
+    final confirmedBookings = bookings.where(
+      (b) =>
+          b.status == BookingStatus.confirmed ||
+          b.status == BookingStatus.completed,
+    );
+    final monthlyRevenue = confirmedBookings.fold(
+      0.0,
+      (sum, b) => sum + b.amount,
+    );
 
     // Dynamic metrics
-    final totalCompleted = bookings.where((b) => b.status == BookingStatus.completed).length;
-    final totalConfirmed = bookings.where((b) => b.status == BookingStatus.confirmed).length;
-    final completionRate = totalBookings > 0 
-        ? '${((totalCompleted + totalConfirmed) / totalBookings * 100).toStringAsFixed(0)}%' 
-        : '100%';
-    
-    final searchVisibility = vendor != null 
-        ? '+${(vendor.priorityScore * 10).toStringAsFixed(0)}%' 
-        : '0%';
+    final totalCompleted =
+        bookings.where((b) => b.status == BookingStatus.completed).length;
+    final totalConfirmed =
+        bookings.where((b) => b.status == BookingStatus.confirmed).length;
+    final completionRate =
+        totalBookings > 0
+            ? '${((totalCompleted + totalConfirmed) / totalBookings * 100).toStringAsFixed(0)}%'
+            : '100%';
 
-    // Calculate response rate from confirmed vs total bookings  
-    final responseRate = totalBookings > 0
-        ? '${((totalConfirmed + totalCompleted) / totalBookings * 100).clamp(0, 100).toStringAsFixed(0)}%'
-        : '0%';
-    final activeServices = vendorProvider.getCurrentVendorServices();
+    final searchVisibility =
+        vendor != null
+            ? '+${(vendor.priorityScore * 10).toStringAsFixed(0)}%'
+            : '0%';
+
+    // Calculate response rate from confirmed vs total bookings
+    final responseRate =
+        totalBookings > 0
+            ? '${((totalConfirmed + totalCompleted) / totalBookings * 100).clamp(0, 100).toStringAsFixed(0)}%'
+            : '0%';
+    final activeServices =
+        vendor == null
+            ? <VendorServiceEnhanced>[]
+            : vendorProvider.getCurrentVendorServicesForId(vendor.id);
     final analyticsProvider = Provider.of<VendorAnalyticsProvider>(context);
 
     return Scaffold(
@@ -327,8 +397,8 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
               ),
             ),
             Text(
-              vendor?.categories.isNotEmpty == true 
-                  ? vendor!.categories.join(' • ') 
+              vendor?.categories.isNotEmpty == true
+                  ? vendor!.categories.join(' • ')
                   : 'Vendor',
               style: const TextStyle(
                 color: AppTheme.textSecondaryColor,
@@ -339,18 +409,24 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_outlined,
-                color: AppTheme.textPrimaryColor),
+            icon: const Icon(
+              Icons.notifications_outlined,
+              color: AppTheme.textPrimaryColor,
+            ),
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (_) => const VendorNotificationsScreen()),
+                MaterialPageRoute(
+                  builder: (_) => const VendorNotificationsScreen(),
+                ),
               );
             },
           ),
           IconButton(
-            icon: const Icon(Icons.settings_outlined,
-                color: AppTheme.textPrimaryColor),
+            icon: const Icon(
+              Icons.settings_outlined,
+              color: AppTheme.textPrimaryColor,
+            ),
             onPressed: () {
               Navigator.push(
                 context,
@@ -368,13 +444,22 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
             if (vendorProvider.isLoading && vendor == null)
               const Center(child: CircularProgressIndicator())
             else ...[
-              _buildWelcomeSection(vendor?.name ?? 'Vendor', avgRating, reviews.length, pendingBookings),
+              _buildWelcomeSection(
+                vendor?.name ?? 'Vendor',
+                avgRating,
+                reviews.length,
+                pendingBookings,
+              ),
               const SizedBox(height: 20),
               _buildEventEaseWorkflowHubCard(),
               const SizedBox(height: 20),
               _buildLeadKanbanQuickActionCard(bookings),
               const SizedBox(height: 20),
-              _buildRevenueOverviewCard(bookings, monthlyRevenue, analyticsProvider),
+              _buildRevenueOverviewCard(
+                bookings,
+                monthlyRevenue,
+                analyticsProvider,
+              ),
               const SizedBox(height: 20),
               _buildQuickStats(totalBookings, monthlyRevenue, pendingBookings),
               const SizedBox(height: 20),
@@ -386,7 +471,13 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
               const SizedBox(height: 20),
               _buildActiveServicesSection(activeServices),
               const SizedBox(height: 20),
-              _buildPerformanceSection(avgRating, reviews.length, completionRate, searchVisibility, responseRate),
+              _buildPerformanceSection(
+                avgRating,
+                reviews.length,
+                completionRate,
+                searchVisibility,
+                responseRate,
+              ),
               const SizedBox(height: 20),
               _buildRecentReviews(reviews),
               const SizedBox(height: 20),
@@ -406,7 +497,12 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
     );
   }
 
-  Widget _buildWelcomeSection(String name, double rating, int reviewCount, int pendingCount) {
+  Widget _buildWelcomeSection(
+    String name,
+    double rating,
+    int reviewCount,
+    int pendingCount,
+  ) {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
@@ -434,10 +530,7 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 const SizedBox(height: 8),
                 Text(
                   'You have $pendingCount pending bookings',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white70,
-                  ),
+                  style: const TextStyle(fontSize: 16, color: Colors.white70),
                 ),
                 const SizedBox(height: 16),
                 Row(
@@ -504,11 +597,19 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
             children: [
               const Row(
                 children: [
-                  Icon(Icons.hub_outlined, color: AppTheme.primaryColor, size: 22),
+                  Icon(
+                    Icons.hub_outlined,
+                    color: AppTheme.primaryColor,
+                    size: 22,
+                  ),
                   SizedBox(width: 8),
                   Text(
                     'Vendor Service & Collaboration Workflow',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppTheme.textPrimaryColor),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.textPrimaryColor,
+                    ),
                   ),
                 ],
               ),
@@ -520,7 +621,11 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 ),
                 child: const Text(
                   'Connected Lifecycle',
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppTheme.primaryColor),
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.bold,
+                    color: AppTheme.primaryColor,
+                  ),
                 ),
               ),
             ],
@@ -545,7 +650,12 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 subtitle: 'My Services, Packages & Tastings',
                 color: const Color(0xFF6366F1),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => const VendorServicesHubScreen()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const VendorServicesHubScreen(),
+                    ),
+                  );
                 },
               ),
               _buildWorkflowShortcutItem(
@@ -554,7 +664,12 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 subtitle: 'Joint Bundles & Customer Choices',
                 color: const Color(0xFF8B5CF6),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => const VendorPackagesHubScreen()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const VendorPackagesHubScreen(),
+                    ),
+                  );
                 },
               ),
               _buildWorkflowShortcutItem(
@@ -563,7 +678,12 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 subtitle: 'Bookings, Appointments & Times',
                 color: const Color(0xFF10B981),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => const VendorUnifiedCalendarScreen()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const VendorUnifiedCalendarScreen(),
+                    ),
+                  );
                 },
               ),
               _buildWorkflowShortcutItem(
@@ -572,7 +692,12 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 subtitle: 'Category-Aware Dynamic Wizard',
                 color: const Color(0xFFF59E0B),
                 onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => const VendorServiceCreatorScreen()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const VendorServiceCreatorScreen(),
+                    ),
+                  );
                 },
               ),
             ],
@@ -614,13 +739,20 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: AppTheme.textPrimaryColor),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 13,
+                      color: AppTheme.textPrimaryColor,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 2),
                   Text(
                     subtitle,
-                    style: TextStyle(fontSize: 10.5, color: Colors.grey.shade600),
+                    style: TextStyle(
+                      fontSize: 10.5,
+                      color: Colors.grey.shade600,
+                    ),
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
@@ -635,10 +767,14 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
 
   Widget _buildLeadKanbanQuickActionCard(List<Booking> bookings) {
     // Derive kanban counts from booking statuses
-    final newLeads = bookings.where((b) => b.status == BookingStatus.pendingVendor).length;
-    final contacted = bookings.where((b) => b.status == BookingStatus.confirmed).length;
-    final proposal = bookings.where((b) => b.status == BookingStatus.awaitingPayment).length;
-    final won = bookings.where((b) => b.status == BookingStatus.completed).length;
+    final newLeads =
+        bookings.where((b) => b.status == BookingStatus.pendingVendor).length;
+    final contacted =
+        bookings.where((b) => b.status == BookingStatus.confirmed).length;
+    final proposal =
+        bookings.where((b) => b.status == BookingStatus.awaitingPayment).length;
+    final won =
+        bookings.where((b) => b.status == BookingStatus.completed).length;
 
     return Container(
       decoration: BoxDecoration(
@@ -679,7 +815,11 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                             color: Colors.white.withOpacity(0.2),
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: const Icon(Icons.view_kanban, color: Colors.white, size: 22),
+                          child: const Icon(
+                            Icons.view_kanban,
+                            color: Colors.white,
+                            size: 22,
+                          ),
                         ),
                         const SizedBox(width: 12),
                         const Column(
@@ -704,12 +844,19 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                         ),
                       ],
                     ),
-                    const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+                    const Icon(
+                      Icons.arrow_forward_ios,
+                      color: Colors.white,
+                      size: 16,
+                    ),
                   ],
                 ),
                 const SizedBox(height: 16),
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 12,
+                  ),
                   decoration: BoxDecoration(
                     color: Colors.black.withOpacity(0.15),
                     borderRadius: BorderRadius.circular(12),
@@ -717,11 +864,23 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildKanbanPill('New Leads', '$newLeads', Colors.lightBlueAccent),
+                      _buildKanbanPill(
+                        'New Leads',
+                        '$newLeads',
+                        Colors.lightBlueAccent,
+                      ),
                       _buildKanbanDivider(),
-                      _buildKanbanPill('Contacted', '$contacted', Colors.amberAccent),
+                      _buildKanbanPill(
+                        'Contacted',
+                        '$contacted',
+                        Colors.amberAccent,
+                      ),
                       _buildKanbanDivider(),
-                      _buildKanbanPill('Proposal', '$proposal', Colors.purpleAccent),
+                      _buildKanbanPill(
+                        'Proposal',
+                        '$proposal',
+                        Colors.purpleAccent,
+                      ),
                       _buildKanbanDivider(),
                       _buildKanbanPill('Won', '$won', Colors.greenAccent),
                     ],
@@ -749,37 +908,47 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
         const SizedBox(height: 2),
         Text(
           label,
-          style: const TextStyle(
-            color: Colors.white70,
-            fontSize: 11,
-          ),
+          style: const TextStyle(color: Colors.white70, fontSize: 11),
         ),
       ],
     );
   }
 
   Widget _buildKanbanDivider() {
-    return Container(
-      height: 20,
-      width: 1,
-      color: Colors.white24,
-    );
+    return Container(height: 20, width: 1, color: Colors.white24);
   }
 
-  Widget _buildRevenueOverviewCard(List<Booking> bookings, double monthlyRevenue, VendorAnalyticsProvider analyticsProvider) {
+  Widget _buildRevenueOverviewCard(
+    List<Booking> bookings,
+    double monthlyRevenue,
+    VendorAnalyticsProvider analyticsProvider,
+  ) {
     final analyticsData = analyticsProvider.analyticsData;
-    
+
     // Available = completed bookings revenue net of 5% platform commission
-    final completedBookings = bookings.where((b) => b.status == BookingStatus.completed);
-    final completedRevenue = completedBookings.fold(0.0, (sum, b) => sum + b.amount);
-    final availableBalance = completedRevenue > 0 ? (completedRevenue * 0.95) : 0.0;
+    final completedBookings = bookings.where(
+      (b) => b.status == BookingStatus.completed,
+    );
+    final completedRevenue = completedBookings.fold(
+      0.0,
+      (sum, b) => sum + b.amount,
+    );
+    final availableBalance =
+        completedRevenue > 0 ? (completedRevenue * 0.95) : 0.0;
 
     // Pending = confirmed or in-progress bookings awaiting event completion
-    final escrowBookings = bookings.where((b) => b.status == BookingStatus.confirmed || b.status == BookingStatus.inProgress);
+    final escrowBookings = bookings.where(
+      (b) =>
+          b.status == BookingStatus.confirmed ||
+          b.status == BookingStatus.inProgress,
+    );
     final pendingBalance = escrowBookings.fold(0.0, (sum, b) => sum + b.amount);
 
-    final totalEarnings = (analyticsData?['total_revenue'] as num?)?.toDouble() ??
-        (completedRevenue + pendingBalance > 0 ? (completedRevenue + pendingBalance) : monthlyRevenue);
+    final totalEarnings =
+        (analyticsData?['total_revenue'] as num?)?.toDouble() ??
+        (completedRevenue + pendingBalance > 0
+            ? (completedRevenue + pendingBalance)
+            : monthlyRevenue);
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -802,7 +971,10 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
             children: [
               const Row(
                 children: [
-                  Icon(Icons.account_balance_wallet, color: AppTheme.primaryColor),
+                  Icon(
+                    Icons.account_balance_wallet,
+                    color: AppTheme.primaryColor,
+                  ),
                   SizedBox(width: 8),
                   Text(
                     'Revenue & Finance Overview',
@@ -815,7 +987,9 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 ],
               ),
               InkWell(
-                onTap: () => Navigator.pushNamed(context, '/vendor-payment-payout'),
+                onTap:
+                    () =>
+                        Navigator.pushNamed(context, '/vendor-payment-payout'),
                 child: const Text(
                   'Manage Payouts →',
                   style: TextStyle(
@@ -843,7 +1017,10 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                     children: [
                       const Text(
                         'Available Balance',
-                        style: TextStyle(fontSize: 12, color: AppTheme.textSecondaryColor),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppTheme.textSecondaryColor,
+                        ),
                       ),
                       const SizedBox(height: 6),
                       Text(
@@ -877,7 +1054,10 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                     children: [
                       const Text(
                         'Pending (In Escrow)',
-                        style: TextStyle(fontSize: 12, color: AppTheme.textSecondaryColor),
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppTheme.textSecondaryColor,
+                        ),
                       ),
                       const SizedBox(height: 6),
                       Text(
@@ -911,7 +1091,10 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
               children: [
                 const Text(
                   'Lifetime Total Earnings',
-                  style: TextStyle(fontSize: 13, color: AppTheme.textSecondaryColor),
+                  style: TextStyle(
+                    fontSize: 13,
+                    color: AppTheme.textSecondaryColor,
+                  ),
                 ),
                 Text(
                   'RM ${totalEarnings.toStringAsFixed(2)}',
@@ -929,7 +1112,9 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
     );
   }
 
-  Widget _buildInquiryAndQuoteMetrics(VendorAnalyticsProvider analyticsProvider) {
+  Widget _buildInquiryAndQuoteMetrics(
+    VendorAnalyticsProvider analyticsProvider,
+  ) {
     final views = analyticsProvider.impressionsAndViews;
     final totalInquiries = views['inquiries'] ?? 0;
     final inquiriesGrowth = views['inquiries_growth'] ?? '+0%';
@@ -941,7 +1126,8 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
     String quoteWinRate = '—';
     String winRateChange = '';
     for (final m in analyticsProvider.performanceMetrics) {
-      if (m['title'] == 'Avg Response Time') avgResponseTime = m['value'] ?? '—';
+      if (m['title'] == 'Avg Response Time')
+        avgResponseTime = m['value'] ?? '—';
       if (m['title'] == 'Quote Win Rate') {
         quoteWinRate = m['value'] ?? '—';
         winRateChange = m['change'] ?? '';
@@ -976,7 +1162,13 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 ),
               ),
               Chip(
-                label: Text(analyticsProvider.selectedPeriod, style: const TextStyle(fontSize: 11, color: AppTheme.primaryColor)),
+                label: Text(
+                  analyticsProvider.selectedPeriod,
+                  style: const TextStyle(
+                    fontSize: 11,
+                    color: AppTheme.primaryColor,
+                  ),
+                ),
                 backgroundColor: const Color(0xFFEEF2FF),
                 padding: EdgeInsets.zero,
                 visualDensity: VisualDensity.compact,
@@ -1095,7 +1287,9 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
     );
   }
 
-  Widget _buildConversionFunnelPreview(VendorAnalyticsProvider analyticsProvider) {
+  Widget _buildConversionFunnelPreview(
+    VendorAnalyticsProvider analyticsProvider,
+  ) {
     final stages = analyticsProvider.funnelStages;
     final funnelColors = [
       Colors.indigo.shade400,
@@ -1169,9 +1363,17 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
             final count = stage['count'] ?? 0;
             final conversion = stage['conversion'] ?? '';
             final factor = (stage['factor'] as num?)?.toDouble() ?? 0.0;
-            final color = (stage['color'] as Color?) ?? (i < funnelColors.length ? funnelColors[i] : Colors.grey);
-            final label = conversion.isNotEmpty ? '${i + 1}. $stageName' : '${i + 1}. $stageName';
-            final countLabel = conversion.isNotEmpty && conversion != '100%' ? '$count ($conversion)' : '$count';
+            final color =
+                (stage['color'] as Color?) ??
+                (i < funnelColors.length ? funnelColors[i] : Colors.grey);
+            final label =
+                conversion.isNotEmpty
+                    ? '${i + 1}. $stageName'
+                    : '${i + 1}. $stageName';
+            final countLabel =
+                conversion.isNotEmpty && conversion != '100%'
+                    ? '$count ($conversion)'
+                    : '$count';
             return Padding(
               padding: const EdgeInsets.only(bottom: 8),
               child: _buildFunnelStage(label, countLabel, factor, color),
@@ -1192,7 +1394,11 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 Expanded(
                   child: Text(
                     'Overall lead conversion rate is $overallConversion',
-                    style: const TextStyle(fontSize: 12, color: Colors.green, fontWeight: FontWeight.w600),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: Colors.green,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],
@@ -1203,15 +1409,34 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
     );
   }
 
-  Widget _buildFunnelStage(String title, String count, double factor, Color color) {
+  Widget _buildFunnelStage(
+    String title,
+    String count,
+    double factor,
+    Color color,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(title, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: AppTheme.textPrimaryColor)),
-            Text(count, style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: color)),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textPrimaryColor,
+              ),
+            ),
+            Text(
+              count,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
+            ),
           ],
         ),
         const SizedBox(height: 4),
@@ -1228,7 +1453,13 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
     );
   }
 
-  Widget _buildPerformanceSection(double rating, int reviewCount, String completionRate, String visibility, String responseRate) {
+  Widget _buildPerformanceSection(
+    double rating,
+    int reviewCount,
+    String completionRate,
+    String visibility,
+    String responseRate,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1256,13 +1487,33 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
           ),
           child: Column(
             children: [
-              _buildPerformanceRow('Response Rate', responseRate, Icons.chat_bubble_outline, Colors.blue),
+              _buildPerformanceRow(
+                'Response Rate',
+                responseRate,
+                Icons.chat_bubble_outline,
+                Colors.blue,
+              ),
               const Divider(height: 32),
-              _buildPerformanceRow('Service Rating', rating.toStringAsFixed(1), Icons.star_outline, Colors.amber),
+              _buildPerformanceRow(
+                'Service Rating',
+                rating.toStringAsFixed(1),
+                Icons.star_outline,
+                Colors.amber,
+              ),
               const Divider(height: 32),
-              _buildPerformanceRow('Completion Rate', completionRate, Icons.check_circle_outline, Colors.green),
+              _buildPerformanceRow(
+                'Completion Rate',
+                completionRate,
+                Icons.check_circle_outline,
+                Colors.green,
+              ),
               const Divider(height: 32),
-              _buildPerformanceRow('Search Visibility', visibility, Icons.trending_up, Colors.purple),
+              _buildPerformanceRow(
+                'Search Visibility',
+                visibility,
+                Icons.trending_up,
+                Colors.purple,
+              ),
             ],
           ),
         ),
@@ -1270,7 +1521,12 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
     );
   }
 
-  Widget _buildPerformanceRow(String label, String value, IconData icon, Color color) {
+  Widget _buildPerformanceRow(
+    String label,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Row(
       children: [
         Container(
@@ -1395,7 +1651,10 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: AppTheme.primaryColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(12),
@@ -1440,7 +1699,12 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
     );
   }
 
-  Widget _buildCommissionStatCard(String title, String value, IconData icon, Color color) {
+  Widget _buildCommissionStatCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -1475,7 +1739,12 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
     );
   }
 
-  Widget _buildStatCard(String title, String value, IconData icon, Color color) {
+  Widget _buildStatCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -1536,9 +1805,17 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 Icons.add_business,
                 AppTheme.primaryColor,
                 () {
-                  final vendor = Provider.of<VendorProvider>(context, listen: false).currentVendor;
+                  final vendor =
+                      Provider.of<VendorProvider>(
+                        context,
+                        listen: false,
+                      ).currentVendor;
                   if (vendor != null) {
-                    Navigator.pushNamed(context, '/service-creation', arguments: {'vendorId': vendor.id});
+                    Navigator.pushNamed(
+                      context,
+                      '/service-creation',
+                      arguments: {'vendorId': vendor.id},
+                    );
                   }
                 },
               ),
@@ -1550,9 +1827,21 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 Icons.shopping_bag,
                 AppTheme.secondaryColor,
                 () {
-                  final vendor = Provider.of<VendorProvider>(context, listen: false).currentVendor;
+                  final vendor =
+                      Provider.of<VendorProvider>(
+                        context,
+                        listen: false,
+                      ).currentVendor;
                   if (vendor != null) {
-                    Navigator.push(context, MaterialPageRoute(builder: (_) => VendorOrderManagementScreen(vendorId: vendor.id)));
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (_) => VendorOrderManagementScreen(
+                              vendorId: vendor.id,
+                            ),
+                      ),
+                    );
                   }
                 },
               ),
@@ -1568,7 +1857,10 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 Icons.chat,
                 AppTheme.accentColor,
                 () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => const VendorChatScreen()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const VendorChatScreen()),
+                  );
                 },
               ),
             ),
@@ -1579,7 +1871,12 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 Icons.local_offer,
                 AppTheme.successColor,
                 () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => const CouponManagementScreen()));
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const CouponManagementScreen(),
+                    ),
+                  );
                 },
               ),
             ),
@@ -1596,7 +1893,9 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => const VendorCatalogScreen()),
+                    MaterialPageRoute(
+                      builder: (_) => const VendorCatalogScreen(),
+                    ),
                   );
                 },
               ),
@@ -1637,7 +1936,9 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const VendorReviewsScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => const VendorReviewsScreen(),
+                  ),
                 );
               },
               child: const Text('View All'),
@@ -1649,21 +1950,33 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
           const Center(
             child: Padding(
               padding: EdgeInsets.all(20.0),
-              child: Text("No reviews yet.", style: TextStyle(color: Colors.grey)),
+              child: Text(
+                "No reviews yet.",
+                style: TextStyle(color: Colors.grey),
+              ),
             ),
           )
         else
-          ...reviews.take(3).map((r) => _buildReviewCard(
-                r.customerName ?? 'Anonymous',
-                r.comment ?? 'No comment',
-                r.rating,
-                DateFormat("yMMMd").format(r.createdAt),
-              )),
+          ...reviews
+              .take(3)
+              .map(
+                (r) => _buildReviewCard(
+                  r.customerName ?? 'Anonymous',
+                  r.comment ?? 'No comment',
+                  r.rating,
+                  DateFormat("yMMMd").format(r.createdAt),
+                ),
+              ),
       ],
     );
   }
 
-  Widget _buildReviewCard(String name, String comment, int rating, String time) {
+  Widget _buildReviewCard(
+    String name,
+    String comment,
+    int rating,
+    String time,
+  ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
@@ -1716,12 +2029,16 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                     Row(
                       children: [
                         ...List.generate(
-                            5,
-                            (index) => Icon(
-                                  Icons.star,
-                                  size: 16,
-                                  color: index < rating ? Colors.amber : Colors.grey[300],
-                                )),
+                          5,
+                          (index) => Icon(
+                            Icons.star,
+                            size: 16,
+                            color:
+                                index < rating
+                                    ? Colors.amber
+                                    : Colors.grey[300],
+                          ),
+                        ),
                         const SizedBox(width: 8),
                         Text(
                           time,
@@ -1750,13 +2067,18 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
     );
   }
 
-
   Widget _buildMarketplaceStatus() {
     return Consumer<VendorNetworkingProvider>(
       builder: (context, networkingProvider, child) {
         final myItems = networkingProvider.myMarketplaceItems;
-        final pendingItems = myItems.where((item) => item.status == MarketplaceItemStatus.pending).toList();
-        final activeItems = myItems.where((item) => item.status == MarketplaceItemStatus.active).toList();
+        final pendingItems =
+            myItems
+                .where((item) => item.status == MarketplaceItemStatus.pending)
+                .toList();
+        final activeItems =
+            myItems
+                .where((item) => item.status == MarketplaceItemStatus.active)
+                .toList();
 
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -1815,7 +2137,12 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
     );
   }
 
-  Widget _buildStatusCard(String title, String value, IconData icon, Color color) {
+  Widget _buildStatusCard(
+    String title,
+    String value,
+    IconData icon,
+    Color color,
+  ) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -1837,10 +2164,7 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
           ),
           Text(
             title,
-            style: TextStyle(
-              fontSize: 12,
-              color: color.withOpacity(0.8),
-            ),
+            style: TextStyle(fontSize: 12, color: color.withOpacity(0.8)),
           ),
         ],
       ),
@@ -1872,7 +2196,11 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (_) => VendorBookingManagementScreenFixed(vendor: vendor)),
+                      builder:
+                          (_) => VendorBookingManagementScreenFixed(
+                            vendor: vendor,
+                          ),
+                    ),
                   );
                 }
               },
@@ -1911,7 +2239,9 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  booking.packageName.isNotEmpty ? booking.packageName : booking.serviceName,
+                  booking.packageName.isNotEmpty
+                      ? booking.packageName
+                      : booking.serviceName,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 Text(
@@ -1923,7 +2253,10 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
           ),
           Text(
             'RM ${booking.amount.toStringAsFixed(0)}',
-            style: const TextStyle(fontWeight: FontWeight.bold, color: AppTheme.primaryColor),
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: AppTheme.primaryColor,
+            ),
           ),
         ],
       ),
@@ -1965,11 +2298,18 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
             ),
             child: Column(
               children: [
-                Icon(Icons.inventory_2_outlined, size: 48, color: Colors.grey[400]),
+                Icon(
+                  Icons.inventory_2_outlined,
+                  size: 48,
+                  color: Colors.grey[400],
+                ),
                 const SizedBox(height: 12),
                 const Text(
                   'No active services found',
-                  style: TextStyle(color: Colors.grey, fontWeight: FontWeight.w500),
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 ElevatedButton(
@@ -2015,23 +2355,28 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
         children: [
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
-            child: service.images.isNotEmpty
-                ? Image.network(
-                    service.images.first,
-                    height: 80,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
+            child:
+                service.images.isNotEmpty
+                    ? Image.network(
+                      service.images.first,
+                      height: 80,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                      errorBuilder:
+                          (_, __, ___) => Container(
+                            height: 80,
+                            color: Colors.grey[200],
+                            child: const Icon(
+                              Icons.image_not_supported,
+                              color: Colors.grey,
+                            ),
+                          ),
+                    )
+                    : Container(
                       height: 80,
                       color: Colors.grey[200],
-                      child: const Icon(Icons.image_not_supported, color: Colors.grey),
+                      child: const Icon(Icons.image, color: Colors.grey),
                     ),
-                  )
-                : Container(
-                    height: 80,
-                    color: Colors.grey[200],
-                    child: const Icon(Icons.image, color: Colors.grey),
-                  ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -2059,9 +2404,15 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 ),
                 const SizedBox(height: 4),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
-                    color: service.isActive ? Colors.green.withOpacity(0.1) : Colors.grey.withOpacity(0.1),
+                    color:
+                        service.isActive
+                            ? Colors.green.withOpacity(0.1)
+                            : Colors.grey.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: Text(
@@ -2114,7 +2465,11 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 children: [
                   Text(
                     'Join Bridal Fair 2026',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
                   ),
                   SizedBox(height: 4),
                   Text(
@@ -2163,13 +2518,23 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
                 ],
               ),
             ),
-            Icon(Icons.arrow_forward_ios, size: 16, color: AppTheme.primaryColor),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: AppTheme.primaryColor,
+            ),
           ],
         ),
       ),
     );
   }
-  Widget _buildActionCard(String title, IconData icon, Color color, VoidCallback onTap) {
+
+  Widget _buildActionCard(
+    String title,
+    IconData icon,
+    Color color,
+    VoidCallback onTap,
+  ) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -2206,11 +2571,17 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
 
   Widget _buildEventsTodaySection(List<Booking> bookings) {
     final today = DateTime.now();
-    final eventsToday = bookings.where((b) => 
-        (b.status == BookingStatus.confirmed || b.status == BookingStatus.completed) && 
-        b.bookingDate.year == today.year && 
-        b.bookingDate.month == today.month && 
-        b.bookingDate.day == today.day).toList();
+    final eventsToday =
+        bookings
+            .where(
+              (b) =>
+                  (b.status == BookingStatus.confirmed ||
+                      b.status == BookingStatus.completed) &&
+                  b.bookingDate.year == today.year &&
+                  b.bookingDate.month == today.month &&
+                  b.bookingDate.day == today.day,
+            )
+            .toList();
 
     if (eventsToday.isEmpty) return const SizedBox.shrink();
 
@@ -2223,45 +2594,67 @@ class _VendorHomeContentState extends State<VendorHomeContent> {
             SizedBox(width: 8),
             Text(
               'Events Today',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: AppTheme.textPrimaryColor),
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: AppTheme.textPrimaryColor,
+              ),
             ),
           ],
         ),
         const SizedBox(height: 16),
-        ...eventsToday.map((booking) => Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              margin: const EdgeInsets.only(bottom: 12),
-              child: ListTile(
-                contentPadding: const EdgeInsets.all(16),
-                title: Text(booking.serviceName, style: const TextStyle(fontWeight: FontWeight.bold)),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 4),
-                    Text('${booking.customerName} • ${booking.location}'),
-                    const SizedBox(height: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Colors.blue.shade50,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: const Text('Event Day Operations', style: TextStyle(color: Colors.blue, fontSize: 12, fontWeight: FontWeight.bold)),
-                    ),
-                  ],
-                ),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => VendorEventCheckinScreen(booking: booking),
-                    ),
-                  );
-                },
+        ...eventsToday.map(
+          (booking) => Card(
+            elevation: 2,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+            ),
+            margin: const EdgeInsets.only(bottom: 12),
+            child: ListTile(
+              contentPadding: const EdgeInsets.all(16),
+              title: Text(
+                booking.serviceName,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-            )),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 4),
+                  Text('${booking.customerName} • ${booking.location}'),
+                  const SizedBox(height: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.blue.shade50,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Text(
+                      'Event Day Operations',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => VendorEventCheckinScreen(booking: booking),
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
       ],
     );
   }

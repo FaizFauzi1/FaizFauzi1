@@ -163,7 +163,7 @@ class _VendorPostEventScreenState extends State<VendorPostEventScreen> {
           ),
           const SizedBox(height: 4),
           Text(
-            'Booth ${_exhibitor.boothNumber ?? "A-05"} · ${_exhibitor.companyName}',
+            'Booth ${_exhibitor.boothNumber ?? "Not assigned"} · ${_exhibitor.companyName}',
             style: const TextStyle(fontSize: 13, color: Color(0xFF64748B)),
           ),
         ],

@@ -24,16 +24,40 @@ class AdminEntityDetailDialog extends StatefulWidget {
 
   static void show(
     BuildContext context, {
-    required MarketplaceEntityType type,
-    required String entityId,
+    MarketplaceEntityType? type,
+    String? entityId,
+    String? entityName,
+    String? entityType,
     dynamic data,
+    String? vendorName,
+    String? customerName,
+    String? bookingId,
+    String? status,
+    double? price,
+    String? category,
   }) {
+    final resolvedType = type ?? MarketplaceEntityType.values.firstWhere(
+      (candidate) => candidate.label.toLowerCase() == (entityType ?? '').toLowerCase() || candidate.name.toLowerCase() == (entityType ?? '').toLowerCase(),
+      orElse: () => MarketplaceEntityType.service,
+    );
+
+    final resolvedId = entityId ?? entityName ?? 'unknown';
+    final payload = data ?? {
+      'entityName': entityName,
+      'vendorName': vendorName,
+      'customerName': customerName,
+      'bookingId': bookingId,
+      'status': status,
+      'price': price,
+      'category': category,
+    };
+
     showDialog(
       context: context,
       builder: (ctx) => AdminEntityDetailDialog(
-        initialType: type,
-        entityId: entityId,
-        initialData: data,
+        initialType: resolvedType,
+        entityId: resolvedId,
+        initialData: payload,
       ),
     );
   }
@@ -787,7 +811,7 @@ class _AdminEntityDetailDialogState extends State<AdminEntityDetailDialog> {
             _buildHealthCard('Cancellation Rate', '0.8%', 'Target < 3%', Colors.green),
             _buildHealthCard('No-Show Rate', '0.0%', '0 incidents reported', Colors.teal),
             _buildHealthCard('Refund Rate', '1.2%', 'Low dispute risk', Colors.indigo),
-            _buildHealthCard('Policy Violations', '0', 'Clean record', Colors.emeraldAccent),
+            _buildHealthCard('Policy Violations', '0', 'Clean record', Colors.greenAccent),
           ],
         ),
         const SizedBox(height: 20),

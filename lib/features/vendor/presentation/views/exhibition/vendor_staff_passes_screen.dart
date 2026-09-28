@@ -27,28 +27,6 @@ class _VendorStaffPassesScreenState extends State<VendorStaffPassesScreen> {
     super.initState();
     _exhibitor = widget.exhibitor;
     _passes = List<ExhibitorStaffPass>.from(_exhibitor.staffPasses);
-    if (_passes.isEmpty) {
-      _passes = [
-        ExhibitorStaffPass(
-          id: 'sp-1',
-          name: _exhibitor.contactName,
-          phone: _exhibitor.phone,
-          email: _exhibitor.email,
-          role: 'Booth Lead / Manager',
-          qrCode: 'EP-2026-BOOTH-${_exhibitor.boothNumber ?? "A05"}-LEAD',
-          issuedAt: DateTime.now().subtract(const Duration(days: 2)),
-        ),
-        ExhibitorStaffPass(
-          id: 'sp-2',
-          name: 'Sarah Tan',
-          phone: '+60 12-998 1122',
-          email: 'sarah.tan@voguebridal.com',
-          role: 'Senior Sales Consultant',
-          qrCode: 'EP-2026-BOOTH-${_exhibitor.boothNumber ?? "A05"}-02',
-          issuedAt: DateTime.now().subtract(const Duration(days: 1)),
-        ),
-      ];
-    }
   }
 
   void _openAddStaffDialog() {
@@ -131,7 +109,7 @@ class _VendorStaffPassesScreenState extends State<VendorStaffPassesScreen> {
                   phone: phoneCtrl.text.trim(),
                   email: emailCtrl.text.trim(),
                   role: selectedRole,
-                  qrCode: 'EP-2026-${_exhibitor.boothNumber ?? "A05"}-${_passes.length + 1}',
+                  qrCode: 'EP-2026-${_exhibitor.boothNumber ?? _exhibitor.id}-${_passes.length + 1}',
                   issuedAt: DateTime.now(),
                 );
 
@@ -266,7 +244,7 @@ class _VendorStaffPassesScreenState extends State<VendorStaffPassesScreen> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${pass.role} · Booth ${_exhibitor.boothNumber ?? "A-05"}',
+                    '${pass.role} · Booth ${_exhibitor.boothNumber ?? "Not assigned"}',
                     style: const TextStyle(color: Color(0xFF67E8F9), fontSize: 12, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 4),

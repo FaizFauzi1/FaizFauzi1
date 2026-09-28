@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:eventease/core/services/supabase_service.dart';
 import 'package:eventease/core/services/payment_service.dart';
 import 'package:eventease/core/config/billplz_config.dart';
@@ -12,6 +15,8 @@ import '../models/vendor.dart';
 import 'package:eventease/features/referral/data/referral_service.dart';
 
 class SubscriptionProvider with ChangeNotifier {
+  static const _tiersCacheKey = 'vendor_subscription_tiers';
+
   final SupabaseClient _supabase = Supabase.instance.client;
   
   List<SubscriptionTierModel> _tiers = [];
@@ -19,7 +24,7 @@ class SubscriptionProvider with ChangeNotifier {
   List<SubscriptionPayment> _payments = [];
   int _servicesCount = 0;
   int _bookingsCount = 0;
-  String _visibilityLevel = 'Standard';
+  String _visibilityLevel = '';
   DateTime? _expiryDate;
   bool _isLoading = false;
   String? _error;
@@ -40,6 +45,8 @@ class SubscriptionProvider with ChangeNotifier {
     notifyListeners();
 
     try {
+      await _restoreCachedTiers();
+
       // 1. Load Tiers
       final tiersData = await _supabase
           .from('subscription_tiers')
@@ -48,6 +55,7 @@ class SubscriptionProvider with ChangeNotifier {
           .eq('target_audience', 'vendor')
           .order('sort_order');
       _tiers = (tiersData as List).map((json) => SubscriptionTierModel.fromJson(json)).toList();
+          await _cacheTiers();
 
       // 2. Load Current Vendor Profile to see their tier
       final vendorData = await _supabase
@@ -67,22 +75,24 @@ class SubscriptionProvider with ChangeNotifier {
 
       // Check if latest payment is completed but tier is outdated
       final latestPaid = _payments.firstWhereOrNull((p) => p.status.toLowerCase() == 'completed' || p.status.toLowerCase() == 'succeeded');
-      String tierName = vendorData['subscription_tier'] ?? 'Starter';
+        String? tierName =
+          vendorData['subscription_tier']?.toString() ?? _tiers.firstOrNull?.name;
       
       if (latestPaid != null) {
         // Find tier by ID
         final latestTier = _tiers.firstWhereOrNull((t) => t.id == latestPaid.tierId);
-        if (latestTier != null && latestTier.name.toLowerCase() != tierName.toLowerCase()) {
+        if (latestTier != null &&
+          latestTier.name.toLowerCase() != tierName?.toLowerCase()) {
           // Sync database because webhook couldn't do it
           tierName = latestTier.name;
           await _supabase.from('vendor_profiles').update({'subscription_tier': tierName}).eq('id', vendorId);
         }
       }
 
-      _currentTier = _tiers.firstWhere(
-        (t) => t.name.toLowerCase() == tierName.toLowerCase(),
-        orElse: () => _tiers.isNotEmpty ? _tiers.first : _getDefaultFreeTier(),
-      );
+      _currentTier = _tiers.firstWhereOrNull(
+            (tier) => tier.name.toLowerCase() == tierName?.toLowerCase(),
+          ) ??
+          _tiers.firstOrNull;
 
       // 4. Calculate Expiry Date from latest successful payment
       _expiryDate = latestPaid?.periodEnd;
@@ -103,22 +113,12 @@ class SubscriptionProvider with ChangeNotifier {
       _bookingsCount = (bookingsResponse as List).length;
 
       // 6. Set Visibility Level
-      final activeTierName = _currentTier?.name.toLowerCase() ?? 'starter';
-      if (activeTierName == 'business') {
-        _visibilityLevel = 'Highest (Top Priority)';
-      } else if (activeTierName == 'pro') {
-        _visibilityLevel = 'High (Featured)';
-      } else {
-        _visibilityLevel = 'Standard';
-      }
+      _visibilityLevel =
+          _currentTier?.limits['visibility_level']?.toString() ?? '';
 
     } catch (e) {
       print('Error loading subscription data: $e');
       _error = 'Failed to load subscription information';
-      // Fallback if tiers failed to load
-      if (_tiers.isEmpty) {
-        _tiers = _getFallbackTiers();
-      }
     } finally {
       _isLoading = false;
       notifyListeners();
@@ -283,106 +283,61 @@ class SubscriptionProvider with ChangeNotifier {
     }
   }
 
-  SubscriptionTierModel _getDefaultFreeTier() {
-    return SubscriptionTierModel(
-      id: 'starter_id',
-      name: 'Starter',
-      displayName: 'Starter Plan',
-      price: 0,
-      billingCycle: 'Monthly',
-      features: ['List 3 services/packages', 'Basic vendor profile', 'Standard search ranking', '12% Commission'],
-      limits: {'listings': 3},
-    );
+  Future<void> _restoreCachedTiers() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final cachedTiers = prefs.getString(_tiersCacheKey);
+      if (cachedTiers == null) return;
+
+      _tiers = (jsonDecode(cachedTiers) as List)
+          .map((json) => SubscriptionTierModel.fromJson(
+                Map<String, dynamic>.from(json as Map),
+              ))
+          .toList();
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Failed to restore subscription tier cache: $e');
+    }
   }
 
-  List<SubscriptionTierModel> _getFallbackTiers() {
-    return [
-      _getDefaultFreeTier(),
-      SubscriptionTierModel(
-        id: 'pro_id',
-        name: 'Pro',
-        displayName: 'Pro Vendor',
-        price: 49.0,
-        billingCycle: 'Monthly',
-        features: ['List 10 services/packages', 'Featured occasionally', 'Full portfolio gallery', 'Customer analytics', 'Promotion tools', '10% Commission'],
-        limits: {'listings': 10},
-        isPopular: true,
-      ),
-      SubscriptionTierModel(
-        id: 'business_id',
-        name: 'Business',
-        displayName: 'Business Class',
-        price: 149.0,
-        billingCycle: 'Monthly',
-        features: ['Unlimited listings', 'Priority "Top Rated" ranking', 'Dedicated account manager', 'CRM (Lead handling)', 'Export lead data', '7% Commission'],
-        limits: {'listings': -1}, // -1 indicates unlimited
-      ),
-    ];
+  Future<void> _cacheTiers() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(
+        _tiersCacheKey,
+        jsonEncode(_tiers.map((tier) => tier.toJson()).toList()),
+      );
+    } catch (e) {
+      debugPrint('Failed to cache subscription tiers: $e');
+    }
   }
 
   // --- Feature Gates based on Tier ---
 
   int get maxListings {
-    if (_currentTier == null) return 3;
-    
-    // Check DB limits first
-    if (_currentTier!.limits.containsKey('listings')) {
-      final dbLimit = _currentTier!.limits['listings'];
-      if (dbLimit != null) {
-        if (dbLimit is int) return dbLimit;
-        if (dbLimit is String && int.tryParse(dbLimit) != null) return int.parse(dbLimit);
-      }
-    }
-
-    // Fallback to name/id heuristics if DB limits are missing or misconfigured
-    final name = _currentTier!.name.toLowerCase();
-    final id = _currentTier!.id.toLowerCase();
-    
-    if (name.contains('business') || name.contains('enterprise') || name.contains('premium') || 
-        id.contains('business') || id.contains('enterprise') || id.contains('premium')) {
-      return -1; // Unlimited
-    }
-    
-    if (name.contains('pro') || name.contains('professional') || 
-        id.contains('pro') || id.contains('professional')) {
-      return 10;
-    }
-    
-    return 3; // Default for starter/free
+    final limit = _currentTier?.limits['max_listings'] ??
+        _currentTier?.limits['listings'];
+    if (limit is num) return limit.toInt();
+    return int.tryParse(limit?.toString() ?? '') ?? 0;
   }
 
   bool get canUsePromoTools {
-    final name = _currentTier?.name.toLowerCase() ?? 'starter';
-    final id = _currentTier?.id.toLowerCase() ?? 'starter';
-    return name.contains('pro') || name.contains('professional') || name.contains('business') || name.contains('premium') || name.contains('enterprise') ||
-           id.contains('pro') || id.contains('professional') || id.contains('business') || id.contains('premium') || id.contains('enterprise');
+    return _currentTier?.limits['promo_tools'] == true;
   }
 
   bool get canAccessAnalytics {
-    return canUsePromoTools; // Same requirements
+    return _currentTier?.limits['analytics'] == true;
   }
 
   bool get canExportLeads {
-    final name = _currentTier?.name.toLowerCase() ?? 'starter';
-    final id = _currentTier?.id.toLowerCase() ?? 'starter';
-    return name.contains('business') || name.contains('premium') || name.contains('enterprise') ||
-           id.contains('business') || id.contains('premium') || id.contains('enterprise');
+    return _currentTier?.limits['export_leads'] == true;
   }
 
   double get commissionRate {
-    final name = _currentTier?.name.toLowerCase() ?? 'starter';
-    final id = _currentTier?.id.toLowerCase() ?? 'starter';
-    
-    if (name.contains('business') || name.contains('premium') || name.contains('enterprise') ||
-        id.contains('business') || id.contains('premium') || id.contains('enterprise')) {
-      return 0.07;
-    }
-    
-    if (name.contains('pro') || name.contains('professional') ||
-        id.contains('pro') || id.contains('professional')) {
-      return 0.10;
-    }
-    
-    return 0.12; // Starter default
+    final rate = _currentTier?.limits['commission_rate_percent'];
+    if (rate is num) return rate / 100;
+    return double.tryParse(rate?.toString() ?? '') != null
+        ? double.parse(rate.toString()) / 100
+        : 0.0;
   }
 }

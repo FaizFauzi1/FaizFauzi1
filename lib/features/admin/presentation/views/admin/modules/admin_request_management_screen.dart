@@ -109,8 +109,8 @@ class _AdminRequestManagementScreenState extends State<AdminRequestManagementScr
               c.id.toLowerCase().contains(q) ||
               c.subject.toLowerCase().contains(q) ||
               c.customerName.toLowerCase().contains(q) ||
-              c.vendorName.toLowerCase().contains(q) ||
-              c.bookingId.toLowerCase().contains(q))
+              (c.vendorName?.toLowerCase().contains(q) ?? false) ||
+              (c.bookingId?.toLowerCase().contains(q) ?? false))
           .toList();
     }
 
@@ -301,9 +301,9 @@ class _AdminRequestManagementScreenState extends State<AdminRequestManagementScr
                 runSpacing: 6,
                 children: [
                   _buildEntityChip(Icons.person_outline, caseItem.customerName, MarketplaceEntityType.customer),
-                  _buildEntityChip(Icons.storefront_outlined, caseItem.vendorName, MarketplaceEntityType.vendor),
-                  _buildEntityChip(Icons.bookmark_outline, caseItem.bookingId, MarketplaceEntityType.booking),
-                  _buildEntityChip(Icons.event_outlined, caseItem.eventName, MarketplaceEntityType.event),
+                  _buildEntityChip(Icons.storefront_outlined, caseItem.vendorName ?? 'Unknown vendor', MarketplaceEntityType.vendor),
+                  _buildEntityChip(Icons.bookmark_outline, caseItem.bookingId ?? 'No booking', MarketplaceEntityType.booking),
+                  _buildEntityChip(Icons.event_outlined, caseItem.eventName ?? 'No event', MarketplaceEntityType.event),
                 ],
               ),
             ),
@@ -391,14 +391,16 @@ class _AdminRequestManagementScreenState extends State<AdminRequestManagementScr
     );
   }
 
-  Widget _buildEntityChip(IconData icon, String text, MarketplaceEntityType type) {
+  Widget _buildEntityChip(IconData icon, String? text, MarketplaceEntityType type) {
+    final label = text ?? 'N/A';
+
     return InkWell(
       onTap: () {
         AdminEntityDetailDialog.show(
           context,
           type: type,
-          entityId: text,
-          entityName: text,
+          entityId: label,
+          entityName: label,
         );
       },
       borderRadius: BorderRadius.circular(4),
@@ -414,7 +416,7 @@ class _AdminRequestManagementScreenState extends State<AdminRequestManagementScr
           children: [
             Icon(icon, size: 12, color: Colors.grey.shade700),
             const SizedBox(width: 4),
-            Text(text, style: TextStyle(fontSize: 11, color: Colors.blue.shade800, fontWeight: FontWeight.w600)),
+            Text(label, style: TextStyle(fontSize: 11, color: Colors.blue.shade800, fontWeight: FontWeight.w600)),
           ],
         ),
       ),

@@ -1156,7 +1156,7 @@ class _FinancialManagementScreenState extends State<FinancialManagementScreen>
     return InkWell(
       onTap: () => AdminEntityDetailDialog.show(
         context,
-        entityType: type,
+        type: type,
         entityId: id,
         entityName: name,
       ),

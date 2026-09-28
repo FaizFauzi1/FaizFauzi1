@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:eventease/core/utils/app_theme.dart';
 import 'package:eventease/features/organizer/data/models/exhibitor_vendor.dart';
+import 'package:eventease/features/organizer/data/models/live_expo.dart';
 import 'package:eventease/features/organizer/data/repositories/organizer_repository.dart';
 import 'package:eventease/features/organizer/presentation/widgets/organizer_ui_helpers.dart';
 import 'package:eventease/features/vendor/presentation/views/exhibition/vendor_floor_plan_screen.dart';
 import 'package:eventease/features/vendor/presentation/views/exhibition/vendor_requirements_screen.dart';
 import 'package:eventease/features/vendor/presentation/views/exhibition/vendor_staff_passes_screen.dart';
 import 'package:eventease/features/vendor/presentation/views/exhibition/vendor_post_event_screen.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class VendorExhibitionDashboardScreen extends StatefulWidget {
   final ExhibitorVendor exhibitor;
@@ -27,6 +30,10 @@ class _VendorExhibitionDashboardScreenState extends State<VendorExhibitionDashbo
   late ExhibitorVendor _exhibitor;
   bool _isLoading = false;
   DateTime? _expoStartAt;
+  List<ExpoTimelineItem> _timeline = [];
+  List<EmergencyAlert> _announcements = [];
+  String? _organizerContactEmail;
+  String? _organizerContactPhone;
 
   Map<String, bool> get _checklist => {
         'Booth Fee Paid': _exhibitor.paymentStatus == PaymentStatus.paid,
@@ -56,8 +63,35 @@ class _VendorExhibitionDashboardScreenState extends State<VendorExhibitionDashbo
       final expoId = _exhibitor.expoId;
       if (expoId != null && expoId.isNotEmpty) {
         final expo = await OrganizerRepository.instance.fetchExpoSummary(expoId);
-        if (expo != null && mounted) {
-          setState(() => _expoStartAt = expo.startAt);
+        final timeline = await OrganizerRepository.instance.fetchTimeline(expoId);
+        final announcements =
+            await OrganizerRepository.instance.fetchEmergencyAlerts(expoId);
+
+        Map<String, dynamic>? organizer;
+        try {
+          final expoRow = await Supabase.instance.client
+              .from('organizer_expos')
+              .select('company_id')
+              .eq('id', expoId)
+              .maybeSingle();
+          final companyId = expoRow?['company_id']?.toString();
+          if (companyId != null && companyId.isNotEmpty) {
+            organizer = await Supabase.instance.client
+                .from('organizer_companies')
+                .select('contact_email, contact_phone')
+                .eq('id', companyId)
+                .maybeSingle();
+          }
+        } catch (_) {}
+
+        if (mounted) {
+          setState(() {
+            _expoStartAt = expo?.startAt;
+            _timeline = timeline;
+            _announcements = announcements;
+            _organizerContactEmail = organizer?['contact_email']?.toString();
+            _organizerContactPhone = organizer?['contact_phone']?.toString();
+          });
         }
       }
     } catch (_) {}
@@ -219,9 +253,9 @@ class _VendorExhibitionDashboardScreenState extends State<VendorExhibitionDashbo
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _heroItem('BOOTH NUMBER', _exhibitor.boothNumber ?? 'A-05', isAccent: true),
+              _heroItem('BOOTH NUMBER', _exhibitor.boothNumber ?? 'Not assigned', isAccent: true),
               _heroItem('LOCATION', '${_exhibitor.boothHall} · ${_exhibitor.boothZone}'),
-              _heroItem('SIZE', _exhibitor.boothSize ?? '3m × 3m'),
+              _heroItem('SIZE', _exhibitor.boothSize ?? 'Not provided'),
             ],
           ),
         ],
@@ -278,7 +312,7 @@ class _VendorExhibitionDashboardScreenState extends State<VendorExhibitionDashbo
                     children: [
                       const Text('Package', style: TextStyle(fontSize: 11, color: Color(0xFF64748B))),
                       Text(
-                        _exhibitor.packageName ?? 'Premium',
+                        _exhibitor.packageName ?? 'Not selected',
                         style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -521,23 +555,6 @@ class _VendorExhibitionDashboardScreenState extends State<VendorExhibitionDashbo
   }
 
   Widget _buildOrganiserAnnouncements() {
-    final announcements = [
-      {
-        'title': 'Contractor Move-in Window Confirmed',
-        'desc': 'Heavy loading bay access opens at 08:00 AM on 9 Oct. Display vehicle passes on dashboards.',
-        'date': 'Yesterday',
-        'icon': Icons.campaign_rounded,
-        'color': const Color(0xFF3B82F6),
-      },
-      {
-        'title': 'High-Speed Wi-Fi SSID Provided',
-        'desc': 'Exhibitor Wi-Fi network: KLCC_EXPO_VENDORS (Password will be given at badge counter).',
-        'date': '3 days ago',
-        'icon': Icons.wifi_rounded,
-        'color': const Color(0xFF10B981),
-      },
-    ];
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -546,7 +563,12 @@ class _VendorExhibitionDashboardScreenState extends State<VendorExhibitionDashbo
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Color(0xFF0F172A)),
         ),
         const SizedBox(height: 12),
-        ...announcements.map((a) {
+        if (_announcements.isEmpty)
+          const Text(
+            'No organizer bulletins have been published.',
+            style: TextStyle(color: Color(0xFF64748B), fontSize: 13),
+          ),
+        ..._announcements.map((announcement) {
           return Container(
             margin: const EdgeInsets.only(bottom: 12),
             padding: const EdgeInsets.all(16),
@@ -561,10 +583,10 @@ class _VendorExhibitionDashboardScreenState extends State<VendorExhibitionDashbo
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: (a['color'] as Color).withValues(alpha: 0.1),
+                    color: const Color(0xFF3B82F6).withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: Icon(a['icon'] as IconData, color: a['color'] as Color, size: 20),
+                  child: const Icon(Icons.campaign_rounded, color: Color(0xFF3B82F6), size: 20),
                 ),
                 const SizedBox(width: 12),
                 Expanded(
@@ -576,19 +598,19 @@ class _VendorExhibitionDashboardScreenState extends State<VendorExhibitionDashbo
                         children: [
                           Flexible(
                             child: Text(
-                              a['title'] as String,
+                              'Organizer Alert',
                               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Color(0xFF0F172A)),
                             ),
                           ),
                           Text(
-                            a['date'] as String,
+                            DateFormat('d MMM, h:mm a').format(announcement.sentAt.toLocal()),
                             style: const TextStyle(fontSize: 11, color: Color(0xFF94A3B8)),
                           ),
                         ],
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        a['desc'] as String,
+                        announcement.message,
                         style: const TextStyle(fontSize: 12, color: Color(0xFF64748B), height: 1.35),
                       ),
                     ],
@@ -603,14 +625,6 @@ class _VendorExhibitionDashboardScreenState extends State<VendorExhibitionDashbo
   }
 
   Widget _buildScheduleCard() {
-    final schedule = [
-      {'date': 'Thu, 9 Oct', 'time': '08:00 - 20:00', 'title': 'Exhibitor Setup & Move-In', 'active': true},
-      {'date': 'Fri, 10 Oct', 'time': '10:00 - 21:00', 'title': 'Expo Day 1 (VIP & Public)', 'active': false},
-      {'date': 'Sat, 11 Oct', 'time': '10:00 - 22:00', 'title': 'Expo Day 2 (Peak Attendance)', 'active': false},
-      {'date': 'Sun, 12 Oct', 'time': '10:00 - 19:00', 'title': 'Expo Day 3 & Awarding', 'active': false},
-      {'date': 'Sun, 12 Oct', 'time': '19:30 - 23:30', 'title': 'Booth Teardown & Move-Out', 'active': false},
-    ];
-
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
@@ -632,7 +646,13 @@ class _VendorExhibitionDashboardScreenState extends State<VendorExhibitionDashbo
             ],
           ),
           const SizedBox(height: 16),
-          ...schedule.map((s) {
+          if (_timeline.isEmpty)
+            const Text(
+              'No schedule has been published for this expo.',
+              style: TextStyle(color: Color(0xFF64748B), fontSize: 13),
+            ),
+          ..._timeline.map((item) {
+            final isLive = item.status == TimelineItemStatus.live;
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
               child: Row(
@@ -645,7 +665,7 @@ class _VendorExhibitionDashboardScreenState extends State<VendorExhibitionDashbo
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
-                      s['date'] as String,
+                      DateFormat('EEE, d MMM').format(item.startAt.toLocal()),
                       style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFF334155)),
                       textAlign: TextAlign.center,
                     ),
@@ -656,11 +676,15 @@ class _VendorExhibitionDashboardScreenState extends State<VendorExhibitionDashbo
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          s['title'] as String,
-                          style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13, color: Color(0xFF0F172A)),
+                          item.title,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                            color: isLive ? const Color(0xFF059669) : const Color(0xFF0F172A),
+                          ),
                         ),
                         Text(
-                          s['time'] as String,
+                          '${DateFormat('HH:mm').format(item.startAt.toLocal())} - ${DateFormat('HH:mm').format(item.endAt.toLocal())} · ${item.location}',
                           style: const TextStyle(fontSize: 11, color: Color(0xFF64748B)),
                         ),
                       ],
@@ -676,6 +700,9 @@ class _VendorExhibitionDashboardScreenState extends State<VendorExhibitionDashbo
   }
 
   void _showContactOrganizerModal(BuildContext context) {
+    final email = _organizerContactEmail?.trim();
+    final phone = _organizerContactPhone?.trim();
+
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -697,63 +724,38 @@ class _VendorExhibitionDashboardScreenState extends State<VendorExhibitionDashbo
               style: TextStyle(fontSize: 13, color: Color(0xFF64748B)),
             ),
             const SizedBox(height: 20),
-            ListTile(
-              leading: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFEFF6FF),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(Icons.chat_bubble_rounded, color: Color(0xFF3B82F6)),
+            if ((phone == null || phone.isEmpty) &&
+                (email == null || email.isEmpty))
+              const Text(
+                'Organizer contact details have not been published.',
+                style: TextStyle(color: Color(0xFF64748B)),
               ),
-              title: const Text('Live Chat with Organizer'),
-              subtitle: const Text('Available 9 AM - 6 PM'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () {
-                Navigator.pop(ctx);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Opening Organizer Support Chat...')),
-                );
-              },
-            ),
-            ListTile(
-              leading: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFECFDF5),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(Icons.phone_rounded, color: Color(0xFF10B981)),
+            if (phone != null && phone.isNotEmpty)
+              ListTile(
+                leading: const Icon(Icons.phone_rounded, color: Color(0xFF10B981)),
+                title: const Text('Call Organizer'),
+                subtitle: Text(phone),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () async {
+                  final uri = Uri(scheme: 'tel', path: phone);
+                  if (await canLaunchUrl(uri)) {
+                    await launchUrl(uri);
+                  }
+                },
               ),
-              title: const Text('Call Operations Hotline'),
-              subtitle: const Text('+60 3-8888 1234'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () {
-                Navigator.pop(ctx);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Calling +60 3-8888 1234...')),
-                );
-              },
-            ),
-            ListTile(
-              leading: Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFFFBEB),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: const Icon(Icons.email_rounded, color: Color(0xFFF59E0B)),
+            if (email != null && email.isNotEmpty)
+              ListTile(
+                leading: const Icon(Icons.email_rounded, color: Color(0xFFF59E0B)),
+                title: const Text('Email Organizer'),
+                subtitle: Text(email),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: () async {
+                  final uri = Uri(scheme: 'mailto', path: email);
+                  if (await canLaunchUrl(uri)) {
+                    await launchUrl(uri);
+                  }
+                },
               ),
-              title: const Text('Email Logistics Support'),
-              subtitle: const Text('logistics@apexpomalaysia.com'),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () {
-                Navigator.pop(ctx);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Opening mail client...')),
-                );
-              },
-            ),
             const SizedBox(height: 12),
           ],
         ),

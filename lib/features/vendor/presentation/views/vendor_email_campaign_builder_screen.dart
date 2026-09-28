@@ -9,44 +9,7 @@ class VendorEmailCampaignBuilderScreen extends StatefulWidget {
 }
 
 class _VendorEmailCampaignBuilderScreenState extends State<VendorEmailCampaignBuilderScreen> {
-  final List<Map<String, dynamic>> _emailCampaigns = [
-    {
-      'id': 'EMAIL001',
-      'name': 'Spring Wedding Promotion',
-      'subject': 'Exclusive Spring Wedding Packages - Save 20%!',
-      'status': 'Sent',
-      'sentDate': '2024-03-01',
-      'recipients': 1250,
-      'openRate': 28.5,
-      'clickRate': 8.2,
-      'conversions': 23,
-      'template': 'Wedding Promotion',
-    },
-    {
-      'id': 'EMAIL002',
-      'name': 'Customer Appreciation',
-      'subject': 'Thank You for Choosing EventEase!',
-      'status': 'Scheduled',
-      'sentDate': '2024-03-15',
-      'recipients': 890,
-      'openRate': 0.0,
-      'clickRate': 0.0,
-      'conversions': 0,
-      'template': 'Thank You',
-    },
-    {
-      'id': 'EMAIL003',
-      'name': 'New Service Launch',
-      'subject': 'Introducing Our Premium Event Photography Service',
-      'status': 'Draft',
-      'sentDate': null,
-      'recipients': 0,
-      'openRate': 0.0,
-      'clickRate': 0.0,
-      'conversions': 0,
-      'template': 'Service Launch',
-    },
-  ];
+  final List<Map<String, dynamic>> _emailCampaigns = [];
 
   final List<Map<String, dynamic>> _emailTemplates = [
     {
@@ -86,36 +49,7 @@ class _VendorEmailCampaignBuilderScreenState extends State<VendorEmailCampaignBu
     },
   ];
 
-  final List<Map<String, dynamic>> _subscriberLists = [
-    {
-      'name': 'All Customers',
-      'count': 2450,
-      'description': 'Complete customer database',
-      'lastUpdated': '2024-03-10',
-      'growth': '+5.2%',
-    },
-    {
-      'name': 'Wedding Clients',
-      'count': 890,
-      'description': 'Customers interested in wedding services',
-      'lastUpdated': '2024-03-08',
-      'growth': '+12.1%',
-    },
-    {
-      'name': 'Corporate Clients',
-      'count': 456,
-      'description': 'Business and corporate event clients',
-      'lastUpdated': '2024-03-05',
-      'growth': '+8.7%',
-    },
-    {
-      'name': 'Recent Bookings',
-      'count': 234,
-      'description': 'Customers who booked in the last 30 days',
-      'lastUpdated': '2024-03-12',
-      'growth': '+15.3%',
-    },
-  ];
+  final List<Map<String, dynamic>> _subscriberLists = [];
 
   String _selectedTab = 'Campaigns';
 
@@ -196,7 +130,7 @@ class _VendorEmailCampaignBuilderScreenState extends State<VendorEmailCampaignBu
     final totalRecipients = _emailCampaigns
         .where((c) => c['status'] == 'Sent')
         .fold<int>(0, (sum, c) => sum + (c['recipients'] as int));
-    final avgOpenRate = _emailCampaigns
+    final avgOpenRate = sentCampaigns == 0 ? 0.0 : _emailCampaigns
         .where((c) => c['status'] == 'Sent')
         .fold<double>(0, (sum, c) => sum + (c['openRate'] as double)) /
         sentCampaigns;
@@ -241,12 +175,14 @@ class _VendorEmailCampaignBuilderScreenState extends State<VendorEmailCampaignBu
 
         // Campaigns list
         Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: _emailCampaigns.length,
-            itemBuilder: (context, index) =>
-                _buildCampaignCard(_emailCampaigns[index]),
-          ),
+          child: _emailCampaigns.isEmpty
+              ? const Center(child: Text('No email campaigns are available.'))
+              : ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: _emailCampaigns.length,
+                  itemBuilder: (context, index) =>
+                      _buildCampaignCard(_emailCampaigns[index]),
+                ),
         ),
       ],
     );
@@ -637,7 +573,7 @@ class _VendorEmailCampaignBuilderScreenState extends State<VendorEmailCampaignBu
               Expanded(
                 child: _buildSubscriberOverviewCard(
                   'Avg Growth',
-                  '+9.8%',
+                  '—',
                   Icons.trending_up,
                   AppTheme.accentColor,
                 ),
@@ -648,12 +584,14 @@ class _VendorEmailCampaignBuilderScreenState extends State<VendorEmailCampaignBu
 
         // Subscriber lists
         Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: _subscriberLists.length,
-            itemBuilder: (context, index) =>
-                _buildSubscriberListCard(_subscriberLists[index]),
-          ),
+          child: _subscriberLists.isEmpty
+              ? const Center(child: Text('No subscriber lists are available.'))
+              : ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: _subscriberLists.length,
+                  itemBuilder: (context, index) =>
+                      _buildSubscriberListCard(_subscriberLists[index]),
+                ),
         ),
       ],
     );

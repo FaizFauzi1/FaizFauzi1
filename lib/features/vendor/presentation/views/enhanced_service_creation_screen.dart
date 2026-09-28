@@ -28,6 +28,7 @@ import 'package:eventease/shared/utils/constants/image_constants.dart';
 import 'package_component_config_screen.dart'; // Added
 import 'package:eventease/core/utils/location_helper.dart';
 import 'package:eventease/core/utils/currency_formatter.dart';
+import 'package:eventease/features/admin/data/providers/admin_provider.dart';
 
 // --- ENUMS & MODELS ---
 
@@ -4689,9 +4690,17 @@ class _EnhancedServiceCreationScreenState
     ];
   }
 
-  void _showServiceAreaSelectionDialog() {
+  Future<void> _showServiceAreaSelectionDialog() async {
     final TextEditingController cityCtrl = TextEditingController();
-    final List<Region> allRegions = Region.getSampleRegions();
+    final adminProvider = context.read<AdminProvider>();
+    if (adminProvider.regions.isEmpty) {
+      await adminProvider.ensureRegionsLoaded();
+    }
+    if (!mounted) {
+      cityCtrl.dispose();
+      return;
+    }
+    final List<Region> allRegions = adminProvider.regions;
     final List<Region> countries = allRegions.where((r) => r.type == RegionType.country).toList();
     
     showDialog(

@@ -15,6 +15,7 @@ import 'package:eventease/shared/models/notification.dart';
 import 'package:eventease/features/vendor/data/models/subscription_model.dart';
 import 'package:eventease/features/vendor/data/models/subscription_model.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:realtime_client/realtime_client.dart';
 import 'package:eventease/core/services/bypass_incident_recorder.dart';
@@ -624,6 +625,9 @@ class ApiIntegration {
 }
 
 class AdminProvider extends ChangeNotifier {
+  static const _systemSettingsCacheKey = 'admin_system_settings_cache';
+  static const _regionsCacheKey = 'admin_regions_cache';
+
   final SupabaseClient _supabase = Supabase.instance.client;
   final NotificationService _notificationService = NotificationService();
 
@@ -941,11 +945,7 @@ class AdminProvider extends ChangeNotifier {
     };
   }
 
-  // Mock data for additional admin features
-  final List<ReportedUser> _reportedUsers = [
-    ReportedUser(user: 'Spam Bot', reason: 'Spam messages'),
-    ReportedUser(user: 'ToxicUser99', reason: 'Inappropriate language'),
-  ];
+  List<ReportedUser> _reportedUsers = [];
 
   List<Invitation> _guestInvitations = [];
 
@@ -972,17 +972,30 @@ class AdminProvider extends ChangeNotifier {
     }
   }
 
-  double _commissionPercent = 10.0;
+  Future<void> _loadReportedUsers() async {
+    try {
+      final response = await _supabase
+          .from('reported_users')
+          .select('reported_user_id, reason')
+          .eq('status', 'pending')
+          .order('created_at', ascending: false);
+
+      _reportedUsers = (response as List)
+          .map((json) => ReportedUser(
+                user: json['reported_user_id']?.toString() ?? '',
+                reason: json['reason']?.toString() ?? '',
+              ))
+          .where((report) => report.user.isNotEmpty)
+          .toList();
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Failed to load reported users: $e');
+    }
+  }
+
+  double _commissionPercent = 0.0;
   bool _isMaintenanceMode = false;
-  Map<String, bool> _featureFlags = {
-    'Vendor Registration': true,
-    'Booking System': true,
-    'In-App Messaging': true,
-    'Reviews & Ratings': true,
-    'Promotions & Ads': true,
-    'Articles & Content': true,
-    'Payment System': true,
-  };
+  Map<String, bool> _featureFlags = {};
 
   AdminProvider() {
     _initializeData();
@@ -999,6 +1012,7 @@ class AdminProvider extends ChangeNotifier {
       await Future.wait([
         _loadUsers(),
         _loadGuestInvitations(),
+        _loadReportedUsers(),
         _loadVendors(),
         _loadRegions(),
         _loadServiceCategories(),
@@ -1127,6 +1141,7 @@ class AdminProvider extends ChangeNotifier {
       await Future.wait([
         _loadUsers(),
         _loadGuestInvitations(),
+        _loadReportedUsers(),
         _loadVendors(),
         _loadRegions(),
         _loadServiceCategories(),
@@ -1194,25 +1209,8 @@ class AdminProvider extends ChangeNotifier {
         } catch (_) {}
       }
 
-      if (_users.isEmpty) {
-        _users = [
-          AppUser(id: 'u1', name: 'Farah Nadia', email: 'farah@eventease.my', role: 'customer', status: 'active', subscriptionTier: 'wedding_pass'),
-          AppUser(id: 'u2', name: 'Sarah Lim', email: 'sarah@bridalelegance.my', role: 'vendor', status: 'active', subscriptionTier: 'business'),
-          AppUser(id: 'u3', name: 'Admin Account', email: 'admin@eventease.my', role: 'admin', status: 'active', subscriptionTier: 'admin'),
-          AppUser(id: 'u4', name: 'Ahmad Rizal', email: 'ahmad@royalcatering.my', role: 'vendor', status: 'active', subscriptionTier: 'pro'),
-          AppUser(id: 'u5', name: 'Chloe Wong', email: 'chloe.wong@gmail.com', role: 'customer', status: 'active', subscriptionTier: 'free'),
-        ];
-      }
-
       notifyListeners();
     } catch (e) {
-      _users = [
-        AppUser(id: 'u1', name: 'Farah Nadia', email: 'farah@eventease.my', role: 'customer', status: 'active', subscriptionTier: 'wedding_pass'),
-        AppUser(id: 'u2', name: 'Sarah Lim', email: 'sarah@bridalelegance.my', role: 'vendor', status: 'active', subscriptionTier: 'business'),
-        AppUser(id: 'u3', name: 'Admin Account', email: 'admin@eventease.my', role: 'admin', status: 'active', subscriptionTier: 'admin'),
-        AppUser(id: 'u4', name: 'Ahmad Rizal', email: 'ahmad@royalcatering.my', role: 'vendor', status: 'active', subscriptionTier: 'pro'),
-        AppUser(id: 'u5', name: 'Chloe Wong', email: 'chloe.wong@gmail.com', role: 'customer', status: 'active', subscriptionTier: 'free'),
-      ];
       _error = 'Failed to load users: $e';
       notifyListeners();
     }
@@ -1447,6 +1445,8 @@ class AdminProvider extends ChangeNotifier {
   }
 
   Future<void> _loadRegions() async {
+    await _restoreCachedRegions();
+
     try {
       // 1. Fetch Countries (from 'countries' table)
       final countriesResponse = await _supabase
@@ -1506,14 +1506,47 @@ class AdminProvider extends ChangeNotifier {
       }
 
       _regions = allRegions;
+      await _cacheRegions();
     } catch (e) {
-      print('Error loading regions: $e');
-      // If error, keeping empty or fallback is debated. 
-      // Let's fallback to sample only if list is empty to avoid complete blank screen if DB fails
-      if (_regions.isEmpty) {
-        _regions = Region.getSampleRegions();
-      }
+      debugPrint('Error loading regions: $e');
       _error = 'Failed to load regions: $e';
+    }
+  }
+
+  Future<void> ensureRegionsLoaded() async {
+    if (_regions.isEmpty) await _loadRegions();
+  }
+
+  Future<void> _restoreCachedRegions() async {
+    if (_regions.isNotEmpty) return;
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final cachedRegions = prefs.getString(_regionsCacheKey);
+      if (cachedRegions == null) return;
+
+      _regions = (jsonDecode(cachedRegions) as List).map((value) {
+        final region = Map<String, dynamic>.from(value as Map);
+        return Region.fromMap(region, region['id'] as String);
+      }).toList();
+    } catch (e) {
+      debugPrint('Error restoring cached regions: $e');
+    }
+  }
+
+  Future<void> _cacheRegions() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(
+        _regionsCacheKey,
+        jsonEncode(
+          _regions
+              .map((region) => {...region.toMap(), 'id': region.id})
+              .toList(),
+        ),
+      );
+    } catch (e) {
+      debugPrint('Error caching regions: $e');
     }
   }
 
@@ -1721,11 +1754,7 @@ class AdminProvider extends ChangeNotifier {
         vendor: json['vendor_name'],
       )).toList();
     } catch (e) {
-      // Fallback to mock data
-      _appointments = [
-        Appointment(type: 'Food Testing', title: 'Menu tasting with Elegant Catering', date: 'Mar 20, 2025', vendor: 'Elegant Catering'),
-        Appointment(type: 'Fitting', title: 'Gown fitting - Lisa', date: 'Mar 22, 2025', vendor: 'Dress4U'),
-      ];
+      debugPrint('Failed to load admin appointments: $e');
     }
   }
 
@@ -1743,11 +1772,7 @@ class AdminProvider extends ChangeNotifier {
         status: json['status'],
       )).toList();
     } catch (e) {
-      // Fallback to mock data
-      _rentals = [
-        Rental(item: 'Gown A12', user: 'Sarah', deposit: 500, status: 'borrowed'),
-        Rental(item: 'Suit M5', user: 'Ahmad', deposit: 300, status: 'returned'),
-      ];
+      debugPrint('Failed to load admin rentals: $e');
     }
   }
 
@@ -1768,11 +1793,7 @@ class AdminProvider extends ChangeNotifier {
         date: json['created_at'] ?? DateTime.now().toIso8601String(),
       )).toList();
     } catch (e) {
-      // Fallback to mock data
-      _payouts = [
-        Payout(id: 'p1', vendor: 'Grand Ballroom KL', amount: 4500, status: 'pending', date: '2025-03-01'),
-        Payout(id: 'p2', vendor: 'Perfect Photography', amount: 800, status: 'pending', date: '2025-03-05'),
-      ];
+      debugPrint('Failed to load admin payouts: $e');
     }
   }
 
@@ -1789,10 +1810,7 @@ class AdminProvider extends ChangeNotifier {
         days: json['days_overdue'],
       )).toList();
     } catch (e) {
-      // Fallback to mock data
-      _overdues = [
-        OverduePayment(user: 'Corporate XYZ', amount: 12000, days: 14),
-      ];
+      debugPrint('Failed to load overdue payments: $e');
     }
   }
 
@@ -2183,10 +2201,7 @@ class AdminProvider extends ChangeNotifier {
         spent: json['amount_spent'],
       )).toList();
     } catch (e) {
-      // Fallback to mock data
-      _budgets = [
-        BudgetSummary(couple: 'Ahmad & Sarah', total: 30000, spent: 18500),
-      ];
+      debugPrint('Failed to load admin budgets: $e');
     }
   }
 
@@ -2204,10 +2219,7 @@ class AdminProvider extends ChangeNotifier {
         pending: json['pending_count'],
       )).toList();
     } catch (e) {
-      // Fallback to mock data
-      _rsvps = [
-        RSVPEntry(event: 'Ahmad & Sarah Wedding', yes: 120, no: 15, pending: 40),
-      ];
+      debugPrint('Failed to load admin RSVPs: $e');
     }
   }
 
@@ -2223,10 +2235,7 @@ class AdminProvider extends ChangeNotifier {
         suggestion: json['suggestion_text'],
       )).toList();
     } catch (e) {
-      // Fallback to mock data
-      _suggestions = [
-        Suggestion(couple: 'Ahmad & Sarah', suggestion: 'Venues in KL under RM100/pax'),
-      ];
+      debugPrint('Failed to load admin suggestions: $e');
     }
   }
 
@@ -2246,10 +2255,7 @@ class AdminProvider extends ChangeNotifier {
         note: json['notes'],
       )).toList();
     } catch (e) {
-      // Fallback to mock data
-      _disputes = [
-        Dispute(caseId: 'D-001', parties: 'Ahmad vs Catering', status: 'open', severity: 'High', comments: 'Payment dispute', note: 'Requires immediate attention'),
-      ];
+      debugPrint('Failed to load admin disputes: $e');
     }
   }
 
@@ -2266,10 +2272,7 @@ class AdminProvider extends ChangeNotifier {
         reason: json['moderation_reason'],
       )).toList();
     } catch (e) {
-      // Fallback to mock data
-      _reviewQueue = [
-        ReviewModeration(id: 'R-001', reviewer: 'Anon123', reason: 'Suspicious pattern'),
-      ];
+      debugPrint('Failed to load admin review queue: $e');
     }
   }
 
@@ -2287,10 +2290,7 @@ class AdminProvider extends ChangeNotifier {
         reason: json['appeal_reason'],
       )).toList();
     } catch (e) {
-      // Fallback to mock data
-      _appeals = [
-        Appeal(caseId: 'D-001', status: 'pending', comments: 'Requesting review of dispute resolution', reason: 'Unfair decision'),
-      ];
+      debugPrint('Failed to load admin appeals: $e');
     }
   }
 
@@ -2308,10 +2308,7 @@ class AdminProvider extends ChangeNotifier {
         pinned: json['is_pinned'] ?? false,
       )).toList();
     } catch (e) {
-      // Fallback to mock data
-      _announcements = [
-        Announcement(message: 'Peak season approaching, update availability!', date: 'Mar 01, 2025', audience: 'All', pinned: true),
-      ];
+      debugPrint('Failed to load admin announcements: $e');
     }
   }
 
@@ -2328,10 +2325,7 @@ class AdminProvider extends ChangeNotifier {
         ip: json['ip_address'],
       )).toList();
     } catch (e) {
-      // Fallback to mock data
-      _logins = [
-        LoginEvent(user: 'admin', time: 'Mar 10, 10:45', ip: '192.168.1.8'),
-      ];
+      debugPrint('Failed to load admin login events: $e');
     }
   }
 
@@ -2347,11 +2341,7 @@ class AdminProvider extends ChangeNotifier {
         role: json['role_name'],
       )).toList();
     } catch (e) {
-      // Fallback to mock data
-      _roles = [
-        RoleAssignment(user: 'admin', role: 'super-admin'),
-        RoleAssignment(user: 'sarah.ops', role: 'support'),
-      ];
+      debugPrint('Failed to load admin role assignments: $e');
     }
   }
 
@@ -2386,13 +2376,6 @@ class AdminProvider extends ChangeNotifier {
       }).toList();
     } catch (e) {
       print('Error loading admin activity logs: $e');
-      // Fallback to mock data to keep UI alive
-      _activity = [
-        ActivityLog(title: 'New vendor registered: Grand Ballroom KL', subtitle: 'Venues category', time: '5 mins ago', type: 'registration'),
-        ActivityLog(title: 'Payment received: RM 8,500 from Ahmad Faiz', subtitle: 'Wedding booking confirmed', time: '1 hour ago', type: 'payment'),
-        ActivityLog(title: 'Dispute resolved: Refund processed', subtitle: 'Catering service issue', time: '2 hours ago', type: 'dispute'),
-        ActivityLog(title: 'New customer registered: Sarah Johnson', subtitle: 'Customer account created', time: '3 hours ago', type: 'registration'),
-      ];
     }
   }
 
@@ -2409,30 +2392,62 @@ class AdminProvider extends ChangeNotifier {
         status: json['status'],
       )).toList();
     } catch (e) {
-      // Fallback to mock data
-      _apis = [
-        ApiIntegration(name: 'PaymentGatewayX', status: 'active'),
-      ];
+      debugPrint('Failed to load admin API integrations: $e');
     }
   }
 
   Future<void> _loadMaintenanceMode() async {
     try {
-      // Try to load from Supabase first
-      final response = await _supabase
-          .from('admin_system_settings')
-          .select('maintenance_mode, feature_flags')
-          .single();
-
-      _isMaintenanceMode = response['maintenance_mode'] ?? false;
-      if (response['feature_flags'] != null) {
-        _featureFlags = Map<String, bool>.from(response['feature_flags']);
+      final prefs = await SharedPreferences.getInstance();
+      final cachedSettings = prefs.getString(_systemSettingsCacheKey);
+      if (cachedSettings != null) {
+        _applySystemSettings(
+          Map<String, dynamic>.from(jsonDecode(cachedSettings) as Map),
+        );
+        notifyListeners();
       }
     } catch (e) {
-      print('Error loading maintenance mode: $e');
-      // Fallback to shared preferences or default to false
-      // For now, we'll default to false since we don't have persistent storage
-      _isMaintenanceMode = false;
+      debugPrint('Error loading cached admin settings: $e');
+    }
+
+    try {
+      final response = await _supabase
+          .from('admin_system_settings')
+          .select('maintenance_mode, feature_flags, commission_percent')
+          .single();
+
+      _applySystemSettings(response);
+      await _cacheSystemSettings();
+    } catch (e) {
+      debugPrint('Error loading admin system settings: $e');
+    } finally {
+      notifyListeners();
+    }
+  }
+
+  void _applySystemSettings(Map<String, dynamic> settings) {
+    _isMaintenanceMode = settings['maintenance_mode'] == true;
+    final featureFlags = settings['feature_flags'];
+    _featureFlags = featureFlags is Map
+        ? Map<String, bool>.from(featureFlags)
+        : {};
+    _commissionPercent =
+        (settings['commission_percent'] as num?)?.toDouble() ?? 0.0;
+  }
+
+  Future<void> _cacheSystemSettings() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(
+        _systemSettingsCacheKey,
+        jsonEncode({
+          'maintenance_mode': _isMaintenanceMode,
+          'feature_flags': _featureFlags,
+          'commission_percent': _commissionPercent,
+        }),
+      );
+    } catch (e) {
+      debugPrint('Error caching admin system settings: $e');
     }
   }
 
@@ -2441,23 +2456,20 @@ class AdminProvider extends ChangeNotifier {
 
   Future<void> setMaintenanceMode(bool enabled) async {
     try {
-      _isMaintenanceMode = enabled;
-
-      // Try to save to Supabase
       await _supabase
           .from('admin_system_settings')
-          .upsert({
-            'id': 'system_settings',
+          .update({
             'maintenance_mode': enabled,
             'updated_at': DateTime.now().toIso8601String(),
-          });
+          })
+          .eq('id', 'system_settings');
 
+      _isMaintenanceMode = enabled;
+      await _cacheSystemSettings();
       notifyListeners();
     } catch (e) {
-      // If Supabase fails, still update local state
-      _isMaintenanceMode = enabled;
-      notifyListeners();
       _error = 'Failed to save maintenance mode setting: $e';
+      notifyListeners();
     }
   }
 
@@ -2466,23 +2478,21 @@ class AdminProvider extends ChangeNotifier {
 
   Future<void> updateFeatureFlag(String featureName, bool isEnabled) async {
     try {
-      _featureFlags[featureName] = isEnabled;
-
-      // Try to save to Supabase
+      final updatedFlags = {..._featureFlags, featureName: isEnabled};
       await _supabase
           .from('admin_system_settings')
-          .upsert({
-            'id': 'system_settings',
-            'feature_flags': _featureFlags,
+          .update({
+            'feature_flags': updatedFlags,
             'updated_at': DateTime.now().toIso8601String(),
-          });
+          })
+          .eq('id', 'system_settings');
 
+      _featureFlags = updatedFlags;
+      await _cacheSystemSettings();
       notifyListeners();
     } catch (e) {
-      // If Supabase fails, still update local state
-      _featureFlags[featureName] = isEnabled;
-      notifyListeners();
       _error = 'Failed to save feature flag: $e';
+      notifyListeners();
     }
   }
 
@@ -3553,8 +3563,8 @@ class AdminProvider extends ChangeNotifier {
       final response = await _supabase.from('vendor_documents').select('id');
       return response.length;
     } catch (e) {
-      // Return mock data if Supabase fails
-      return 4; // vendor user docs only
+      debugPrint('Failed to count vendor documents: $e');
+      return 0;
     }
   }
 
@@ -3566,8 +3576,8 @@ class AdminProvider extends ChangeNotifier {
           .eq('verified', true);
       return response.length;
     } catch (e) {
-      // Return mock data if Supabase fails
-      return 3; // verified vendor user docs only
+      debugPrint('Failed to count verified vendor documents: $e');
+      return 0;
     }
   }
 
@@ -3717,10 +3727,8 @@ class AdminProvider extends ChangeNotifier {
 
   // Commission management
   double get commissionPercent => _commissionPercent;
-  void updateCommissionPercent(double percent) {
-    _commissionPercent = percent;
-    notifyListeners();
-  }
+  Future<void> updateCommissionPercent(double percent) =>
+      setCommissionPercent(percent);
 
   // Announcement management
   Future<void> addAnnouncement(String message, String audience) async {
@@ -4861,7 +4869,16 @@ class AdminProvider extends ChangeNotifier {
   // Commission management
   Future<void> setCommissionPercent(double percent) async {
     try {
+      await _supabase
+          .from('admin_system_settings')
+          .update({
+            'commission_percent': percent,
+            'updated_at': DateTime.now().toIso8601String(),
+          })
+          .eq('id', 'system_settings');
+
       _commissionPercent = percent;
+      await _cacheSystemSettings();
       notifyListeners();
     } catch (e) {
       _error = 'Failed to set commission percent: $e';

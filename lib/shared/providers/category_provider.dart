@@ -1,20 +1,109 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:eventease/shared/models/services/service_category.dart';
 
 class CategoryProvider with ChangeNotifier {
+  static const _categoriesCacheKey = 'search_filter_categories';
+  static const _eventTypesCacheKey = 'search_filter_event_types';
+
   final SupabaseClient _supabase = Supabase.instance.client;
 
   List<ServiceCategory> _allCategories = [];
   List<ServiceCategory> _filteredCategories = [];
+  List<String> _eventTypes = [];
   bool _isLoading = false;
   String? _error;
 
   // Getters
   List<ServiceCategory> get allCategories => _allCategories;
   List<ServiceCategory> get filteredCategories => _filteredCategories;
+  List<String> get eventTypes => _eventTypes;
   bool get isLoading => _isLoading;
   String? get error => _error;
+
+  Future<void> fetchSearchFilterOptions() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    await _restoreSearchFilterCache();
+    notifyListeners();
+
+    try {
+      final response = await _supabase
+          .from('service_categories')
+          .select()
+          .eq('is_active', true)
+          .order('display_order', ascending: true);
+
+      _allCategories = (response as List)
+          .map((json) => ServiceCategory.fromMap(json))
+          .toList();
+      _filteredCategories = _allCategories;
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(
+        _categoriesCacheKey,
+        jsonEncode(_allCategories.map((category) => category.toMap()).toList()),
+      );
+    } catch (e) {
+      _error = 'Failed to fetch categories: $e';
+      debugPrint(_error);
+    }
+
+    try {
+      final response = await _supabase
+          .from('event_types')
+          .select()
+          .order('display_order', ascending: true);
+
+      final eventTypes = <String>{};
+      for (final row in response as List) {
+        final isEnabled = row['is_enabled'] ?? row['is_active'] ?? true;
+        final name = (row['display_name'] ?? row['name'] ?? '').toString().trim();
+        if (isEnabled == true && name.isNotEmpty) {
+          eventTypes.add(name);
+        }
+      }
+      _eventTypes = eventTypes.toList();
+
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_eventTypesCacheKey, jsonEncode(_eventTypes));
+    } catch (e) {
+      _error ??= 'Failed to fetch event types: $e';
+      debugPrint('Failed to fetch search event types: $e');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> _restoreSearchFilterCache() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final cachedCategories = prefs.getString(_categoriesCacheKey);
+      if (_allCategories.isEmpty && cachedCategories != null) {
+        _allCategories = (jsonDecode(cachedCategories) as List)
+            .map((json) => ServiceCategory.fromMap(
+                  Map<String, dynamic>.from(json as Map),
+                ))
+            .toList();
+        _filteredCategories = _allCategories;
+      }
+
+      final cachedEventTypes = prefs.getString(_eventTypesCacheKey);
+      if (_eventTypes.isEmpty && cachedEventTypes != null) {
+        _eventTypes = (jsonDecode(cachedEventTypes) as List)
+            .map((name) => name.toString())
+            .toList();
+      }
+    } catch (e) {
+      debugPrint('Failed to restore search filter cache: $e');
+    }
+  }
 
   /// Fetch all categories from Supabase
   Future<void> fetchCategories() async {

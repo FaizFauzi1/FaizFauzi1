@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:eventease/core/utils/app_theme.dart';
+import 'package:eventease/features/organizer/data/models/booth.dart';
 import 'package:eventease/features/organizer/data/models/exhibitor_vendor.dart';
+import 'package:eventease/features/organizer/data/repositories/organizer_repository.dart';
 
 class VendorFloorPlanScreen extends StatefulWidget {
   final ExhibitorVendor exhibitor;
@@ -19,48 +21,66 @@ class VendorFloorPlanScreen extends StatefulWidget {
 class _VendorFloorPlanScreenState extends State<VendorFloorPlanScreen> {
   String _selectedZone = 'All Zones';
   String? _inspectedBoothNumber;
-
-  // Mock booth grid representing Hall 2
-  late final List<Map<String, dynamic>> _booths;
+  List<Map<String, dynamic>> _booths = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _inspectedBoothNumber = widget.exhibitor.boothNumber ?? 'A-05';
-    _initBooths();
+    _inspectedBoothNumber = widget.exhibitor.boothNumber;
+    _loadBooths();
   }
 
-  void _initBooths() {
-    final myBooth = widget.exhibitor.boothNumber ?? 'A-05';
-    _booths = [
-      {'num': 'A-01', 'zone': 'Zone A (Bridal)', 'vendor': 'Bella Wedding Gowns', 'cat': 'Attire', 'status': 'occupied', 'size': '3m x 3m'},
-      {'num': 'A-02', 'zone': 'Zone A (Bridal)', 'vendor': 'Chic Bridal Studio', 'cat': 'Attire', 'status': 'occupied', 'size': '3m x 3m'},
-      {'num': 'A-03', 'zone': 'Zone A (Bridal)', 'vendor': 'Vogue Tailoring', 'cat': 'Groom Suits', 'status': 'occupied', 'size': '3m x 3m'},
-      {'num': 'A-04', 'zone': 'Zone A (Bridal)', 'vendor': 'Available', 'cat': 'Open', 'status': 'available', 'size': '3m x 3m'},
-      {'num': myBooth, 'zone': 'Zone A (Bridal)', 'vendor': widget.exhibitor.companyName, 'cat': widget.exhibitor.category, 'status': 'mine', 'size': widget.exhibitor.boothSize},
-      {'num': 'A-06', 'zone': 'Zone A (Bridal)', 'vendor': 'Crown Jewels & Bands', 'cat': 'Jewelry', 'status': 'occupied', 'size': '3m x 3m'},
-      {'num': 'B-01', 'zone': 'Zone B (Photo)', 'vendor': 'Lumiere Studios', 'cat': 'Photography', 'status': 'occupied', 'size': '3m x 4m'},
-      {'num': 'B-02', 'zone': 'Zone B (Photo)', 'vendor': 'Kite Cinematography', 'cat': 'Videography', 'status': 'occupied', 'size': '3m x 4m'},
-      {'num': 'B-03', 'zone': 'Zone B (Photo)', 'vendor': 'Available', 'cat': 'Open', 'status': 'available', 'size': '3m x 4m'},
-      {'num': 'B-04', 'zone': 'Zone B (Photo)', 'vendor': 'Moments PhotoBooth', 'cat': 'Interactive', 'status': 'occupied', 'size': '3m x 4m'},
-      {'num': 'C-01', 'zone': 'Zone C (Catering)', 'vendor': 'Royale Gourmet Catering', 'cat': 'Catering', 'status': 'occupied', 'size': '6m x 6m'},
-      {'num': 'C-02', 'zone': 'Zone C (Catering)', 'vendor': 'Sweet Bliss Patisserie', 'cat': 'Desserts & Cakes', 'status': 'occupied', 'size': '3m x 3m'},
-      {'num': 'VIP-1', 'zone': 'VIP Lane', 'vendor': 'Mandarin Oriental KL', 'cat': 'Venue Host', 'status': 'vip', 'size': '8m x 8m'},
-      {'num': 'VIP-2', 'zone': 'VIP Lane', 'vendor': 'Glitz Luxury Stage Decor', 'cat': 'Floral & Decor', 'status': 'vip', 'size': '8m x 8m'},
-    ];
+  Future<void> _loadBooths() async {
+    final expoId = widget.exhibitor.expoId;
+    if (expoId == null || expoId.isEmpty) {
+      if (mounted) setState(() => _isLoading = false);
+      return;
+    }
+
+    try {
+      final booths = await OrganizerRepository.instance.fetchBooths(expoId);
+      if (!mounted) return;
+      setState(() {
+        _booths = booths.map((booth) {
+          final isMine = booth.vendorId == widget.exhibitor.id ||
+              booth.number == widget.exhibitor.boothNumber;
+          return {
+            'num': booth.number,
+            'zone': booth.zoneLabel,
+            'vendor': booth.vendorName ?? booth.statusLabel,
+            'cat': booth.zoneLabel,
+            'status': booth.zone == BoothZone.vip
+                ? 'vip'
+                : booth.status == BoothStatus.available
+                    ? 'available'
+                    : booth.status == BoothStatus.pending
+                        ? 'pending'
+                        : isMine
+                            ? 'mine'
+                            : 'occupied',
+            'size': booth.size,
+          };
+        }).toList();
+        _isLoading = false;
+      });
+    } catch (e) {
+      debugPrint('Failed to load expo booths: $e');
+      if (mounted) setState(() => _isLoading = false);
+    }
   }
 
   Map<String, dynamic>? get _inspectedBooth {
     if (_inspectedBoothNumber == null) return null;
-    return _booths.firstWhere(
-      (b) => b['num'] == _inspectedBoothNumber,
-      orElse: () => _booths.first,
-    );
+    for (final booth in _booths) {
+      if (booth['num'] == _inspectedBoothNumber) return booth;
+    }
+    return null;
   }
 
   @override
   Widget build(BuildContext context) {
-    final myBooth = widget.exhibitor.boothNumber ?? 'A-05';
+    final myBooth = widget.exhibitor.boothNumber ?? '';
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8FAFC),
@@ -82,10 +102,7 @@ class _VendorFloorPlanScreenState extends State<VendorFloorPlanScreen> {
               child: Row(
                 children: [
                   _zoneFilterChip('All Zones'),
-                  _zoneFilterChip('Zone A (Bridal)'),
-                  _zoneFilterChip('Zone B (Photo)'),
-                  _zoneFilterChip('Zone C (Catering)'),
-                  _zoneFilterChip('VIP Lane'),
+                  ..._booths.map((booth) => booth['zone'] as String).toSet().map(_zoneFilterChip),
                 ],
               ),
             ),
@@ -144,7 +161,11 @@ class _VendorFloorPlanScreenState extends State<VendorFloorPlanScreen> {
 
                   // Booth layout grid
                   Expanded(
-                    child: GridView.builder(
+                      child: _isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : _booths.isEmpty
+                          ? const Center(child: Text('No booth assignments are available for this expo.'))
+                          : GridView.builder(
                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 3,
                         crossAxisSpacing: 12,

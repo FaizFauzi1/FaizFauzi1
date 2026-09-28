@@ -108,6 +108,7 @@ class AdminSupportCase {
     String? internalNotes,
     String? resolution,
     List<AdminCaseTimelineItem>? timeline,
+    DateTime? updatedAt,
   }) {
     return AdminSupportCase(
       id: id,
@@ -124,7 +125,7 @@ class AdminSupportCase {
       status: status ?? this.status,
       assignedAdmin: assignedAdmin ?? this.assignedAdmin,
       createdAt: createdAt,
-      updatedAt: DateTime.now(),
+      updatedAt: updatedAt ?? DateTime.now(),
       timeline: timeline ?? this.timeline,
       internalNotes: internalNotes ?? this.internalNotes,
       resolution: resolution ?? this.resolution,
@@ -223,6 +224,8 @@ class CategoryDynamicConfig {
 
   CategoryConfigVersion get currentVersion =>
       versions.firstWhere((v) => v.version == activeVersion, orElse: () => versions.first);
+
+  CategoryConfigVersion get activeConfig => currentVersion;
 }
 
 /// Potential Duplicate Entity Item
@@ -237,6 +240,16 @@ class DuplicateMatch {
   final String reason;
   final Map<String, dynamic> details1;
   final Map<String, dynamic> details2;
+  final String status;
+  final String entityAName;
+  final String entityBName;
+  final String vendorA;
+  final String vendorB;
+  final String phoneA;
+  final String phoneB;
+  final String locationA;
+  final String locationB;
+  final List<String> matchedFields;
 
   DuplicateMatch({
     required this.id,
@@ -249,7 +262,25 @@ class DuplicateMatch {
     required this.reason,
     required this.details1,
     required this.details2,
-  });
+    this.status = 'Pending Review',
+    String? entityAName,
+    String? entityBName,
+    String? vendorA,
+    String? vendorB,
+    String? phoneA,
+    String? phoneB,
+    String? locationA,
+    String? locationB,
+    List<String>? matchedFields,
+  })  : entityAName = entityAName ?? name1,
+        entityBName = entityBName ?? name2,
+        vendorA = vendorA ?? (details1['vendor'] ?? 'Unknown Vendor'),
+        vendorB = vendorB ?? (details2['vendor'] ?? 'Unknown Vendor'),
+        phoneA = phoneA ?? (details1['phone'] ?? details1['phoneA'] ?? ''),
+        phoneB = phoneB ?? (details2['phone'] ?? details2['phoneB'] ?? ''),
+        locationA = locationA ?? (details1['location'] ?? details1['locationA'] ?? ''),
+        locationB = locationB ?? (details2['location'] ?? details2['locationB'] ?? ''),
+        matchedFields = matchedFields ?? const ['Phone', 'Location'];
 }
 
 /// Booking Exception Item

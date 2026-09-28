@@ -28,6 +28,7 @@ import 'package:eventease/features/customer/presentation/views/customer/chat_scr
 import 'package:eventease/features/support/data/providers/request_provider.dart';
 import 'package:eventease/features/support/data/models/customer_request.dart';
 import 'package:eventease/shared/models/services/service_enums.dart';
+import 'package:eventease/shared/providers/category_provider.dart';
 import 'package:eventease/shared/widgets/ad_widgets.dart';
 import 'package:eventease/core/providers/ad_provider.dart';
 import 'package:uuid/uuid.dart';
@@ -289,19 +290,10 @@ class _SearchScreenState extends State<SearchScreen> {
     'Convention Center',
     'Hotel',
   ];
-  final List<String> _eventTypes = [
-    'All',
-    'Wedding',
-    'Corporate',
-    'Birthday',
-    'Anniversary',
-    'Party',
-    'Conference',
-    'Seminar',
-    'Graduation',
-    'Retirement',
-    'Other',
-  ];
+  List<String> get _eventTypes => [
+        'All',
+        ...context.read<CategoryProvider>().eventTypes,
+      ];
   final List<String> _amenitiesOptions = [
     'Parking',
     'WiFi',
@@ -313,21 +305,13 @@ class _SearchScreenState extends State<SearchScreen> {
     'Dance Floor',
   ];
 
-  final List<String> _categoryOptions = [
-    'All',
-    'Venues',
-    'Catering',
-    'Photography',
-    'Decoration',
-    'Music',
-    'Florist',
-    'Cake',
-    'Fashion Boutique',
-    'Hotel',
-    'Beauty',
-    'Event Planner',
-    'Makeup Artist',
-  ];
+  List<String> get _categoryOptions => [
+        'All',
+        ...context
+            .read<CategoryProvider>()
+            .allCategories
+            .map((category) => category.name),
+      ];
 
   Set<String> _chatVendors = {};
 
@@ -362,6 +346,7 @@ class _SearchScreenState extends State<SearchScreen> {
     super.initState();
     _sessionSeed = DateTime.now().millisecondsSinceEpoch;
     _fetchResultsFromSupabase();
+    context.read<CategoryProvider>().fetchSearchFilterOptions();
     // Show interstitial ad when search screen opens
     WidgetsBinding.instance.addPostFrameCallback((_) {
       InterstitialAdManager.showInterstitial('search_interstitial_entry', context);
@@ -1440,6 +1425,7 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<CategoryProvider>();
     // We handle targeted rebuilds using Consumers for better performance
     
     return Scaffold(

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:eventease/core/services/supabase_service.dart';
 import '../../../../shared/models/vendor_collaboration_request_fixed.dart';
 import '../../../../shared/models/vendor_partnership.dart';
@@ -8,6 +11,8 @@ import '../../../../shared/models/vendor_marketplace_item.dart';
 import '../../data/models/vendor.dart';
 
 class VendorNetworkingProvider extends ChangeNotifier {
+  static const _discoveryCacheKey = 'vendor_networking_discovery';
+
   // Data storage
   final List<VendorCollaborationRequest> _collaborationRequests = [];
   final List<VendorPartnership> _partnerships = [];
@@ -95,11 +100,11 @@ class VendorNetworkingProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  // Loads discovery vendors from Supabase vendor_profiles with sample fallback
   Future<void> loadDiscoveryVendors() async {
     _isLoadingDiscovery = true;
     notifyListeners();
 
+    await _restoreCachedDiscoveryVendors();
     try {
       final data = await SupabaseService.select(
         table: 'vendor_profiles',
@@ -108,26 +113,41 @@ class VendorNetworkingProvider extends ChangeNotifier {
       );
 
       _allVendors.clear();
-      if (data.isNotEmpty) {
-        _allVendors.addAll(data.map((json) => Vendor.fromSupabase(json)).toList());
-      }
+      _allVendors.addAll(data.map((json) => Vendor.fromSupabase(json)));
+      await _cacheDiscoveryVendors(data);
     } catch (e) {
       debugPrint('Error loading discovery vendors from Supabase: $e');
+    } finally {
+      _isLoadingDiscovery = false;
+      notifyListeners();
     }
-
-    if (_allVendors.isEmpty) {
-      _allVendors.addAll(_sampleDiscoveryVendors());
-    }
-
-    _isLoadingDiscovery = false;
-    notifyListeners();
   }
 
-  void loadSampleData() {
-    if (_allVendors.isEmpty) {
-      _allVendors.addAll(_sampleDiscoveryVendors());
+  Future<void> _restoreCachedDiscoveryVendors() async {
+    if (_allVendors.isNotEmpty) return;
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final cachedVendors = prefs.getString(_discoveryCacheKey);
+      if (cachedVendors == null) return;
+
+      final rows = jsonDecode(cachedVendors) as List;
+      _allVendors.addAll(rows.map((row) => Vendor.fromSupabase(
+            Map<String, dynamic>.from(row as Map),
+          )));
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error restoring vendor discovery cache: $e');
     }
-    notifyListeners();
+  }
+
+  Future<void> _cacheDiscoveryVendors(List<Map<String, dynamic>> data) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_discoveryCacheKey, jsonEncode(data));
+    } catch (e) {
+      debugPrint('Error caching vendor discovery data: $e');
+    }
   }
 
   // Collaboration Request Management
@@ -193,194 +213,6 @@ class VendorNetworkingProvider extends ChangeNotifier {
 
     _isLoadingRequests = false;
     notifyListeners();
-  }
-
-  static List<Vendor> _sampleDiscoveryVendors() {
-    return [
-      Vendor(
-        id: 'sample-v-001',
-        name: 'Lumière Wedding Photography',
-        categories: ['Photography'],
-        subcategories: ['Pre-wedding', 'Actual Day', 'Cinematography'],
-        description: 'Award-winning wedding photography and documentary cinematic films capturing candid moments and authentic love stories across Malaysia.',
-        location: 'Kuala Lumpur',
-        images: const ['https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=500'],
-        imageUrl: 'https://images.unsplash.com/photo-1537633552985-df8429e8048b?w=500',
-        rating: 4.9,
-        reviewCount: 38,
-        status: VendorStatus.approved,
-        documents: const {},
-        subscriptionTier: SubscriptionTier.premium,
-        logistics: const {},
-        contactInfo: const {
-          'email': 'hello@lumierephoto.my',
-          'phone': '+60123456781',
-          'website': 'https://lumierephoto.my',
-        },
-        email: 'hello@lumierephoto.my',
-        phone: '+60123456781',
-        sampleServiceIds: const [],
-        createdAt: DateTime.now().subtract(const Duration(days: 120)),
-        updatedAt: DateTime.now(),
-        verified: true,
-      ),
-      Vendor(
-        id: 'sample-v-002',
-        name: 'Royal Floral & Bespoke Decor',
-        categories: ['Decoration'],
-        subcategories: ['Floral Arch', 'Stage Backdrop', 'Table Centerpieces'],
-        description: 'Luxury wedding stage styling, romantic floral installations, and bespoke tablescapes curated for unforgettable wedding celebrations.',
-        location: 'Petaling Jaya',
-        images: const ['https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=500'],
-        imageUrl: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=500',
-        rating: 4.8,
-        reviewCount: 29,
-        status: VendorStatus.approved,
-        documents: const {},
-        subscriptionTier: SubscriptionTier.premium,
-        logistics: const {},
-        contactInfo: const {
-          'email': 'contact@royalfloral.com',
-          'phone': '+60129876543',
-        },
-        email: 'contact@royalfloral.com',
-        phone: '+60129876543',
-        sampleServiceIds: const [],
-        createdAt: DateTime.now().subtract(const Duration(days: 90)),
-        updatedAt: DateTime.now(),
-        verified: true,
-      ),
-      Vendor(
-        id: 'sample-v-003',
-        name: 'Grand Royale Ballroom & Event Space',
-        categories: ['Venues'],
-        subcategories: ['Pillarless Ballroom', 'Garden Terrace'],
-        description: 'A contemporary 800-capacity pillarless grand ballroom with state-of-the-art panoramic LED screens and crystal chandeliers.',
-        location: 'Subang Jaya',
-        images: const ['https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=500'],
-        imageUrl: 'https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=500',
-        rating: 4.7,
-        reviewCount: 52,
-        status: VendorStatus.approved,
-        documents: const {},
-        subscriptionTier: SubscriptionTier.enterprise,
-        logistics: const {},
-        contactInfo: const {
-          'email': 'events@grandroyale.my',
-          'phone': '+60380234567',
-        },
-        email: 'events@grandroyale.my',
-        phone: '+60380234567',
-        sampleServiceIds: const [],
-        createdAt: DateTime.now().subtract(const Duration(days: 200)),
-        updatedAt: DateTime.now(),
-        verified: true,
-      ),
-      Vendor(
-        id: 'sample-v-004',
-        name: 'Gourmet Artisan Wedding Catering',
-        categories: ['Catering'],
-        subcategories: ['Buffet & Dome', 'Live Cooking Stations', 'Halal Fusion'],
-        description: 'Certified Halal premium wedding catering offering exquisite fusion menus, dome sets, and interactive dessert bars.',
-        location: 'Shah Alam',
-        images: const ['https://images.unsplash.com/photo-1555244162-803834f70033?w=500'],
-        imageUrl: 'https://images.unsplash.com/photo-1555244162-803834f70033?w=500',
-        rating: 4.9,
-        reviewCount: 44,
-        status: VendorStatus.approved,
-        documents: const {},
-        subscriptionTier: SubscriptionTier.premium,
-        logistics: const {},
-        contactInfo: const {
-          'email': 'catering@gourmetartisan.my',
-          'phone': '+60173459812',
-        },
-        email: 'catering@gourmetartisan.my',
-        phone: '+60173459812',
-        sampleServiceIds: const [],
-        createdAt: DateTime.now().subtract(const Duration(days: 150)),
-        updatedAt: DateTime.now(),
-        verified: true,
-      ),
-      Vendor(
-        id: 'sample-v-005',
-        name: 'SoundWave Live DJ & Event Production',
-        categories: ['Music & DJ'],
-        subcategories: ['Wedding DJ', 'Live Acoustic Band', 'Concert Audio'],
-        description: 'Premier audio-visual production, professional multilingual MCs, and live wedding band performances that elevate the crowd.',
-        location: 'Kuala Lumpur',
-        images: const ['https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500'],
-        imageUrl: 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=500',
-        rating: 4.8,
-        reviewCount: 22,
-        status: VendorStatus.approved,
-        documents: const {},
-        subscriptionTier: SubscriptionTier.basic,
-        logistics: const {},
-        contactInfo: const {
-          'email': 'booking@soundwave.my',
-          'phone': '+60162345678',
-        },
-        email: 'booking@soundwave.my',
-        phone: '+60162345678',
-        sampleServiceIds: const [],
-        createdAt: DateTime.now().subtract(const Duration(days: 80)),
-        updatedAt: DateTime.now(),
-        verified: true,
-      ),
-      Vendor(
-        id: 'sample-v-006',
-        name: 'Prestige Bridal Glam & Hair Studio',
-        categories: ['Beauty & Spa'],
-        subcategories: ['Airbrush Makeup', 'Bridal Hijab Styling', 'Touch-up Crew'],
-        description: 'Specializing in flawless dewy bridal glam, airbrush makeup, and hair styling for brides and bridal parties.',
-        location: 'Petaling Jaya',
-        images: const ['https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=500'],
-        imageUrl: 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=500',
-        rating: 4.9,
-        reviewCount: 31,
-        status: VendorStatus.approved,
-        documents: const {},
-        subscriptionTier: SubscriptionTier.premium,
-        logistics: const {},
-        contactInfo: const {
-          'email': 'glam@prestigebridal.my',
-          'phone': '+60193456782',
-        },
-        email: 'glam@prestigebridal.my',
-        phone: '+60193456782',
-        sampleServiceIds: const [],
-        createdAt: DateTime.now().subtract(const Duration(days: 60)),
-        updatedAt: DateTime.now(),
-        verified: true,
-      ),
-      Vendor(
-        id: 'sample-v-007',
-        name: 'Vintage Luxe Bridal Chauffeur',
-        categories: ['Transportation'],
-        subcategories: ['Classic Rolls Royce', 'Modern S-Class', 'Bridal Convoy'],
-        description: 'Chauffeured luxury and classic vintage car rentals ensuring a grand and memorable arrival for the bride and groom.',
-        location: 'Klang',
-        images: const ['https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=500'],
-        imageUrl: 'https://images.unsplash.com/photo-1549399542-7e3f8b79c341?w=500',
-        rating: 4.6,
-        reviewCount: 16,
-        status: VendorStatus.approved,
-        documents: const {},
-        subscriptionTier: SubscriptionTier.standard,
-        logistics: const {},
-        contactInfo: const {
-          'email': 'ride@vintageluxe.my',
-          'phone': '+60124567890',
-        },
-        email: 'ride@vintageluxe.my',
-        phone: '+60124567890',
-        sampleServiceIds: const [],
-        createdAt: DateTime.now().subtract(const Duration(days: 70)),
-        updatedAt: DateTime.now(),
-        verified: true,
-      ),
-    ];
   }
 
   // Partnership Management

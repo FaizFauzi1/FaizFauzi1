@@ -585,6 +585,8 @@ enum ServiceAppointmentStatus {
         return const Color(0xFF0EA5E9);
     }
   }
+
+  Color get badgeColor => color;
 }
 
 /// Actual booked appointment instance
@@ -839,6 +841,28 @@ class CollaboratorOption {
       isAvailable: isAvailable ?? this.isAvailable,
     );
   }
+
+  double get priceAdjustment => priceDelta;
+}
+
+enum PackageComponentType {
+  fixedVendor,
+  customerChoice,
+  optionalAddOn,
+  quantityBased;
+
+  String get displayName {
+    switch (this) {
+      case PackageComponentType.fixedVendor:
+        return 'Fixed Vendor';
+      case PackageComponentType.customerChoice:
+        return 'Customer Choice';
+      case PackageComponentType.optionalAddOn:
+        return 'Optional Add-on';
+      case PackageComponentType.quantityBased:
+        return 'Quantity Based';
+    }
+  }
 }
 
 /// Package Component: Fixed Vendor, Customer Choice, Optional, Quantity-Based
@@ -879,6 +903,12 @@ class PackageComponent {
     }
     return approvedCollaborators.isNotEmpty;
   }
+
+  String? get serviceId => approvedCollaborators.isNotEmpty ? approvedCollaborators.first.serviceId : null;
+
+  PackageComponentType get type => isFixedVendor ? PackageComponentType.fixedVendor : PackageComponentType.customerChoice;
+
+  List<CollaboratorOption> get collaborators => approvedCollaborators;
 
   CollaboratorOption? get selectedCollaborator {
     if (approvedCollaborators.isEmpty) return null;
@@ -939,6 +969,8 @@ class CollaborativePackage {
   final DateTime createdAt;
   final DateTime updatedAt;
 
+  final PackageStatus status;
+
   CollaborativePackage({
     required this.id,
     required this.ownerVendorId,
@@ -950,6 +982,7 @@ class CollaborativePackage {
     this.components = const [],
     this.bannerImageUrl = '',
     this.isPublished = true,
+    this.status = PackageStatus.published,
     DateTime? createdAt,
     DateTime? updatedAt,
   })  : createdAt = createdAt ?? DateTime.now(),
@@ -969,6 +1002,7 @@ class CollaborativePackage {
     List<PackageComponent>? components,
     String? bannerImageUrl,
     bool? isPublished,
+    PackageStatus? status,
   }) {
     return CollaborativePackage(
       id: id ?? this.id,
@@ -981,9 +1015,33 @@ class CollaborativePackage {
       components: components ?? this.components,
       bannerImageUrl: bannerImageUrl ?? this.bannerImageUrl,
       isPublished: isPublished ?? this.isPublished,
+      status: status ?? this.status,
       createdAt: createdAt,
       updatedAt: DateTime.now(),
     );
+  }
+}
+
+enum PackageStatus {
+  draft,
+  pendingApproval,
+  approved,
+  published,
+  archived;
+
+  String get displayName {
+    switch (this) {
+      case PackageStatus.draft:
+        return 'Draft';
+      case PackageStatus.pendingApproval:
+        return 'Pending Approval';
+      case PackageStatus.approved:
+        return 'Approved';
+      case PackageStatus.published:
+        return 'Published';
+      case PackageStatus.archived:
+        return 'Archived';
+    }
   }
 }
 

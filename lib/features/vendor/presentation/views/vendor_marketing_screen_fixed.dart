@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../core/utils/app_theme.dart';
 import 'vendor_marketing_analytics_screen.dart';
 import 'vendor_social_media_manager_screen.dart';
@@ -16,6 +18,11 @@ class VendorMarketingScreen extends StatefulWidget {
 }
 
 class _VendorMarketingScreenState extends State<VendorMarketingScreen> {
+  List<Map<String, dynamic>> _campaigns = [];
+  List<Map<String, dynamic>> _coupons = [];
+  bool _isLoadingData = true;
+  String? _dataError;
+
   final List<Map<String, dynamic>> _marketingTools = [
     {
       'title': 'Marketing Analytics',
@@ -67,6 +74,95 @@ class _VendorMarketingScreenState extends State<VendorMarketingScreen> {
       'screen': const ReferralHomeScreen(),
     },
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadMarketingData();
+  }
+
+  Future<void> _loadMarketingData() async {
+    try {
+      final client = Supabase.instance.client;
+      final userId = client.auth.currentUser?.id;
+      if (userId == null) {
+        if (mounted) {
+          setState(() {
+            _campaigns = [];
+            _coupons = [];
+            _dataError = 'Sign in to view your marketing data.';
+          });
+        }
+        return;
+      }
+
+      final profile = await client
+          .from('vendor_profiles')
+          .select('id')
+          .eq('user_id', userId)
+          .maybeSingle();
+      if (profile == null) {
+        if (mounted) {
+          setState(() {
+            _campaigns = [];
+            _coupons = [];
+            _dataError = 'No vendor profile is linked to this account.';
+          });
+        }
+        return;
+      }
+
+      final vendorId = profile['id'].toString();
+      String? queryError;
+      List<Map<String, dynamic>> campaigns = [];
+      List<Map<String, dynamic>> coupons = [];
+
+      try {
+        final response = await client
+            .from('ads_campaigns')
+            .select()
+            .eq('vendor_id', vendorId)
+            .order('created_at', ascending: false);
+        campaigns = (response as List)
+            .map((row) => Map<String, dynamic>.from(row as Map))
+            .toList();
+      } catch (e) {
+        queryError = e.toString();
+      }
+
+      try {
+        final response = await client
+            .from('service_coupons')
+            .select()
+            .eq('vendor_id', vendorId)
+            .eq('is_active', true)
+            .order('created_at', ascending: false);
+        coupons = (response as List)
+            .map((row) => Map<String, dynamic>.from(row as Map))
+            .toList();
+      } catch (e) {
+        queryError ??= e.toString();
+      }
+
+      if (mounted) {
+        setState(() {
+          _campaigns = campaigns;
+          _coupons = coupons;
+          _dataError = queryError;
+        });
+      }
+    } catch (e) {
+      if (mounted) setState(() => _dataError = e.toString());
+    } finally {
+      if (mounted) setState(() => _isLoadingData = false);
+    }
+  }
+
+  int _intValue(Map<String, dynamic> row, String key) =>
+      (row[key] as num?)?.toInt() ?? 0;
+
+  DateTime? _recordDate(Map<String, dynamic> row) =>
+      DateTime.tryParse((row['created_at'] ?? row['updated_at'] ?? '').toString());
 
   @override
   Widget build(BuildContext context) {
@@ -251,6 +347,25 @@ class _VendorMarketingScreenState extends State<VendorMarketingScreen> {
   }
 
   Widget _buildQuickStats() {
+    final activeCampaigns = _campaigns
+        .where((campaign) => campaign['status'] == 'active')
+        .length;
+    final totalImpressions = _campaigns.fold<int>(
+      0,
+      (total, campaign) => total + _intValue(campaign, 'impressions'),
+    );
+    final totalClicks = _campaigns.fold<int>(
+      0,
+      (total, campaign) => total + _intValue(campaign, 'clicks'),
+    );
+    final totalConversions = _campaigns.fold<int>(
+      0,
+      (total, campaign) => total + _intValue(campaign, 'conversions'),
+    );
+    final conversionRate = totalClicks == 0
+        ? 0.0
+        : totalConversions / totalClicks * 100;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -263,12 +378,21 @@ class _VendorMarketingScreenState extends State<VendorMarketingScreen> {
           ),
         ),
         const SizedBox(height: 16),
+        if (_isLoadingData) const LinearProgressIndicator(),
+        if (_dataError != null)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: Text(
+              'Could not load all marketing data: $_dataError',
+              style: const TextStyle(color: AppTheme.errorColor, fontSize: 12),
+            ),
+          ),
         Row(
           children: [
             Expanded(
               child: _buildStatCard(
                 'Active Campaigns',
-                '12',
+                '$activeCampaigns',
                 Icons.campaign,
                 AppTheme.primaryColor,
               ),
@@ -277,7 +401,7 @@ class _VendorMarketingScreenState extends State<VendorMarketingScreen> {
             Expanded(
               child: _buildStatCard(
                 'Total Reach',
-                '45.2K',
+                NumberFormat.compact().format(totalImpressions),
                 Icons.people,
                 AppTheme.successColor,
               ),
@@ -286,7 +410,7 @@ class _VendorMarketingScreenState extends State<VendorMarketingScreen> {
             Expanded(
               child: _buildStatCard(
                 'Conversion Rate',
-                '8.3%',
+                '${conversionRate.toStringAsFixed(1)}%',
                 Icons.trending_up,
                 AppTheme.accentColor,
               ),
@@ -338,34 +462,15 @@ class _VendorMarketingScreenState extends State<VendorMarketingScreen> {
   }
 
   Widget _buildRecentActivity() {
-    final activities = [
-      {
-        'title': 'Email campaign "Spring Wedding" sent',
-        'time': '2 hours ago',
-        'type': 'email',
-      },
-      {
-        'title': 'Social media post scheduled',
-        'time': '4 hours ago',
-        'type': 'social',
-      },
-      {
-        'title': 'New customer segment created',
-        'time': '1 day ago',
-        'type': 'segment',
-      },
-      {
-        'title': 'Referral program updated',
-        'time': '2 days ago',
-        'type': 'referral',
-      },
-    ];
+    final campaigns = [..._campaigns]
+      ..sort((a, b) => (_recordDate(b) ?? DateTime(0))
+          .compareTo(_recordDate(a) ?? DateTime(0)));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Recent Activity',
+          'Recent Campaigns',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -373,7 +478,21 @@ class _VendorMarketingScreenState extends State<VendorMarketingScreen> {
           ),
         ),
         const SizedBox(height: 16),
-        ...activities.map((activity) => _buildActivityItem(activity)),
+        if (campaigns.isEmpty)
+          const Text(
+            'No campaigns have been created yet.',
+            style: TextStyle(color: AppTheme.textSecondaryColor),
+          ),
+        ...campaigns.take(4).map((campaign) {
+          final date = _recordDate(campaign);
+          return _buildActivityItem({
+            'title': campaign['campaign_name']?.toString() ?? 'Campaign',
+            'time': date == null
+                ? campaign['status']?.toString() ?? ''
+                : DateFormat('d MMM, h:mm a').format(date.toLocal()),
+            'type': 'campaign',
+          });
+        }),
       ],
     );
   }
@@ -398,6 +517,10 @@ class _VendorMarketingScreenState extends State<VendorMarketingScreen> {
       case 'referral':
         icon = Icons.card_giftcard;
         color = AppTheme.secondaryColor;
+        break;
+      case 'campaign':
+        icon = Icons.campaign;
+        color = AppTheme.primaryColor;
         break;
       default:
         icon = Icons.info;
@@ -477,8 +600,8 @@ class _VendorMarketingScreenState extends State<VendorMarketingScreen> {
 
   void _showSocialFlyerModal() {
     String selectedTemplate = 'Wedding Elegance';
-    String customHeadline = 'Book Your 2026 Dream Wedding';
-    String discountOffer = '15% OFF Early Bird';
+    String customHeadline = '';
+    String discountOffer = '';
 
     showModalBottomSheet(
       context: context,
@@ -551,7 +674,7 @@ class _VendorMarketingScreenState extends State<VendorMarketingScreen> {
                       ),
                       const SizedBox(height: 24),
                       Text(
-                        customHeadline,
+                        customHeadline.isEmpty ? 'Your campaign headline' : customHeadline,
                         textAlign: TextAlign.center,
                         style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                       ),
@@ -670,44 +793,39 @@ class _VendorMarketingScreenState extends State<VendorMarketingScreen> {
                     'Flash Deals & Promo Codes',
                     style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.textPrimaryColor),
                   ),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      Navigator.pop(ctx);
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('New 48h Flash Deal created and activated!'), backgroundColor: Colors.green),
-                      );
-                    },
-                    icon: const Icon(Icons.bolt, size: 16),
-                    label: const Text('Create Deal'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.teal,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                    ),
-                  ),
                 ],
               ),
               const SizedBox(height: 16),
-
-              // Active Flash Deals
-              _buildFlashDealCard(
-                title: 'Merdeka Weekend Special Flash Sale',
-                discount: '25% OFF',
-                code: 'MERDEKA25',
-                timeLeft: '18h 42m remaining',
-                claimed: '14 / 20 claimed',
-                isActive: true,
-              ),
-              const SizedBox(height: 12),
-              _buildFlashDealCard(
-                title: 'Early Bird Year-End Wedding Gala',
-                discount: 'RM 500 OFF',
-                code: 'YEAREND500',
-                timeLeft: '3 days remaining',
-                claimed: '8 / 15 claimed',
-                isActive: true,
-              ),
+              if (_isLoadingData) const LinearProgressIndicator(),
+              if (!_isLoadingData && _coupons.isEmpty)
+                const Text('No active coupons found.'),
+              ..._coupons.map((coupon) {
+                final expiry = DateTime.tryParse(
+                  coupon['expiry_date']?.toString() ?? '',
+                );
+                final discountValue =
+                    (coupon['discount_value'] as num?)?.toDouble() ?? 0;
+                final isPercentage = coupon['discount_type'] == 'percentage';
+                final usageLimit = coupon['usage_limit'] as num?;
+                final currentUsage = _intValue(coupon, 'current_usage');
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: 12),
+                  child: _buildFlashDealCard(
+                    title: coupon['code']?.toString() ?? 'Coupon',
+                    discount: isPercentage
+                        ? '${discountValue.toStringAsFixed(0)}% OFF'
+                        : 'RM ${discountValue.toStringAsFixed(2)} OFF',
+                    code: coupon['code']?.toString() ?? '',
+                    timeLeft: expiry == null
+                        ? 'No expiry date'
+                        : 'Expires ${DateFormat('d MMM yyyy').format(expiry.toLocal())}',
+                    claimed: usageLimit == null
+                        ? '$currentUsage used'
+                        : '$currentUsage / ${usageLimit.toInt()} used',
+                    isActive: coupon['is_active'] == true,
+                  ),
+                );
+              }),
             ],
           ),
         ),

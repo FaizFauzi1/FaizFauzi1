@@ -1,5 +1,6 @@
 import 'package:eventease/core/utils/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class VendorMarketingToolsScreen extends StatefulWidget {
   const VendorMarketingToolsScreen({super.key});
@@ -9,50 +10,9 @@ class VendorMarketingToolsScreen extends StatefulWidget {
 }
 
 class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen> {
-  final List<Map<String, dynamic>> _campaigns = [
-    {
-      'id': 'CAMP001',
-      'name': 'Spring Wedding Promotion',
-      'type': 'Email Campaign',
-      'status': 'Active',
-      'sent': 1250,
-      'opened': 387,
-      'clicked': 89,
-      'conversions': 23,
-      'budget': 500.0,
-      'spent': 350.0,
-      'startDate': '2024-03-01',
-      'endDate': '2024-03-31',
-    },
-    {
-      'id': 'CAMP002',
-      'name': 'Facebook Ads - Birthday Parties',
-      'type': 'Social Media',
-      'status': 'Active',
-      'sent': 0,
-      'opened': 0,
-      'clicked': 2450,
-      'conversions': 67,
-      'budget': 1000.0,
-      'spent': 750.0,
-      'startDate': '2024-03-10',
-      'endDate': '2024-03-25',
-    },
-    {
-      'id': 'CAMP003',
-      'name': 'Customer Retention Campaign',
-      'type': 'Automated',
-      'status': 'Draft',
-      'sent': 0,
-      'opened': 0,
-      'clicked': 0,
-      'conversions': 0,
-      'budget': 0.0,
-      'spent': 0.0,
-      'startDate': null,
-      'endDate': null,
-    },
-  ];
+  final List<Map<String, dynamic>> _campaigns = [];
+  bool _isLoadingCampaigns = true;
+  String? _campaignsError;
 
   final List<Map<String, dynamic>> _marketingTools = [
     {
@@ -102,13 +62,69 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
   String _selectedTab = 'Campaigns';
 
   @override
+  void initState() {
+    super.initState();
+    _loadCampaigns();
+  }
+
+  Future<void> _loadCampaigns() async {
+    try {
+      final client = Supabase.instance.client;
+      final userId = client.auth.currentUser?.id;
+      if (userId == null) throw StateError('Sign in to view campaigns.');
+
+      final profile = await client
+          .from('vendor_profiles')
+          .select('id')
+          .eq('user_id', userId)
+          .maybeSingle();
+      if (profile == null) {
+        throw StateError('No vendor profile is linked to this account.');
+      }
+
+      final response = await client
+          .from('ads_campaigns')
+          .select()
+          .eq('vendor_id', profile['id'])
+          .order('created_at', ascending: false);
+      final campaigns = (response as List).map((row) {
+        final data = Map<String, dynamic>.from(row as Map);
+        final status = data['status']?.toString() ?? 'pending';
+        return {
+          'id': data['id']?.toString() ?? '',
+          'name': data['campaign_name']?.toString() ?? 'Campaign',
+          'type': data['campaign_type']?.toString().replaceAll('_', ' ') ?? '',
+          'status': status.isEmpty
+              ? status
+              : '${status[0].toUpperCase()}${status.substring(1)}',
+          'impressions': (data['impressions'] as num?)?.toInt() ?? 0,
+          'clicked': (data['clicks'] as num?)?.toInt() ?? 0,
+          'conversions': (data['conversions'] as num?)?.toInt() ?? 0,
+          'budget': (data['budget'] as num?)?.toDouble() ?? 0.0,
+          'spent': (data['spent'] as num?)?.toDouble() ?? 0.0,
+          'startDate': data['start_date']?.toString(),
+          'endDate': data['end_date']?.toString(),
+        };
+      }).toList();
+
+      if (mounted) setState(() => _campaigns
+        ..clear()
+        ..addAll(campaigns));
+    } catch (e) {
+      if (mounted) setState(() => _campaignsError = e.toString());
+    } finally {
+      if (mounted) setState(() => _isLoadingCampaigns = false);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: const Text('Marketing Tools3',
+        title: const Text('Marketing Tools2',
             style: TextStyle(
                 color: AppTheme.textPrimaryColor, fontWeight: FontWeight.bold)),
         actions: [
@@ -154,6 +170,7 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
 
   Widget _buildTabButton(String title, bool isSelected) {
     return ElevatedButton(
+      key: ValueKey('tab_$title'),
       onPressed: () => setState(() => _selectedTab = title),
       style: ElevatedButton.styleFrom(
         backgroundColor: isSelected ? AppTheme.primaryColor : Colors.white,
@@ -169,7 +186,7 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
 
   Widget _buildCampaignsView() {
     final activeCampaigns = _campaigns.where((c) => c['status'] == 'Active').length;
-    final totalSpent = _campaigns.fold<double>(0, (sum, c) => sum + c['spent']);
+    final totalSpent = _campaigns.fold<double>(0, (sum, c) => sum + (c['spent'] as double));
     final totalConversions = _campaigns.fold<int>(0, (sum, c) => sum + (c['conversions'] as int));
 
     return Column(
@@ -212,12 +229,18 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
 
         // Campaigns list
         Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: _campaigns.length,
-            itemBuilder: (context, index) =>
-                _buildCampaignCard(_campaigns[index]),
-          ),
+          child: _isLoadingCampaigns
+            ? const Center(child: CircularProgressIndicator())
+            : _campaignsError != null
+              ? Center(child: Text('Could not load campaigns: $_campaignsError'))
+              : _campaigns.isEmpty
+                ? const Center(child: Text('No ad campaigns found.'))
+                : ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: _campaigns.length,
+                  itemBuilder: (context, index) =>
+                    _buildCampaignCard(_campaigns[index]),
+                ),
         ),
       ],
     );
@@ -257,14 +280,17 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
   }
 
   Widget _buildCampaignCard(Map<String, dynamic> campaign) {
-    final statusColor = _getStatusColor(campaign['status']);
-    final sent = campaign['sent'] as int;
-    final opened = campaign['opened'] as int;
+    final statusColor = _getStatusColor(campaign['status'] as String);
     final clicked = campaign['clicked'] as int;
-    final openRate = sent > 0 ? (opened / sent * 100) : 0.0;
-    final clickRate = sent > 0 ? (clicked / sent * 100) : 0.0;
+    final impressions = campaign['impressions'] as int;
+    final conversions = campaign['conversions'] as int;
+    final budget = campaign['budget'] as double;
+    final spent = campaign['spent'] as double;
+
+    final clickRate = impressions > 0 ? (clicked / impressions * 100) : 0.0;
 
     return Container(
+      key: ValueKey(campaign['id']),
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -287,12 +313,12 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
                 width: 40,
                 height: 40,
                 decoration: BoxDecoration(
-                  color: _getCampaignColor(campaign['type']).withOpacity(0.1),
+                  color: _getCampaignColor(campaign['type'] as String).withOpacity(0.1),
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: Icon(
-                  _getCampaignIcon(campaign['type']),
-                  color: _getCampaignColor(campaign['type']),
+                  _getCampaignIcon(campaign['type'] as String),
+                  color: _getCampaignColor(campaign['type'] as String),
                   size: 20,
                 ),
               ),
@@ -306,7 +332,7 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
                     Row(
                       children: [
                         Text(
-                          campaign['name'],
+                          campaign['name'] as String,
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -321,7 +347,7 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Text(
-                            campaign['status'],
+                            campaign['status'] as String,
                             style: TextStyle(
                               color: statusColor,
                               fontSize: 10,
@@ -333,7 +359,7 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      campaign['type'],
+                      campaign['type'] as String,
                       style: const TextStyle(
                         color: AppTheme.textSecondaryColor,
                         fontSize: 14,
@@ -354,12 +380,12 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
               ),
 
               // Budget info
-              if ((campaign['budget'] as double) > 0) ...[
+              if (budget > 0) ...[
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      'RM ${campaign['spent'].toStringAsFixed(0)} / ${campaign['budget'].toStringAsFixed(0)}',
+                      'RM ${spent.toStringAsFixed(0)} / ${budget.toStringAsFixed(0)}',
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
@@ -368,9 +394,9 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
                     ),
                     const SizedBox(height: 4),
                     SizedBox(
-                      width: 100,
+                      width: 80,
                       child: LinearProgressIndicator(
-                        value: (campaign['budget'] as double) > 0 ? (campaign['spent'] as double) / (campaign['budget'] as double) : 0.0,
+                        value: budget > 0 ? spent / budget : 0.0,
                         backgroundColor: Colors.grey.shade200,
                         valueColor: const AlwaysStoppedAnimation<Color>(AppTheme.primaryColor),
                       ),
@@ -383,7 +409,7 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      'RM ${campaign['spent'].toStringAsFixed(0)} / No Budget Set',
+                      'RM ${spent.toStringAsFixed(0)} / No Budget Set',
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -392,7 +418,7 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
                     ),
                     const SizedBox(height: 4),
                     SizedBox(
-                      width: 100,
+                      width: 80,
                       child: LinearProgressIndicator(
                         value: 0.0,
                         backgroundColor: Colors.grey.shade200,
@@ -412,16 +438,16 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
             Row(
               children: [
                 Expanded(
-                  child: _buildMetricItem('Sent', sent.toString()),
+                  child: _buildMetricItem('Impressions', impressions.toString()),
                 ),
                 Expanded(
-                  child: _buildMetricItem('Opened', '${openRate.toStringAsFixed(1)}%'),
+                  child: _buildMetricItem('Clicks', clicked.toString()),
                 ),
                 Expanded(
-                  child: _buildMetricItem('Clicked', '${clickRate.toStringAsFixed(1)}%'),
+                  child: _buildMetricItem('Click Rate', '${clickRate.toStringAsFixed(1)}%'),
                 ),
                 Expanded(
-                  child: _buildMetricItem('Converted', (campaign['conversions'] as int).toString()),
+                  child: _buildMetricItem('Converted', conversions.toString()),
                 ),
               ],
             ),
@@ -429,42 +455,51 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
             const SizedBox(height: 16),
 
             // Action buttons
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
+            Row(
               children: [
-                OutlinedButton.icon(
-                  onPressed: () => _editCampaign(campaign),
-                  icon: const Icon(Icons.edit, size: 16),
-                  label: const Text('Edit'),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () => _editCampaign(campaign),
+                    icon: const Icon(Icons.edit, size: 16),
+                    label: const Text('Edit'),
+                  ),
                 ),
-                OutlinedButton.icon(
-                  onPressed: () => _viewAnalytics(campaign),
-                  icon: const Icon(Icons.analytics, size: 16),
-                  label: const Text('Analytics'),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () => _viewAnalytics(campaign),
+                    icon: const Icon(Icons.analytics, size: 16),
+                    label: const Text('Analytics'),
+                  ),
                 ),
-                OutlinedButton.icon(
-                  onPressed: () => _duplicateCampaign(campaign),
-                  icon: const Icon(Icons.copy, size: 16),
-                  label: const Text('Duplicate'),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () => _duplicateCampaign(campaign),
+                    icon: const Icon(Icons.copy, size: 16),
+                    label: const Text('Duplicate'),
+                  ),
                 ),
               ],
             ),
           ] else ...[
             // Draft campaign actions
-            Wrap(
-              spacing: 8,
-              runSpacing: 8,
+            Row(
               children: [
-                ElevatedButton.icon(
-                  onPressed: () => _activateCampaign(campaign),
-                  icon: const Icon(Icons.play_arrow),
-                  label: const Text('Activate'),
+                Expanded(
+                  child: ElevatedButton.icon(
+                    onPressed: () => _activateCampaign(campaign),
+                    icon: const Icon(Icons.play_arrow),
+                    label: const Text('Activate'),
+                  ),
                 ),
-                OutlinedButton.icon(
-                  onPressed: () => _editCampaign(campaign),
-                  icon: const Icon(Icons.edit, size: 16),
-                  label: const Text('Edit'),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () => _editCampaign(campaign),
+                    icon: const Icon(Icons.edit, size: 16),
+                    label: const Text('Edit'),
+                  ),
                 ),
               ],
             ),
@@ -477,25 +512,19 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
   Widget _buildMetricItem(String label, String value) {
     return Column(
       children: [
-        FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            value,
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: AppTheme.primaryColor,
-            ),
+        Text(
+          value,
+          style: const TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: AppTheme.primaryColor,
           ),
         ),
-        FittedBox(
-          fit: BoxFit.scaleDown,
-          child: Text(
-            label,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppTheme.textSecondaryColor,
-            ),
+        Text(
+          label,
+          style: const TextStyle(
+            fontSize: 12,
+            color: AppTheme.textSecondaryColor,
           ),
         ),
       ],
@@ -503,10 +532,15 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
   }
 
   Widget _buildToolsView() {
-    return ListView.separated(
+    return GridView.builder(
       padding: const EdgeInsets.all(16),
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 12,
+        mainAxisSpacing: 12,
+        childAspectRatio: 0.8,
+      ),
       itemCount: _marketingTools.length,
-      separatorBuilder: (context, index) => const SizedBox(height: 12),
       itemBuilder: (context, index) =>
           _buildToolCard(_marketingTools[index]),
     );
@@ -514,6 +548,7 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
 
   Widget _buildToolCard(Map<String, dynamic> tool) {
     return Container(
+      key: ValueKey('tool_${tool['name']}'),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -528,76 +563,87 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: (tool['color'] as Color).withOpacity(0.1),
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: Icon(
+              tool['icon'] as IconData,
+              color: tool['color'] as Color,
+              size: 30,
+            ),
+          ),
+          const SizedBox(height: 12),
+          Text(
+            tool['name'] as String,
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: AppTheme.textPrimaryColor,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            tool['description'] as String,
+            style: const TextStyle(
+              color: AppTheme.textSecondaryColor,
+              fontSize: 12,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 12),
+          // Fixed layout instead of Wrap to avoid mouse tracker issues
           Row(
             children: [
-              Container(
-                width: 60,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: tool['color'].withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(30),
-                ),
-                child: Icon(
-                  tool['icon'],
-                  color: tool['color'],
-                  size: 30,
-                ),
-              ),
-              const SizedBox(width: 16),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      tool['name'],
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: AppTheme.textPrimaryColor,
-                      ),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: (tool['color'] as Color).withOpacity(0.1),
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    (tool['features'] as List)[0],
+                    style: TextStyle(
+                      color: tool['color'] as Color,
+                      fontSize: 10,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      tool['description'],
-                      style: const TextStyle(
-                        color: AppTheme.textSecondaryColor,
-                        fontSize: 14,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-
-          Wrap(
-            spacing: 4,
-            runSpacing: 4,
-            children: tool['features'].take(2).map<Widget>((feature) {
-              return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: tool['color'].withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  feature,
-                  style: TextStyle(
-                    color: tool['color'],
-                    fontSize: 10,
+                    textAlign: TextAlign.center,
                   ),
                 ),
-              );
-            }).toList(),
+              ),
+              if ((tool['features'] as List).length > 1) ...[
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: (tool['color'] as Color).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      (tool['features'] as List)[1],
+                      style: TextStyle(
+                        color: tool['color'] as Color,
+                        fontSize: 10,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ],
+            ],
           ),
           const SizedBox(height: 12),
           ElevatedButton(
             onPressed: () => _openTool(tool),
             style: ElevatedButton.styleFrom(
-              backgroundColor: tool['color'],
+              backgroundColor: tool['color'] as Color,
               minimumSize: const Size(double.infinity, 32),
             ),
             child: const Text('Open'),
@@ -672,15 +718,18 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
     );
   }
 
-  void _activateCampaign(Map<String, dynamic> campaign) {
-    setState(() {
-      campaign['status'] = 'Active';
-      campaign['startDate'] = DateTime.now().toString().substring(0, 10);
-      campaign['endDate'] = DateTime.now().add(const Duration(days: 30)).toString().substring(0, 10);
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('${campaign['name']} activated')),
-    );
+  Future<void> _activateCampaign(Map<String, dynamic> campaign) async {
+    try {
+      await Supabase.instance.client
+          .from('ads_campaigns')
+          .update({'status': 'active'})
+          .eq('id', campaign['id']);
+      await _loadCampaigns();
+    } catch (e) {
+      if (mounted) {
+        setState(() => _campaignsError = 'Could not activate campaign: $e');
+      }
+    }
   }
 
   void _openTool(Map<String, dynamic> tool) {

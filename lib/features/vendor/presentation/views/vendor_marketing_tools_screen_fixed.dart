@@ -9,50 +9,7 @@ class VendorMarketingToolsScreen extends StatefulWidget {
 }
 
 class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen> {
-  final List<Map<String, dynamic>> _campaigns = [
-    {
-      'id': 'CAMP001',
-      'name': 'Spring Wedding Promotion',
-      'type': 'Email Campaign',
-      'status': 'Active',
-      'sent': 1250,
-      'opened': 387,
-      'clicked': 89,
-      'conversions': 23,
-      'budget': 500.0,
-      'spent': 350.0,
-      'startDate': '2024-03-01',
-      'endDate': '2024-03-31',
-    },
-    {
-      'id': 'CAMP002',
-      'name': 'Facebook Ads - Birthday Parties',
-      'type': 'Social Media',
-      'status': 'Active',
-      'sent': 0,
-      'opened': 0,
-      'clicked': 2450,
-      'conversions': 67,
-      'budget': 1000.0,
-      'spent': 750.0,
-      'startDate': '2024-03-10',
-      'endDate': '2024-03-25',
-    },
-    {
-      'id': 'CAMP003',
-      'name': 'Customer Retention Campaign',
-      'type': 'Automated',
-      'status': 'Draft',
-      'sent': 0,
-      'opened': 0,
-      'clicked': 0,
-      'conversions': 0,
-      'budget': 0.0,
-      'spent': 0.0,
-      'startDate': null,
-      'endDate': null,
-    },
-  ];
+  final List<Map<String, dynamic>> _campaigns = [];
 
   final List<Map<String, dynamic>> _marketingTools = [
     {
@@ -213,12 +170,14 @@ class _VendorMarketingToolsScreenState extends State<VendorMarketingToolsScreen>
 
         // Campaigns list
         Expanded(
-          child: ListView.builder(
-            padding: const EdgeInsets.all(16),
-            itemCount: _campaigns.length,
-            itemBuilder: (context, index) =>
-                _buildCampaignCard(_campaigns[index]),
-          ),
+          child: _campaigns.isEmpty
+              ? const Center(child: Text('No campaign records are available.'))
+              : ListView.builder(
+                  padding: const EdgeInsets.all(16),
+                  itemCount: _campaigns.length,
+                  itemBuilder: (context, index) =>
+                      _buildCampaignCard(_campaigns[index]),
+                ),
         ),
       ],
     );

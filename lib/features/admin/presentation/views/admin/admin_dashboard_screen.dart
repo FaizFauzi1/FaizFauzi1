@@ -30,7 +30,9 @@ import 'package:eventease/features/admin/data/services/admin_impersonation_servi
 import 'package:eventease/features/auth/data/auth_provider.dart';
 import 'package:eventease/features/vendor/presentation/views/vendor_dashboard_screen.dart';
 import 'package:eventease/features/vendor/data/providers/vendor_provider_updated.dart';
+import 'package:eventease/features/vendor/data/models/vendor.dart';
 import 'package:eventease/features/vendor/data/providers/vendor_workflow_provider.dart';
+import 'package:eventease/features/customer/presentation/views/home/home_screen.dart';
 import 'package:eventease/features/admin/data/services/admin_marketplace_service.dart';
 import 'package:eventease/features/admin/data/providers/admin_marketplace_provider.dart';
 import 'package:eventease/features/admin/presentation/widgets/admin_global_search_dialog.dart';
@@ -72,41 +74,48 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   Widget build(BuildContext context) {
     return AdminResponsiveScaffold(
       body: _screens[_currentIndex],
-      bottomNavigationBar: MediaQuery.of(context).size.width >= 1024
-          ? null
-          : BottomNavigationBar(
-              currentIndex: _currentIndex,
-              onTap: (index) {
-                const tabNames = ['Dashboard', 'Users', 'Vendors', 'Transactions', 'Analytics'];
-                AnalyticsService().trackTabChanged(
-                  tabName: tabNames[index],
-                  tabIndex: index,
-                  screen: 'AdminDashboard',
-                );
-                setState(() {
-                  _currentIndex = index;
-                });
-              },
-              type: BottomNavigationBarType.fixed,
-              backgroundColor: Colors.white,
-              selectedItemColor: AppTheme.primaryColor,
-              unselectedItemColor: AppTheme.textSecondaryColor,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.dashboard_outlined),
-                  activeIcon: Icon(Icons.dashboard),
-                  label: 'Dashboard',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.people_outlined),
-                  activeIcon: Icon(Icons.people),
-                  label: 'Users',
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.business_outlined),
-                  activeIcon: Icon(Icons.business),
-                  label: 'Vendors',
-                ),
+      bottomNavigationBar:
+          MediaQuery.of(context).size.width >= 1024
+              ? null
+              : BottomNavigationBar(
+                currentIndex: _currentIndex,
+                onTap: (index) {
+                  const tabNames = [
+                    'Dashboard',
+                    'Users',
+                    'Vendors',
+                    'Transactions',
+                    'Analytics',
+                  ];
+                  AnalyticsService().trackTabChanged(
+                    tabName: tabNames[index],
+                    tabIndex: index,
+                    screen: 'AdminDashboard',
+                  );
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: Colors.white,
+                selectedItemColor: AppTheme.primaryColor,
+                unselectedItemColor: AppTheme.textSecondaryColor,
+                items: const [
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.dashboard_outlined),
+                    activeIcon: Icon(Icons.dashboard),
+                    label: 'Dashboard',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.people_outlined),
+                    activeIcon: Icon(Icons.people),
+                    label: 'Users',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.business_outlined),
+                    activeIcon: Icon(Icons.business),
+                    label: 'Vendors',
+                  ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.payment_outlined),
                     activeIcon: Icon(Icons.payment),
@@ -121,7 +130,15 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               ),
     );
   }
+}
 
+class _MarketOverviewItem {
+  final String label;
+  final String value;
+  final IconData icon;
+  final Color color;
+
+  const _MarketOverviewItem(this.label, this.value, this.icon, this.color);
 }
 
 class AdminHomeContent extends StatefulWidget {
@@ -209,72 +226,94 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 1,
-        title: isDesktop
-            ? Row(
-                children: [
-                  const Text(
-                    'Admin Command Centre',
-                    style: TextStyle(
-                      color: AppTheme.textPrimaryColor,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
+        title:
+            isDesktop
+                ? Row(
+                  children: [
+                    const Text(
+                      'Admin Command Centre',
+                      style: TextStyle(
+                        color: AppTheme.textPrimaryColor,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                      ),
                     ),
-                  ),
-                  const SizedBox(width: 20),
-                  // Global Search Bar in Header (Item 3 in prompt)
-                  Expanded(
-                    child: InkWell(
-                      onTap: () => AdminGlobalSearchDialog.show(context),
-                      borderRadius: BorderRadius.circular(10),
-                      child: Container(
-                        height: 38,
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        decoration: BoxDecoration(
-                          color: Colors.grey.shade100,
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey.shade300),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.search, size: 18, color: AppTheme.textSecondaryColor),
-                            const SizedBox(width: 8),
-                            const Expanded(
-                              child: Text(
-                                'Search EventEase (vendors, services, packages, bookings, cases)...',
-                                style: TextStyle(fontSize: 13, color: AppTheme.textSecondaryColor),
-                                overflow: TextOverflow.ellipsis,
+                    const SizedBox(width: 20),
+                    // Global Search Bar in Header (Item 3 in prompt)
+                    Expanded(
+                      child: InkWell(
+                        onTap: () => AdminGlobalSearchDialog.show(context),
+                        borderRadius: BorderRadius.circular(10),
+                        child: Container(
+                          height: 38,
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade100,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(color: Colors.grey.shade300),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.search,
+                                size: 18,
+                                color: AppTheme.textSecondaryColor,
                               ),
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade200,
-                                borderRadius: BorderRadius.circular(4),
+                              const SizedBox(width: 8),
+                              const Expanded(
+                                child: Text(
+                                  'Search EventEase (vendors, services, packages, bookings, cases)...',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: AppTheme.textSecondaryColor,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
                               ),
-                              child: const Text('Ctrl+K', style: TextStyle(fontSize: 10, color: Colors.grey)),
-                            ),
-                          ],
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 6,
+                                  vertical: 2,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.grey.shade200,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                child: const Text(
+                                  'Ctrl+K',
+                                  style: TextStyle(
+                                    fontSize: 10,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
+                  ],
+                )
+                : const Text(
+                  'Admin Command Centre',
+                  style: TextStyle(
+                    color: AppTheme.textPrimaryColor,
+                    fontWeight: FontWeight.bold,
                   ),
-                ],
-              )
-            : const Text(
-                'Admin Command Centre',
-                style: TextStyle(
-                  color: AppTheme.textPrimaryColor,
-                  fontWeight: FontWeight.bold,
                 ),
-              ),
-        leading: isDesktop
-            ? null
-            : Builder(
-                builder: (context) => IconButton(
-                  icon: const Icon(Icons.menu, color: AppTheme.textPrimaryColor),
-                  onPressed: () => Scaffold.of(context).openDrawer(),
+        leading:
+            isDesktop
+                ? null
+                : Builder(
+                  builder:
+                      (context) => IconButton(
+                        icon: const Icon(
+                          Icons.menu,
+                          color: AppTheme.textPrimaryColor,
+                        ),
+                        onPressed: () => Scaffold.of(context).openDrawer(),
+                      ),
                 ),
-              ),
         actions: [
           if (!isDesktop)
             IconButton(
@@ -288,33 +327,51 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
             icon: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.filter_list, size: 18, color: AppTheme.primaryColor),
+                const Icon(
+                  Icons.filter_list,
+                  size: 18,
+                  color: AppTheme.primaryColor,
+                ),
                 if (isDesktop) ...[
                   const SizedBox(width: 4),
                   Text(
                     mkt.activeSavedView,
-                    style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppTheme.primaryColor),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.primaryColor,
+                    ),
                   ),
-                  const Icon(Icons.arrow_drop_down, size: 16, color: AppTheme.primaryColor),
+                  const Icon(
+                    Icons.arrow_drop_down,
+                    size: 16,
+                    color: AppTheme.primaryColor,
+                  ),
                 ],
               ],
             ),
             onSelected: (view) => mkt.setSavedView(view),
-            itemBuilder: (ctx) => mkt.savedViews.map((v) {
-              return PopupMenuItem(
-                value: v,
-                child: Row(
-                  children: [
-                    if (v == mkt.activeSavedView)
-                      const Icon(Icons.check, size: 16, color: AppTheme.primaryColor)
-                    else
-                      const SizedBox(width: 16),
-                    const SizedBox(width: 8),
-                    Text(v, style: const TextStyle(fontSize: 13)),
-                  ],
-                ),
-              );
-            }).toList(),
+            itemBuilder:
+                (ctx) =>
+                    mkt.savedViews.map((v) {
+                      return PopupMenuItem(
+                        value: v,
+                        child: Row(
+                          children: [
+                            if (v == mkt.activeSavedView)
+                              const Icon(
+                                Icons.check,
+                                size: 16,
+                                color: AppTheme.primaryColor,
+                              )
+                            else
+                              const SizedBox(width: 16),
+                            const SizedBox(width: 8),
+                            Text(v, style: const TextStyle(fontSize: 13)),
+                          ],
+                        ),
+                      );
+                    }).toList(),
           ),
           // Role Badge / Switcher (Item 29 in prompt)
           PopupMenuButton<AdminRole>(
@@ -325,16 +382,26 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
               decoration: BoxDecoration(
                 color: AppTheme.primaryColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppTheme.primaryColor.withValues(alpha: 0.3)),
+                border: Border.all(
+                  color: AppTheme.primaryColor.withValues(alpha: 0.3),
+                ),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.shield_outlined, size: 14, color: AppTheme.primaryColor),
+                  const Icon(
+                    Icons.shield_outlined,
+                    size: 14,
+                    color: AppTheme.primaryColor,
+                  ),
                   const SizedBox(width: 4),
                   Text(
                     mkt.currentRole.title,
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppTheme.primaryColor),
+                    style: const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: AppTheme.primaryColor,
+                    ),
                   ),
                 ],
               ),
@@ -345,62 +412,86 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
                 SnackBar(content: Text('Switched view role to ${role.title}')),
               );
             },
-            itemBuilder: (ctx) => AdminRole.values.map((role) {
-              return PopupMenuItem(
-                value: role,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(role.title, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                    Text(role.description, style: const TextStyle(fontSize: 11, color: Colors.grey)),
-                  ],
-                ),
-              );
-            }).toList(),
+            itemBuilder:
+                (ctx) =>
+                    AdminRole.values.map((role) {
+                      return PopupMenuItem(
+                        value: role,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              role.title,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                              ),
+                            ),
+                            Text(
+                              role.description,
+                              style: const TextStyle(
+                                fontSize: 11,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
           ),
           // Impersonation / View As (Item 33 in prompt)
-          PopupMenuButton<String?>(
+          PopupMenuButton<String>(
             tooltip: 'View As (Read-Only Preview)',
             icon: Icon(
               Icons.remove_red_eye_outlined,
-              color: mkt.readOnlyPreviewMode != null ? Colors.amber.shade800 : AppTheme.textPrimaryColor,
+              color:
+                  mkt.readOnlyPreviewMode != null
+                      ? Colors.amber.shade800
+                      : AppTheme.textPrimaryColor,
             ),
-            onSelected: (mode) => mkt.setReadOnlyPreviewMode(mode),
-            itemBuilder: (ctx) => [
-              const PopupMenuItem(
-                value: null,
-                child: Text('Normal Admin Mode', style: TextStyle(fontWeight: FontWeight.bold)),
-              ),
-              const PopupMenuItem(
-                value: 'customer',
-                child: Text('👁 View Customer Experience (Read-Only)'),
-              ),
-              const PopupMenuItem(
-                value: 'vendor',
-                child: Text('👁 View Vendor Experience (Read-Only)'),
-              ),
-            ],
+            onSelected:
+                (mode) =>
+                    mkt.setReadOnlyPreviewMode(mode == 'normal' ? null : mode),
+            itemBuilder:
+                (ctx) => [
+                  const PopupMenuItem(
+                    value: 'normal',
+                    child: Text(
+                      'Normal Admin Mode',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'customer',
+                    child: Text('👁 View Customer Experience (Read-Only)'),
+                  ),
+                  const PopupMenuItem(
+                    value: 'vendor',
+                    child: Text('👁 View Vendor Experience (Read-Only)'),
+                  ),
+                ],
           ),
           Consumer<AdminNotificationProvider>(
-            builder: (context, notificationProvider, _) => Badge(
-              label: Text(notificationProvider.unreadCount.toString()),
-              isLabelVisible: notificationProvider.unreadCount > 0,
-              backgroundColor: Colors.red,
-              child: IconButton(
-                icon: const Icon(
-                  Icons.notifications_outlined,
-                  color: AppTheme.textPrimaryColor,
-                ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const AdminNotificationCenterScreen(),
+            builder:
+                (context, notificationProvider, _) => Badge(
+                  label: Text(notificationProvider.unreadCount.toString()),
+                  isLabelVisible: notificationProvider.unreadCount > 0,
+                  backgroundColor: Colors.red,
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.notifications_outlined,
+                      color: AppTheme.textPrimaryColor,
                     ),
-                  );
-                },
-              ),
-            ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const AdminNotificationCenterScreen(),
+                        ),
+                      );
+                    },
+                  ),
+                ),
           ),
           IconButton(
             icon: const Icon(Icons.settings, color: AppTheme.textPrimaryColor),
@@ -414,99 +505,147 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
         ],
       ),
       drawer: isDesktop ? null : adminDrawer(context),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Read-Only Preview Warning Banner (Item 33 in prompt)
-            if (mkt.readOnlyPreviewMode != null)
-              Container(
-                margin: const EdgeInsets.only(bottom: 16),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                decoration: BoxDecoration(
-                  color: Colors.amber.shade100,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.amber.shade400),
+      body:
+          mkt.readOnlyPreviewMode == null
+              ? SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 1. ACTION REQUIRED OPERATIONAL COMMAND CENTRE (Item 2 in prompt)
+                    _buildActionRequiredCommandCenter(context),
+
+                    const SizedBox(height: 24),
+
+                    // 2. MARKETPLACE OVERVIEW METRICS GRID (Item 2 in prompt)
+                    _buildMarketplaceOverviewMetrics(context),
+
+                    const SizedBox(height: 24),
+
+                    // Welcome section
+                    _buildWelcomeSection(),
+
+                    const SizedBox(height: 24),
+
+                    // Marketplace metrics (MVP) - GMV, revenue, bookings, vendors, customers, conversion, top categories
+                    _buildMarketplaceMetricsMVP(),
+
+                    const SizedBox(height: 24),
+
+                    // Product usage: MAU, DAU, Retention
+                    _buildProductUsageSection(),
+
+                    const SizedBox(height: 24),
+
+                    // Vendor performance: acceptance rate, response time, top vendors by revenue
+                    _buildVendorPerformanceSection(),
+
+                    const SizedBox(height: 24),
+
+                    // EventEase-specific: peak dates, avg event budget
+                    _buildEventEaseSpecificSection(),
+
+                    const SizedBox(height: 24),
+
+                    // Marketing: CAC, LTV
+                    _buildMarketingMetricsSection(),
+
+                    const SizedBox(height: 24),
+
+                    // Key metrics
+                    _buildKeyMetrics(),
+
+                    const SizedBox(height: 24),
+
+                    // Pending approvals
+                    _buildPendingApprovals(),
+
+                    const SizedBox(height: 24),
+
+                    // Recent activities
+                    _buildRecentActivities(),
+
+                    const SizedBox(height: 24),
+
+                    // Quick actions
+                    _buildQuickActions(),
+                  ],
+                ),
+              )
+              : _buildReadOnlyPreview(mkt.readOnlyPreviewMode!, mkt),
+    );
+  }
+
+  Widget _buildReadOnlyPreview(
+    String mode,
+    AdminMarketplaceProvider marketplace,
+  ) {
+    final isCustomer = mode == 'customer';
+    final preview =
+        isCustomer
+            ? const HomeScreen()
+            : Consumer<VendorProvider>(
+              builder: (context, vendorProvider, _) {
+                final vendor =
+                    vendorProvider.currentVendor ??
+                    (vendorProvider.vendors.isEmpty
+                        ? null
+                        : vendorProvider.vendors.first);
+                return VendorDashboardScreen(
+                  key: ValueKey(vendor?.id),
+                  previewVendor: vendor,
+                );
+              },
+            );
+
+    return Stack(
+      children: [
+        Positioned.fill(child: AbsorbPointer(child: preview)),
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          child: SafeArea(
+            bottom: false,
+            child: Material(
+              color: Colors.amber.shade900,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
                 ),
                 child: Row(
                   children: [
-                    Icon(Icons.info_outline, color: Colors.amber.shade900, size: 20),
+                    const Icon(
+                      Icons.visibility_outlined,
+                      color: Colors.white,
+                      size: 18,
+                    ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'READ-ONLY PREVIEW MODE: You are currently viewing the marketplace as a ${mkt.readOnlyPreviewMode!.toUpperCase()}. Changes and mutations are safely locked.',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.amber.shade900),
+                        'READ-ONLY PREVIEW: ${isCustomer ? 'CUSTOMER' : 'VENDOR'} EXPERIENCE',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                     TextButton(
-                      onPressed: () => mkt.setReadOnlyPreviewMode(null),
-                      child: const Text('Exit Preview', style: TextStyle(fontWeight: FontWeight.bold)),
+                      onPressed: () => marketplace.setReadOnlyPreviewMode(null),
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text('Exit Preview'),
                     ),
                   ],
                 ),
               ),
-
-            // 1. ACTION REQUIRED OPERATIONAL COMMAND CENTRE (Item 2 in prompt)
-            _buildActionRequiredCommandCenter(context),
-
-            const SizedBox(height: 24),
-
-            // 2. MARKETPLACE OVERVIEW METRICS GRID (Item 2 in prompt)
-            _buildMarketplaceOverviewMetrics(context),
-
-            const SizedBox(height: 24),
-
-            // Welcome section
-            _buildWelcomeSection(),
-
-            const SizedBox(height: 24),
-
-            // Marketplace metrics (MVP) - GMV, revenue, bookings, vendors, customers, conversion, top categories
-            _buildMarketplaceMetricsMVP(),
-
-            const SizedBox(height: 24),
-
-            // Product usage: MAU, DAU, Retention
-            _buildProductUsageSection(),
-
-            const SizedBox(height: 24),
-
-            // Vendor performance: acceptance rate, response time, top vendors by revenue
-            _buildVendorPerformanceSection(),
-
-            const SizedBox(height: 24),
-
-            // EventEase-specific: peak dates, avg event budget
-            _buildEventEaseSpecificSection(),
-
-            const SizedBox(height: 24),
-
-            // Marketing: CAC, LTV
-            _buildMarketingMetricsSection(),
-
-            const SizedBox(height: 24),
-
-            // Key metrics
-            _buildKeyMetrics(),
-
-            const SizedBox(height: 24),
-
-            // Pending approvals
-            _buildPendingApprovals(),
-
-            const SizedBox(height: 24),
-
-            // Recent activities
-            _buildRecentActivities(),
-
-            const SizedBox(height: 24),
-
-            // Quick actions
-            _buildQuickActions(),
-          ],
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 
@@ -557,7 +696,10 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
                   SizedBox(height: 2),
                   Text(
                     'High priority items requiring administrative intervention',
-                    style: TextStyle(fontSize: 12, color: AppTheme.textSecondaryColor),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppTheme.textSecondaryColor,
+                    ),
                   ),
                 ],
               ),
@@ -585,7 +727,9 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const VendorManagementScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const VendorManagementScreen(),
+                        ),
                       );
                     },
                   ),
@@ -597,7 +741,9 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const AdminServiceApprovalScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const AdminServiceApprovalScreen(),
+                        ),
                       );
                     },
                   ),
@@ -609,7 +755,9 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const AdminPackageApprovalScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const AdminPackageApprovalScreen(),
+                        ),
                       );
                     },
                   ),
@@ -621,7 +769,9 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const FinancialManagementScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const FinancialManagementScreen(),
+                        ),
                       );
                     },
                   ),
@@ -633,7 +783,9 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const VendorManagementScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const VendorManagementScreen(),
+                        ),
                       );
                     },
                   ),
@@ -645,7 +797,9 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const AdminRequestManagementScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const AdminRequestManagementScreen(),
+                        ),
                       );
                     },
                   ),
@@ -657,7 +811,9 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const AdminCatalogMonitorScreen()),
+                        MaterialPageRoute(
+                          builder: (_) => const AdminCatalogMonitorScreen(),
+                        ),
                       );
                     },
                   ),
@@ -669,7 +825,10 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (_) => const BookingServiceManagementScreen()),
+                        MaterialPageRoute(
+                          builder:
+                              (_) => const BookingServiceManagementScreen(),
+                        ),
                       );
                     },
                   ),
@@ -682,67 +841,6 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
     );
   }
 
-  Widget _buildActionCard({
-    required String title,
-    required String subtitle,
-    required IconData icon,
-    required Color badgeColor,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: badgeColor.withValues(alpha: 0.05),
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: badgeColor.withValues(alpha: 0.25)),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(6),
-                  decoration: BoxDecoration(
-                    color: badgeColor.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(icon, color: badgeColor, size: 18),
-                ),
-                Icon(Icons.arrow_forward, size: 14, color: badgeColor),
-              ],
-            ),
-            const SizedBox(height: 6),
-            Text(
-              title,
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 12,
-                color: Colors.grey.shade900,
-              ),
-            ),
-            Text(
-              subtitle,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                fontSize: 10,
-                color: Colors.grey.shade600,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   // ==========================================
   // 2. MARKETPLACE OVERVIEW METRICS GRID (Item 2 in prompt)
   // ==========================================
@@ -750,23 +848,84 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
     final admin = Provider.of<AdminProvider>(context);
 
     final totalVendors = admin.vendors.isNotEmpty ? admin.vendors.length : 158;
-    final activeVendors = admin.activeVendorsCount > 0 ? admin.activeVendorsCount : 142;
+    final activeVendors =
+        admin.activeVendorsCount > 0 ? admin.activeVendorsCount : 142;
     final totalCustomers = admin.users.isNotEmpty ? admin.users.length : 1420;
     final activeBookings = admin.activeBookings > 0 ? admin.activeBookings : 96;
 
     final metrics = [
-      _MarketOverviewItem('Total Customers', totalCustomers.toString(), Icons.people_outline, Colors.blue),
-      _MarketOverviewItem('Total Vendors', totalVendors.toString(), Icons.storefront_outlined, Colors.purple),
-      _MarketOverviewItem('Active Vendors', activeVendors.toString(), Icons.verified_outlined, Colors.green),
-      _MarketOverviewItem('Total Services', '348', Icons.design_services_outlined, Colors.amber.shade800),
-      _MarketOverviewItem('Total Products', '84', Icons.inventory_2_outlined, Colors.cyan),
-      _MarketOverviewItem('Total Rentals', '62', Icons.chair_outlined, Colors.orange),
-      _MarketOverviewItem('Total Packages', '45', Icons.all_inbox_outlined, Colors.indigo),
-      _MarketOverviewItem('Active Bookings', activeBookings.toString(), Icons.confirmation_number_outlined, Colors.teal),
-      _MarketOverviewItem('Upcoming Events', '54', Icons.event_outlined, Colors.pink),
-      _MarketOverviewItem('GMV', 'RM 348,200', Icons.account_balance_wallet_outlined, Colors.emeraldAccent),
-      _MarketOverviewItem('Platform Revenue', 'RM 38,302', Icons.attach_money, Colors.green),
-      _MarketOverviewItem('Pending Payouts', 'RM 28,450', Icons.payments_outlined, Colors.blueGrey),
+      _MarketOverviewItem(
+        'Total Customers',
+        totalCustomers.toString(),
+        Icons.people_outline,
+        Colors.blue,
+      ),
+      _MarketOverviewItem(
+        'Total Vendors',
+        totalVendors.toString(),
+        Icons.storefront_outlined,
+        Colors.purple,
+      ),
+      _MarketOverviewItem(
+        'Active Vendors',
+        activeVendors.toString(),
+        Icons.verified_outlined,
+        Colors.green,
+      ),
+      _MarketOverviewItem(
+        'Total Services',
+        '348',
+        Icons.design_services_outlined,
+        Colors.amber.shade800,
+      ),
+      _MarketOverviewItem(
+        'Total Products',
+        '84',
+        Icons.inventory_2_outlined,
+        Colors.cyan,
+      ),
+      _MarketOverviewItem(
+        'Total Rentals',
+        '62',
+        Icons.chair_outlined,
+        Colors.orange,
+      ),
+      _MarketOverviewItem(
+        'Total Packages',
+        '45',
+        Icons.all_inbox_outlined,
+        Colors.indigo,
+      ),
+      _MarketOverviewItem(
+        'Active Bookings',
+        activeBookings.toString(),
+        Icons.confirmation_number_outlined,
+        Colors.teal,
+      ),
+      _MarketOverviewItem(
+        'Upcoming Events',
+        '54',
+        Icons.event_outlined,
+        Colors.pink,
+      ),
+      _MarketOverviewItem(
+        'GMV',
+        'RM 348,200',
+        Icons.account_balance_wallet_outlined,
+        Colors.greenAccent,
+      ),
+      _MarketOverviewItem(
+        'Platform Revenue',
+        'RM 38,302',
+        Icons.attach_money,
+        Colors.green,
+      ),
+      _MarketOverviewItem(
+        'Pending Payouts',
+        'RM 28,450',
+        Icons.payments_outlined,
+        Colors.blueGrey,
+      ),
     ];
 
     return Container(
@@ -797,12 +956,18 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
                   SizedBox(height: 2),
                   Text(
                     'Real-time marketplace health & transactional performance',
-                    style: TextStyle(fontSize: 12, color: AppTheme.textSecondaryColor),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: AppTheme.textSecondaryColor,
+                    ),
                   ),
                 ],
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: Colors.green.shade50,
                   borderRadius: BorderRadius.circular(20),
@@ -812,7 +977,14 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
                   children: const [
                     Icon(Icons.circle, color: Colors.green, size: 8),
                     SizedBox(width: 6),
-                    Text('Live Synced', style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.green)),
+                    Text(
+                      'Live Synced',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -822,7 +994,8 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
           LayoutBuilder(
             builder: (context, constraints) {
               final isWide = constraints.maxWidth >= 900;
-              final crossAxisCount = isWide ? 6 : (constraints.maxWidth >= 600 ? 3 : 2);
+              final crossAxisCount =
+                  isWide ? 6 : (constraints.maxWidth >= 600 ? 3 : 2);
 
               return GridView.builder(
                 shrinkWrap: true,
@@ -856,12 +1029,18 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
                         const SizedBox(height: 6),
                         Text(
                           item.value,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15,
+                          ),
                         ),
                         const SizedBox(height: 2),
                         Text(
                           item.label,
-                          style: const TextStyle(fontSize: 10, color: AppTheme.textSecondaryColor),
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: AppTheme.textSecondaryColor,
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -876,15 +1055,6 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
       ),
     );
   }
-
-class _MarketOverviewItem {
-  final String label;
-  final String value;
-  final IconData icon;
-  final Color color;
-
-  const _MarketOverviewItem(this.label, this.value, this.icon, this.color);
-}
 
   Widget _buildWelcomeSection() {
     return Container(
@@ -2126,10 +2296,10 @@ class _MarketOverviewItem {
           children: [
             Expanded(
               child: _buildActionCard(
-                'Manage Users',
-                Icons.people,
-                AppTheme.primaryColor,
-                () {
+                title: 'Manage Users',
+                icon: Icons.people,
+                badgeColor: AppTheme.primaryColor,
+                onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const AdminUsersScreen()),
@@ -2140,10 +2310,10 @@ class _MarketOverviewItem {
             const SizedBox(width: 12),
             Expanded(
               child: _buildActionCard(
-                'Manage Vendors',
-                Icons.business,
-                AppTheme.secondaryColor,
-                () {
+                title: 'Manage Vendors',
+                icon: Icons.business,
+                badgeColor: AppTheme.secondaryColor,
+                onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -2160,10 +2330,10 @@ class _MarketOverviewItem {
           children: [
             Expanded(
               child: _buildActionCard(
-                'View Reports',
-                Icons.analytics,
-                AppTheme.accentColor,
-                () {
+                title: 'View Reports',
+                icon: Icons.analytics,
+                badgeColor: AppTheme.accentColor,
+                onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (_) => const ReportsScreen()),
@@ -2174,10 +2344,10 @@ class _MarketOverviewItem {
             const SizedBox(width: 12),
             Expanded(
               child: _buildActionCard(
-                'System Settings',
-                Icons.settings,
-                AppTheme.successColor,
-                () {
+                title: 'System Settings',
+                icon: Icons.settings,
+                badgeColor: AppTheme.successColor,
+                onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -2194,10 +2364,10 @@ class _MarketOverviewItem {
           children: [
             Expanded(
               child: _buildActionCard(
-                'Service Approval',
-                Icons.fact_check,
-                Colors.orange,
-                () {
+                title: 'Service Approval',
+                icon: Icons.fact_check,
+                badgeColor: Colors.orange,
+                onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -2210,10 +2380,10 @@ class _MarketOverviewItem {
             const SizedBox(width: 12),
             Expanded(
               child: _buildActionCard(
-                'Create Vendor',
-                Icons.add_business,
-                Colors.teal,
-                () {
+                title: 'Create Vendor',
+                icon: Icons.add_business,
+                badgeColor: Colors.teal,
+                onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -2230,10 +2400,10 @@ class _MarketOverviewItem {
           children: [
             Expanded(
               child: _buildActionCard(
-                'Catalog Monitor',
-                Icons.auto_awesome_mosaic,
-                Colors.purple,
-                () {
+                title: 'Catalog Monitor',
+                icon: Icons.auto_awesome_mosaic,
+                badgeColor: Colors.purple,
+                onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -2246,10 +2416,10 @@ class _MarketOverviewItem {
             const SizedBox(width: 12),
             Expanded(
               child: _buildActionCard(
-                'Organizer Mgmt',
-                Icons.festival,
-                Colors.indigo,
-                () {
+                title: 'Organizer Mgmt',
+                icon: Icons.festival,
+                badgeColor: Colors.indigo,
+                onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -2266,10 +2436,10 @@ class _MarketOverviewItem {
           children: [
             Expanded(
               child: _buildActionCard(
-                'Expo Oversight',
-                Icons.event_seat,
-                Colors.deepOrange,
-                () {
+                title: 'Expo Oversight',
+                icon: Icons.event_seat,
+                badgeColor: Colors.deepOrange,
+                onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -2287,12 +2457,13 @@ class _MarketOverviewItem {
     );
   }
 
-  Widget _buildActionCard(
-    String title,
-    IconData icon,
-    Color color,
-    VoidCallback onTap,
-  ) {
+  Widget _buildActionCard({
+    required String title,
+    String subtitle = '',
+    required IconData icon,
+    required Color badgeColor,
+    required VoidCallback onTap,
+  }) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -2309,18 +2480,35 @@ class _MarketOverviewItem {
           ],
         ),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Icon(icon, color: color, size: 32),
-            const SizedBox(height: 8),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: badgeColor.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(icon, color: badgeColor, size: 22),
+            ),
+            const SizedBox(height: 10),
             Text(
               title,
               style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+                fontSize: 13,
+                fontWeight: FontWeight.w700,
                 color: AppTheme.textPrimaryColor,
               ),
-              textAlign: TextAlign.center,
             ),
+            if (subtitle.isNotEmpty) ...[
+              const SizedBox(height: 4),
+              Text(
+                subtitle,
+                style: const TextStyle(
+                  fontSize: 11,
+                  color: AppTheme.textSecondaryColor,
+                ),
+              ),
+            ],
           ],
         ),
       ),
@@ -2374,14 +2562,17 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
     final admin = Provider.of<AdminProvider>(context);
     final allUsers = admin.users;
 
-    final filteredUsers = allUsers.where((u) {
-      final matchesSearch = _searchQuery.isEmpty ||
-          u.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-          u.email.toLowerCase().contains(_searchQuery.toLowerCase());
-      final matchesRole = _selectedRole == 'All' ||
-          u.role.toLowerCase() == _selectedRole.toLowerCase();
-      return matchesSearch && matchesRole;
-    }).toList();
+    final filteredUsers =
+        allUsers.where((u) {
+          final matchesSearch =
+              _searchQuery.isEmpty ||
+              u.name.toLowerCase().contains(_searchQuery.toLowerCase()) ||
+              u.email.toLowerCase().contains(_searchQuery.toLowerCase());
+          final matchesRole =
+              _selectedRole == 'All' ||
+              u.role.toLowerCase() == _selectedRole.toLowerCase();
+          return matchesSearch && matchesRole;
+        }).toList();
 
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
@@ -2398,13 +2589,17 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
         actions: [
           IconButton(
             tooltip: 'Refresh Users',
-            icon: admin.isLoading
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(strokeWidth: 2, color: AppTheme.primaryColor),
-                  )
-                : const Icon(Icons.refresh, color: AppTheme.primaryColor),
+            icon:
+                admin.isLoading
+                    ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppTheme.primaryColor,
+                      ),
+                    )
+                    : const Icon(Icons.refresh, color: AppTheme.primaryColor),
             onPressed: admin.isLoading ? null : () => admin.refreshAllData(),
           ),
         ],
@@ -2425,53 +2620,73 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
                     decoration: InputDecoration(
                       hintText: 'Search by name or email...',
                       prefixIcon: const Icon(Icons.search, size: 20),
-                      suffixIcon: _searchQuery.isNotEmpty
-                          ? IconButton(
-                              icon: const Icon(Icons.clear, size: 18),
-                              onPressed: () {
-                                _searchController.clear();
-                                setState(() => _searchQuery = '');
-                              },
-                            )
-                          : null,
+                      suffixIcon:
+                          _searchQuery.isNotEmpty
+                              ? IconButton(
+                                icon: const Icon(Icons.clear, size: 18),
+                                onPressed: () {
+                                  _searchController.clear();
+                                  setState(() => _searchQuery = '');
+                                },
+                              )
+                              : null,
                       filled: true,
                       fillColor: Colors.grey.shade100,
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 14,
+                        vertical: 10,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10),
                         borderSide: BorderSide.none,
                       ),
                     ),
-                    onChanged: (val) => setState(() => _searchQuery = val.trim()),
+                    onChanged:
+                        (val) => setState(() => _searchQuery = val.trim()),
                   ),
                   const SizedBox(height: 10),
                   // Role Filter Chips
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Row(
-                      children: ['All', 'Customer', 'Vendor', 'Admin'].map((role) {
-                        final isSelected = _selectedRole == role;
-                        final count = role == 'All'
-                            ? allUsers.length
-                            : allUsers.where((u) => u.role.toLowerCase() == role.toLowerCase()).length;
-                        return Padding(
-                          padding: const EdgeInsets.only(right: 8.0),
-                          child: FilterChip(
-                            label: Text('$role ($count)'),
-                            selected: isSelected,
-                            selectedColor: AppTheme.primaryColor.withOpacity(0.15),
-                            checkmarkColor: AppTheme.primaryColor,
-                            labelStyle: TextStyle(
-                              color: isSelected ? AppTheme.primaryColor : AppTheme.textSecondaryColor,
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                              fontSize: 12,
-                            ),
-                            onSelected: (selected) {
-                              setState(() => _selectedRole = role);
-                            },
-                          ),
-                        );
-                      }).toList(),
+                      children:
+                          ['All', 'Customer', 'Vendor', 'Admin'].map((role) {
+                            final isSelected = _selectedRole == role;
+                            final count =
+                                role == 'All'
+                                    ? allUsers.length
+                                    : allUsers
+                                        .where(
+                                          (u) =>
+                                              u.role.toLowerCase() ==
+                                              role.toLowerCase(),
+                                        )
+                                        .length;
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: FilterChip(
+                                label: Text('$role ($count)'),
+                                selected: isSelected,
+                                selectedColor: AppTheme.primaryColor
+                                    .withOpacity(0.15),
+                                checkmarkColor: AppTheme.primaryColor,
+                                labelStyle: TextStyle(
+                                  color:
+                                      isSelected
+                                          ? AppTheme.primaryColor
+                                          : AppTheme.textSecondaryColor,
+                                  fontWeight:
+                                      isSelected
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
+                                  fontSize: 12,
+                                ),
+                                onSelected: (selected) {
+                                  setState(() => _selectedRole = role);
+                                },
+                              ),
+                            );
+                          }).toList(),
                     ),
                   ),
                 ],
@@ -2481,209 +2696,263 @@ class _AdminUsersScreenState extends State<AdminUsersScreen> {
 
             // User List / Loading / Empty
             Expanded(
-              child: admin.isLoading && allUsers.isEmpty
-                  ? const Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircularProgressIndicator(),
-                          SizedBox(height: 16),
-                          Text('Loading user accounts...', style: TextStyle(color: Colors.grey)),
-                        ],
-                      ),
-                    )
-                  : filteredUsers.isEmpty
+              child:
+                  admin.isLoading && allUsers.isEmpty
+                      ? const Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CircularProgressIndicator(),
+                            SizedBox(height: 16),
+                            Text(
+                              'Loading user accounts...',
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      )
+                      : filteredUsers.isEmpty
                       ? Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(32.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.people_outline, size: 64, color: Colors.grey.shade400),
-                                const SizedBox(height: 16),
-                                Text(
-                                  _searchQuery.isNotEmpty
-                                      ? 'No users match "$_searchQuery"'
-                                      : 'No ${_selectedRole != 'All' ? _selectedRole : ''} users found',
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        child: Padding(
+                          padding: const EdgeInsets.all(32.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.people_outline,
+                                size: 64,
+                                color: Colors.grey.shade400,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                _searchQuery.isNotEmpty
+                                    ? 'No users match "$_searchQuery"'
+                                    : 'No ${_selectedRole != 'All' ? _selectedRole : ''} users found',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
                                 ),
-                                const SizedBox(height: 8),
-                                const Text(
-                                  'Pull down to refresh or reload from server.',
-                                  style: TextStyle(color: Colors.grey, fontSize: 13),
+                              ),
+                              const SizedBox(height: 8),
+                              const Text(
+                                'Pull down to refresh or reload from server.',
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 13,
                                 ),
-                                const SizedBox(height: 16),
-                                ElevatedButton.icon(
-                                  onPressed: () => admin.refreshAllData(),
-                                  icon: const Icon(Icons.refresh),
-                                  label: const Text('Reload Users'),
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: AppTheme.primaryColor,
-                                    foregroundColor: Colors.white,
-                                  ),
+                              ),
+                              const SizedBox(height: 16),
+                              ElevatedButton.icon(
+                                onPressed: () => admin.refreshAllData(),
+                                icon: const Icon(Icons.refresh),
+                                label: const Text('Reload Users'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppTheme.primaryColor,
+                                  foregroundColor: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )
+                      : ListView.builder(
+                        padding: const EdgeInsets.all(16),
+                        itemCount: filteredUsers.length,
+                        itemBuilder: (context, i) {
+                          final u = filteredUsers[i];
+                          final isCustomer = u.role.toLowerCase() == 'customer';
+                          final isVendor = u.role.toLowerCase() == 'vendor';
+                          final isAdmin = u.role.toLowerCase() == 'admin';
+
+                          Color roleColor = Colors.blue;
+                          if (isVendor) roleColor = Colors.purple;
+                          if (isAdmin) roleColor = Colors.orange.shade800;
+
+                          return Container(
+                            margin: const EdgeInsets.only(bottom: 12),
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(color: Colors.grey.shade200),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.03),
+                                  blurRadius: 6,
+                                  offset: const Offset(0, 2),
                                 ),
                               ],
                             ),
-                          ),
-                        )
-                      : ListView.builder(
-                          padding: const EdgeInsets.all(16),
-                          itemCount: filteredUsers.length,
-                          itemBuilder: (context, i) {
-                            final u = filteredUsers[i];
-                            final isCustomer = u.role.toLowerCase() == 'customer';
-                            final isVendor = u.role.toLowerCase() == 'vendor';
-                            final isAdmin = u.role.toLowerCase() == 'admin';
-
-                            Color roleColor = Colors.blue;
-                            if (isVendor) roleColor = Colors.purple;
-                            if (isAdmin) roleColor = Colors.orange.shade800;
-
-                            return Container(
-                              margin: const EdgeInsets.only(bottom: 12),
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: Colors.grey.shade200),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withOpacity(0.03),
-                                    blurRadius: 6,
-                                    offset: const Offset(0, 2),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 44,
+                                  height: 44,
+                                  decoration: BoxDecoration(
+                                    color: roleColor.withOpacity(0.12),
+                                    borderRadius: BorderRadius.circular(22),
                                   ),
-                                ],
-                              ),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 44,
-                                    height: 44,
-                                    decoration: BoxDecoration(
-                                      color: roleColor.withOpacity(0.12),
-                                      borderRadius: BorderRadius.circular(22),
-                                    ),
-                                    child: Icon(
-                                      isAdmin
-                                          ? Icons.admin_panel_settings
-                                          : isVendor
-                                              ? Icons.store
-                                              : Icons.person,
-                                      color: roleColor,
-                                      size: 22,
-                                    ),
+                                  child: Icon(
+                                    isAdmin
+                                        ? Icons.admin_panel_settings
+                                        : isVendor
+                                        ? Icons.store
+                                        : Icons.person,
+                                    color: roleColor,
+                                    size: 22,
                                   ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Flexible(
-                                              child: Text(
-                                                u.name,
-                                                style: const TextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  color: AppTheme.textPrimaryColor,
-                                                ),
-                                                overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Flexible(
+                                            child: Text(
+                                              u.name,
+                                              style: const TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                color:
+                                                    AppTheme.textPrimaryColor,
+                                              ),
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 6),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 6,
+                                              vertical: 2,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: roleColor.withOpacity(0.1),
+                                              borderRadius:
+                                                  BorderRadius.circular(4),
+                                            ),
+                                            child: Text(
+                                              u.role.toUpperCase(),
+                                              style: TextStyle(
+                                                color: roleColor,
+                                                fontSize: 9,
+                                                fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                            const SizedBox(width: 6),
+                                          ),
+                                          if (u.subscriptionTier ==
+                                              'wedding_pass') ...[
+                                            const SizedBox(width: 4),
                                             Container(
-                                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 5,
+                                                    vertical: 2,
+                                                  ),
                                               decoration: BoxDecoration(
-                                                color: roleColor.withOpacity(0.1),
-                                                borderRadius: BorderRadius.circular(4),
+                                                color: AppTheme.secondaryColor
+                                                    .withOpacity(0.15),
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
                                               ),
-                                              child: Text(
-                                                u.role.toUpperCase(),
+                                              child: const Text(
+                                                'Pass',
                                                 style: TextStyle(
-                                                  color: roleColor,
+                                                  color:
+                                                      AppTheme.secondaryColor,
                                                   fontSize: 9,
                                                   fontWeight: FontWeight.bold,
                                                 ),
                                               ),
                                             ),
-                                            if (u.subscriptionTier == 'wedding_pass') ...[
-                                              const SizedBox(width: 4),
-                                              Container(
-                                                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-                                                decoration: BoxDecoration(
-                                                  color: AppTheme.secondaryColor.withOpacity(0.15),
-                                                  borderRadius: BorderRadius.circular(4),
-                                                ),
-                                                child: const Text(
-                                                  'Pass',
-                                                  style: TextStyle(
-                                                    color: AppTheme.secondaryColor,
-                                                    fontSize: 9,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
                                           ],
-                                        ),
-                                        const SizedBox(height: 3),
-                                        Text(
-                                          u.email,
-                                          style: const TextStyle(
-                                            color: AppTheme.textSecondaryColor,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                                    decoration: BoxDecoration(
-                                      color: (u.status == 'active')
-                                          ? AppTheme.successColor.withOpacity(0.1)
-                                          : AppTheme.errorColor.withOpacity(0.1),
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                    child: Text(
-                                      u.status == 'active' ? 'Active' : 'Banned',
-                                      style: TextStyle(
-                                        color: (u.status == 'active')
-                                            ? AppTheme.successColor
-                                            : AppTheme.errorColor,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 11,
+                                        ],
                                       ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  OutlinedButton(
-                                    style: OutlinedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                      minimumSize: const Size(54, 32),
-                                      foregroundColor: u.status == 'active' ? Colors.red : Colors.green,
-                                      side: BorderSide(
-                                        color: u.status == 'active' ? Colors.red.shade300 : Colors.green.shade300,
-                                      ),
-                                    ),
-                                    onPressed: () {
-                                      final newStatus = u.status == 'active' ? 'banned' : 'active';
-                                      u.status = newStatus;
-                                      setState(() {});
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        SnackBar(
-                                          content: Text('User ${u.name} marked as $newStatus'),
-                                          duration: const Duration(seconds: 2),
+                                      const SizedBox(height: 3),
+                                      Text(
+                                        u.email,
+                                        style: const TextStyle(
+                                          color: AppTheme.textSecondaryColor,
+                                          fontSize: 12,
                                         ),
-                                      );
-                                    },
-                                    child: Text(u.status == 'active' ? 'Ban' : 'Unban', style: const TextStyle(fontSize: 12)),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
+                                ),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8,
+                                    vertical: 3,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color:
+                                        (u.status == 'active')
+                                            ? AppTheme.successColor.withOpacity(
+                                              0.1,
+                                            )
+                                            : AppTheme.errorColor.withOpacity(
+                                              0.1,
+                                            ),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(
+                                    u.status == 'active' ? 'Active' : 'Banned',
+                                    style: TextStyle(
+                                      color:
+                                          (u.status == 'active')
+                                              ? AppTheme.successColor
+                                              : AppTheme.errorColor,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 11,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 10,
+                                      vertical: 4,
+                                    ),
+                                    minimumSize: const Size(54, 32),
+                                    foregroundColor:
+                                        u.status == 'active'
+                                            ? Colors.red
+                                            : Colors.green,
+                                    side: BorderSide(
+                                      color:
+                                          u.status == 'active'
+                                              ? Colors.red.shade300
+                                              : Colors.green.shade300,
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    final newStatus =
+                                        u.status == 'active'
+                                            ? 'banned'
+                                            : 'active';
+                                    u.status = newStatus;
+                                    setState(() {});
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          'User ${u.name} marked as $newStatus',
+                                        ),
+                                        duration: const Duration(seconds: 2),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    u.status == 'active' ? 'Ban' : 'Unban',
+                                    style: const TextStyle(fontSize: 12),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
             ),
           ],
         ),
@@ -2854,17 +3123,23 @@ class AdminVendorsScreen extends StatelessWidget {
                   icon: const Icon(Icons.switch_account, color: Colors.orange),
                   onPressed: () async {
                     final auth = context.read<AuthProvider>();
-                    final adminId = auth.userId ?? Supabase.instance.client.auth.currentUser?.id ?? 'admin';
+                    final adminId =
+                        auth.userId ??
+                        Supabase.instance.client.auth.currentUser?.id ??
+                        'admin';
                     final adminEmail = auth.userEmail;
-                    final ok = await AdminImpersonationService.instance.startImpersonation(
-                      adminId: adminId,
-                      targetUserId: v.id,
-                      targetRole: 'vendor',
-                      vendorName: v.name,
-                      adminEmail: adminEmail,
-                    );
+                    final ok = await AdminImpersonationService.instance
+                        .startImpersonation(
+                          adminId: adminId,
+                          targetUserId: v.id,
+                          targetRole: 'vendor',
+                          vendorName: v.name,
+                          adminEmail: adminEmail,
+                        );
                     if (ok && context.mounted) {
-                      await context.read<VendorProvider>().loadCurrentVendorFromSupabase(force: true);
+                      await context
+                          .read<VendorProvider>()
+                          .loadCurrentVendorFromSupabase(force: true);
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
@@ -2874,7 +3149,9 @@ class AdminVendorsScreen extends StatelessWidget {
                         );
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (_) => const VendorDashboardScreen()),
+                          MaterialPageRoute(
+                            builder: (_) => const VendorDashboardScreen(),
+                          ),
                         );
                       }
                     }
