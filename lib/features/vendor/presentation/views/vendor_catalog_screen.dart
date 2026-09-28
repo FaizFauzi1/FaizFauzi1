@@ -5,6 +5,8 @@ import 'package:eventease/core/utils/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../data/providers/vendor_provider_updated.dart';
+import 'enhanced_service_creation_screen.dart';
+import '../widgets/vendor_responsive_scaffold.dart';
 
 class VendorCatalogScreen extends StatefulWidget {
   const VendorCatalogScreen({super.key});
@@ -58,30 +60,22 @@ class _VendorCatalogScreenState extends State<VendorCatalogScreen> {
     final activeItems = services.where((s) => s.isActive).length;
     final pendingItems = services.where((s) => s.approvalStatus == ApprovalStatus.pending).length;
 
-    return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(
-          'My Catalog (${eventCategory.displayName})',
-          style: const TextStyle(
-            color: AppTheme.textPrimaryColor,
-            fontWeight: FontWeight.bold,
-          ),
+    return VendorResponsiveScaffold(
+      title: 'My Catalog (${eventCategory.displayName})',
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.add, color: AppTheme.primaryColor),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => EnhancedServiceCreationScreen(vendorId: vendor.id),
+              ),
+            );
+          },
+          tooltip: 'Add Catalog Item',
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppTheme.textPrimaryColor),
-          onPressed: () => Navigator.pop(context),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add, color: AppTheme.primaryColor),
-            onPressed: () => _showAddEditItemSheet(context, eventCategory, null),
-            tooltip: 'Add Catalog Item',
-          ),
-        ],
-      ),
+      ],
       body: Column(
         children: [
           // Stats Row
@@ -230,142 +224,173 @@ class _VendorCatalogScreenState extends State<VendorCatalogScreen> {
   }
 
   Widget _buildCatalogList(List<VendorServiceEnhanced> items, EventCategory category) {
-    return ListView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        final item = items[index];
-        return Card(
-          margin: const EdgeInsets.only(bottom: 16),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-          elevation: 2,
-          clipBehavior: Clip.antiAlias,
-          color: Colors.white,
-          child: Column(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final isWide = constraints.maxWidth > 800;
+        if (isWide) {
+          return GridView.builder(
+            padding: const EdgeInsets.all(16),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              mainAxisExtent: 180,
+            ),
+            itemCount: items.length,
+            itemBuilder: (context, index) => _buildCatalogCard(items[index], category),
+          );
+        }
+        return ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: items.length,
+          itemBuilder: (context, index) => _buildCatalogCard(items[index], category),
+        );
+      },
+    );
+  }
+
+  Widget _buildCatalogCard(VendorServiceEnhanced item, EventCategory category) {
+    final vendor = Provider.of<VendorProvider>(context, listen: false).currentVendor;
+    return Card(
+      margin: const EdgeInsets.only(bottom: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      elevation: 2,
+      clipBehavior: Clip.antiAlias,
+      color: Colors.white,
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Image
-                  Container(
-                    width: 100,
-                    height: 100,
-                    color: Colors.grey[200],
-                    child: item.images.isNotEmpty
-                        ? Image.network(
-                            item.images.first,
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => const Icon(Icons.image, size: 40, color: Colors.grey),
-                          )
-                        : const Icon(Icons.image, size: 40, color: Colors.grey),
-                  ),
-                  // Details
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+              // Image
+              Container(
+                width: 100,
+                height: 100,
+                color: Colors.grey[200],
+                child: item.images.isNotEmpty
+                    ? Image.network(
+                        item.images.first,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => const Icon(Icons.image, size: 40, color: Colors.grey),
+                      )
+                    : const Icon(Icons.image, size: 40, color: Colors.grey),
+              ),
+              // Details
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                                decoration: BoxDecoration(
-                                  color: AppTheme.primaryColor.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                child: Text(
-                                  item.subcategory ?? 'General',
-                                  style: TextStyle(
-                                    fontSize: 10,
-                                    color: AppTheme.primaryColor,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: AppTheme.primaryColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              item.subcategory ?? 'General',
+                              style: const TextStyle(
+                                fontSize: 10,
+                                color: AppTheme.primaryColor,
+                                fontWeight: FontWeight.bold,
                               ),
-                              _buildStatusBadge(item),
-                            ],
-                          ),
-                          const SizedBox(height: 6),
-                          Text(
-                            item.name,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: AppTheme.textPrimaryColor,
-                            ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            item.description,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: AppTheme.textSecondaryColor,
-                            ),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'RM ${item.price.toStringAsFixed(2)}',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: AppTheme.primaryColor,
                             ),
                           ),
+                          _buildStatusBadge(item),
                         ],
                       ),
-                    ),
+                      const SizedBox(height: 6),
+                      Text(
+                        item.name,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.textPrimaryColor,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        item.description,
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: AppTheme.textSecondaryColor,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'RM ${item.price.toStringAsFixed(2)}',
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: AppTheme.primaryColor,
+                        ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-              const Divider(height: 1),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        const Text(
-                          'Available',
-                          style: TextStyle(fontSize: 12, color: AppTheme.textSecondaryColor),
-                        ),
-                        Switch(
-                          value: item.isActive,
-                          onChanged: (val) async {
-                            final provider = Provider.of<VendorProvider>(context, listen: false);
-                            await provider.toggleCustomServiceStatus(item.id);
-                          },
-                          activeColor: AppTheme.primaryColor,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.edit, color: Colors.blue, size: 20),
-                          onPressed: () => _showAddEditItemSheet(context, category, item),
-                          tooltip: 'Edit Item',
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.delete, color: Colors.red, size: 20),
-                          onPressed: () => _confirmDelete(context, item.id),
-                          tooltip: 'Delete Item',
-                        ),
-                      ],
-                    )
-                  ],
                 ),
               ),
             ],
           ),
-        );
-      },
+          const Divider(height: 1),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    const Text(
+                      'Available',
+                      style: TextStyle(fontSize: 12, color: AppTheme.textSecondaryColor),
+                    ),
+                    Switch(
+                      value: item.isActive,
+                      onChanged: (val) async {
+                        final provider = Provider.of<VendorProvider>(context, listen: false);
+                        await provider.toggleCustomServiceStatus(item.id);
+                      },
+                      activeColor: AppTheme.primaryColor,
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit, color: Colors.blue, size: 20),
+                      onPressed: () {
+                        if (vendor == null) return;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => EnhancedServiceCreationScreen(
+                              vendorId: vendor.id,
+                              existingService: item,
+                            ),
+                          ),
+                        );
+                      },
+                      tooltip: 'Edit Item',
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.red, size: 20),
+                      onPressed: () => _confirmDelete(context, item.id),
+                      tooltip: 'Delete Item',
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -476,126 +501,19 @@ class _VendorCatalogScreenState extends State<VendorCatalogScreen> {
   }
 
   void _showAddEditItemSheet(BuildContext context, EventCategory category, VendorServiceEnhanced? existingItem) {
-    final nameController = TextEditingController(text: existingItem?.name ?? '');
-    final descController = TextEditingController(text: existingItem?.description ?? '');
-    final priceController = TextEditingController(text: existingItem != null ? existingItem.price.toString() : '');
-    final imageController = TextEditingController(
-      text: (existingItem != null && existingItem.images.isNotEmpty)
-          ? existingItem.images.first
-          : '',
-    );
-    String selectedSub = existingItem?.subcategory ?? category.subcategories.first;
-    bool isActive = existingItem?.isActive ?? true;
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    final vendor = Provider.of<VendorProvider>(context, listen: false).currentVendor;
+    if (vendor == null) return;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => EnhancedServiceCreationScreen(
+          vendorId: vendor.id,
+          existingService: existingItem,
+        ),
       ),
-      builder: (context) => StatefulBuilder(
-        builder: (context, setModalState) => Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom + 24,
-            left: 24,
-            right: 24,
-            top: 24,
-          ),
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      existingItem == null ? 'Add Catalog Item' : 'Edit Catalog Item',
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: AppTheme.textPrimaryColor),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.close),
-                      onPressed: () => Navigator.pop(context),
-                    )
-                  ],
-                ),
-                const SizedBox(height: 16),
-                DropdownButtonFormField<String>(
-                  value: selectedSub,
-                  decoration: const InputDecoration(labelText: 'Subcategory / Type'),
-                  items: category.subcategories.map((sub) => DropdownMenuItem(
-                    value: sub,
-                    child: Text(sub),
-                  )).toList(),
-                  onChanged: (val) {
-                    if (val != null) {
-                      setModalState(() => selectedSub = val);
-                    }
-                  },
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Item Name',
-                    hintText: 'e.g. Premium Silk Baju Melayu',
-                  ),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: descController,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                    labelText: 'Description',
-                    hintText: 'Provide product details, sizing, material, colors etc.',
-                  ),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: priceController,
-                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                  decoration: const InputDecoration(
-                    labelText: 'Price (RM)',
-                    prefixText: 'RM ',
-                  ),
-                ),
-                const SizedBox(height: 12),
-                TextField(
-                  controller: imageController,
-                  decoration: const InputDecoration(
-                    labelText: 'Image URL',
-                    hintText: 'https://example.com/image.jpg',
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Visible to customers immediately', style: TextStyle(fontWeight: FontWeight.bold)),
-                    Switch(
-                      value: isActive,
-                      onChanged: (val) => setModalState(() => isActive = val),
-                      activeColor: AppTheme.primaryColor,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                SizedBox(
-                  width: double.infinity,
-                  height: 48,
-                  child: ElevatedButton(
-                    onPressed: _isSaving ? null : () async {
-                      final name = nameController.text.trim();
-                      final desc = descController.text.trim();
-                      final priceText = priceController.text.trim();
-                      final imageUrl = imageController.text.trim();
-
-                      if (name.isEmpty || priceText.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Name and Price are required')),
-                        );
-                        return;
-                      }
+    );
+  }
+}
 
                       final price = double.tryParse(priceText);
                       if (price == null || price <= 0) {

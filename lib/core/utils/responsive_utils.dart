@@ -23,15 +23,15 @@ class ResponsiveUtils {
   static bool isWide(BuildContext context) =>
       MediaQuery.of(context).size.width >= mobileLimit;
 
-  // Responsive padding
+  // Responsive padding — tighter on desktop vendor tools
   static EdgeInsets getScreenPadding(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     if (width < mobileLimit) {
       return const EdgeInsets.all(16.0);
     } else if (width < tabletLimit) {
-      return const EdgeInsets.all(24.0);
+      return const EdgeInsets.all(20.0);
     } else {
-      return const EdgeInsets.all(32.0);
+      return const EdgeInsets.symmetric(horizontal: 20.0, vertical: 16.0);
     }
   }
 

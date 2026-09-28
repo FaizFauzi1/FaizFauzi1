@@ -7,7 +7,9 @@ import 'package:provider/provider.dart';
 import '../widgets/vendor_responsive_scaffold.dart';
 
 class VendorChatScreen extends StatefulWidget {
-  const VendorChatScreen({super.key});
+  final bool embeddedInDashboard;
+
+  const VendorChatScreen({super.key, this.embeddedInDashboard = false});
 
   @override
   State<VendorChatScreen> createState() => _VendorChatScreenState();
@@ -35,6 +37,7 @@ class _VendorChatScreenState extends State<VendorChatScreen> {
   Widget build(BuildContext context) {
     return VendorResponsiveScaffold(
       title: 'Customer Messages',
+      embedded: widget.embeddedInDashboard,
       body: Consumer<ChatProvider>(
         builder: (context, chatProvider, child) {
           final conversations = chatProvider.conversations.whereType<ChatConversation>().toList();

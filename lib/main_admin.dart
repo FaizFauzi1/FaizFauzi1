@@ -35,9 +35,8 @@ import 'package:eventease/shared/views/splash_screen.dart';
 import 'package:eventease/core/database/platform_database_service.dart';
 import 'package:eventease/core/services/supabase_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:eventease/l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_quill/translations.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 

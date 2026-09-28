@@ -187,7 +187,7 @@ class _ArticleEditorDialogState extends State<ArticleEditorDialog> {
                       Expanded(
                         child: quill.QuillSimpleToolbar(
                           controller: _quillController,
-                          configurations: const quill.QuillSimpleToolbarConfigurations(
+                          config: const quill.QuillSimpleToolbarConfig(
                             showLink: true,
                             showSearchButton: true,
                             showSmallButton: true,
@@ -212,7 +212,7 @@ class _ArticleEditorDialogState extends State<ArticleEditorDialog> {
                       ),
                       child: quill.QuillEditor.basic(
                         controller: _quillController,
-                        configurations: const quill.QuillEditorConfigurations(),
+                        config: const quill.QuillEditorConfig(),
                       ),
                     ),
                   ),
@@ -383,7 +383,7 @@ class _ArticleEditorDialogState extends State<ArticleEditorDialog> {
                 child: SingleChildScrollView(
                   child: quill.QuillEditor.basic(
                     controller: previewEditor,
-                    configurations: const quill.QuillEditorConfigurations(
+                    config: const quill.QuillEditorConfig(
                       showCursor: false,
                       enableInteractiveSelection: false,
                       enableSelectionToolbar: false,

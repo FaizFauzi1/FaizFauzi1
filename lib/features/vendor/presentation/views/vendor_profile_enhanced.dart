@@ -20,6 +20,7 @@ import 'package:eventease/features/location/data/models/region.dart';
 import 'package:eventease/features/location/data/models/city.dart';
 import 'package:eventease/features/vendor/presentation/views/vendor_profile_tabs.dart';
 import 'package:eventease/shared/widgets/responsive_wrapper.dart';
+import 'package:eventease/features/vendor/presentation/widgets/vendor_setup_checklist.dart';
 import 'package:seo/seo.dart';
 class VendorProfileEnhancedScreen extends StatefulWidget {
   const VendorProfileEnhancedScreen({super.key});
@@ -1231,7 +1232,9 @@ class _VendorProfileEnhancedScreenState extends State<VendorProfileEnhancedScree
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildProfileHeader(profile),
-          const SizedBox(height: 20),
+          const SizedBox(height: 16),
+          const VendorSetupChecklist(),
+          const SizedBox(height: 16),
           _buildSubscriptionSection(profile),
           const SizedBox(height: 20),
           _buildInfoCard('Quick Stats', [

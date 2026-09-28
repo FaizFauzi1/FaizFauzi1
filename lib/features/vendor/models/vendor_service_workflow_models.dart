@@ -585,6 +585,8 @@ enum ServiceAppointmentStatus {
         return const Color(0xFF0EA5E9);
     }
   }
+
+  Color get badgeColor => color;
 }
 
 /// Actual booked appointment instance
@@ -924,6 +926,34 @@ class PackageComponent {
   }
 }
 
+enum CollaborativePackageStatus {
+  draft,
+  published,
+  archived;
+
+  String get displayName {
+    switch (this) {
+      case CollaborativePackageStatus.draft:
+        return 'Draft';
+      case CollaborativePackageStatus.published:
+        return 'Published';
+      case CollaborativePackageStatus.archived:
+        return 'Archived';
+    }
+  }
+
+  Color get color {
+    switch (this) {
+      case CollaborativePackageStatus.draft:
+        return const Color(0xFF9CA3AF);
+      case CollaborativePackageStatus.published:
+        return const Color(0xFF10B981);
+      case CollaborativePackageStatus.archived:
+        return const Color(0xFFEF4444);
+    }
+  }
+}
+
 /// Collaborative Package structure
 class CollaborativePackage {
   final String id;
@@ -954,6 +984,8 @@ class CollaborativePackage {
     DateTime? updatedAt,
   })  : createdAt = createdAt ?? DateTime.now(),
         updatedAt = updatedAt ?? DateTime.now();
+
+  CollaborativePackageStatus get status => isPublished ? CollaborativePackageStatus.published : CollaborativePackageStatus.draft;
 
   int get readyComponentsCount => components.where((c) => c.isReady).length;
   int get totalComponentsCount => components.length;

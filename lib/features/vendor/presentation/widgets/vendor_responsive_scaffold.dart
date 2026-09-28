@@ -2,17 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:eventease/core/utils/app_theme.dart';
 import 'package:eventease/features/vendor/presentation/widgets/vendor_drawer.dart';
 
-/// A wrapper Scaffold that provides a responsive layout for Vendor screens.
-/// On wide screens (>800px), it shows a persistent sidebar and centers the content.
-/// On mobile screens, it falls back to a standard AppBar with a hamburger Drawer.
+/// Responsive layout for Vendor screens.
+/// Wide (>800px): persistent sidebar, content fills remaining width.
+/// Mobile: AppBar + hamburger drawer (+ optional bottom nav).
 class VendorResponsiveScaffold extends StatelessWidget {
   final Widget body;
   final String title;
   final List<Widget>? actions;
   final Widget? floatingActionButton;
   final Color? backgroundColor;
+  /// When true, centers content with maxWidth 1200 (forms). Default false fills width.
   final bool restrictMaxWidth;
   final PreferredSizeWidget? bottom;
+  final Widget? bottomNavigationBar;
+  /// Hide the top AppBar title row on desktop (e.g. dashboard with its own header).
+  final bool hideDesktopAppBar;
+  final Widget? leading;
+  /// When true (e.g. inside dashboard IndexedStack), skip sidebar/drawer shell.
+  final bool embedded;
 
   const VendorResponsiveScaffold({
     super.key,
@@ -21,17 +28,47 @@ class VendorResponsiveScaffold extends StatelessWidget {
     this.actions,
     this.floatingActionButton,
     this.backgroundColor = AppTheme.backgroundColor,
-    this.restrictMaxWidth = true,
+    this.restrictMaxWidth = false,
     this.bottom,
+    this.bottomNavigationBar,
+    this.hideDesktopAppBar = false,
+    this.leading,
+    this.embedded = false,
   });
+
+  static bool isWide(BuildContext context) =>
+      MediaQuery.sizeOf(context).width > 800;
 
   @override
   Widget build(BuildContext context) {
+    if (embedded) {
+      return Scaffold(
+        backgroundColor: backgroundColor,
+        appBar: hideDesktopAppBar
+            ? null
+            : AppBar(
+                title: Text(
+                  title,
+                  style: const TextStyle(
+                    color: AppTheme.textPrimaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                backgroundColor: Colors.transparent,
+                elevation: 0,
+                actions: actions,
+                automaticallyImplyLeading: false,
+                bottom: bottom,
+              ),
+        body: body,
+        floatingActionButton: floatingActionButton,
+      );
+    }
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final isWideScreen = constraints.maxWidth > 800;
 
-        // The main content area
         Widget content = body;
         if (isWideScreen && restrictMaxWidth) {
           content = Center(
@@ -43,14 +80,12 @@ class VendorResponsiveScaffold extends StatelessWidget {
         }
 
         if (isWideScreen) {
-          // Desktop / Tablet Landscape Layout
           return Scaffold(
             backgroundColor: backgroundColor,
             body: Row(
               children: [
-                // Persistent Sidebar
                 Container(
-                  width: 280,
+                  width: 260,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
@@ -63,24 +98,29 @@ class VendorResponsiveScaffold extends StatelessWidget {
                   ),
                   child: const VendorSidebarContent(),
                 ),
-                // Main Content Area with AppBar
                 Expanded(
                   child: Column(
                     children: [
-                      AppBar(
-                        title: Text(
-                          title,
-                          style: const TextStyle(
-                            color: AppTheme.textPrimaryColor,
-                            fontWeight: FontWeight.bold,
+                      if (!hideDesktopAppBar)
+                        AppBar(
+                          title: Text(
+                            title,
+                            style: const TextStyle(
+                              color: AppTheme.textPrimaryColor,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
+                          backgroundColor: Colors.transparent,
+                          elevation: 0,
+                          actions: actions,
+                          automaticallyImplyLeading: false,
+                          bottom: bottom,
                         ),
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
-                        actions: actions,
-                        automaticallyImplyLeading: false, // No hamburger needed
-                        bottom: bottom,
-                      ),
+                      if (hideDesktopAppBar && bottom != null)
+                        Material(
+                          color: Colors.transparent,
+                          child: bottom!,
+                        ),
                       Expanded(child: content),
                     ],
                   ),
@@ -91,7 +131,6 @@ class VendorResponsiveScaffold extends StatelessWidget {
           );
         }
 
-        // Mobile Layout
         return Scaffold(
           backgroundColor: backgroundColor,
           appBar: AppBar(
@@ -104,6 +143,7 @@ class VendorResponsiveScaffold extends StatelessWidget {
             ),
             backgroundColor: Colors.transparent,
             elevation: 0,
+            leading: leading,
             iconTheme: const IconThemeData(color: AppTheme.primaryColor),
             actions: actions,
             bottom: bottom,
@@ -111,6 +151,7 @@ class VendorResponsiveScaffold extends StatelessWidget {
           drawer: VendorDrawer.build(context),
           body: content,
           floatingActionButton: floatingActionButton,
+          bottomNavigationBar: bottomNavigationBar,
         );
       },
     );

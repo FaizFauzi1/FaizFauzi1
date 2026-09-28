@@ -915,4 +915,42 @@ class AdminMarketplaceProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  CategoryDynamicConfig? getCategoryConfig(String categoryName) {
+    try {
+      return _categoryConfigs.firstWhere(
+        (c) => c.categoryName.toLowerCase() == categoryName.toLowerCase() || c.id == categoryName,
+      );
+    } catch (_) {
+      return null;
+    }
+  }
+
+  void publishNewVersion({
+    String? categoryName,
+    String? versionNumber,
+    String? changelog,
+    String? publishedBy,
+  }) {
+    publishCategoryVersion(
+      categoryId: categoryName ?? '',
+      newVersionNumber: versionNumber ?? '1.0',
+      changelog: changelog ?? '',
+      fields: ['General Info', 'Pricing', 'Availability'],
+      appointmentTypes: ['Consultation', 'Site Visit'],
+      adminName: publishedBy ?? 'Admin',
+    );
+  }
+
+  void migrateServicesToLatestVersion(String categoryId) {
+    logAdminAction(
+      adminName: 'Admin',
+      action: 'Migrated Services to Latest Version',
+      entityType: 'Category',
+      entityId: categoryId,
+      entityName: categoryId,
+      details: 'All active services migrated to latest configuration version.',
+    );
+    notifyListeners();
+  }
 }

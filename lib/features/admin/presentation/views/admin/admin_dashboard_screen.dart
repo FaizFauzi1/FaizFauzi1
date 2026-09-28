@@ -764,7 +764,7 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
       _MarketOverviewItem('Total Packages', '45', Icons.all_inbox_outlined, Colors.indigo),
       _MarketOverviewItem('Active Bookings', activeBookings.toString(), Icons.confirmation_number_outlined, Colors.teal),
       _MarketOverviewItem('Upcoming Events', '54', Icons.event_outlined, Colors.pink),
-      _MarketOverviewItem('GMV', 'RM 348,200', Icons.account_balance_wallet_outlined, Colors.emeraldAccent),
+      _MarketOverviewItem('GMV', 'RM 348,200', Icons.account_balance_wallet_outlined, Colors.tealAccent),
       _MarketOverviewItem('Platform Revenue', 'RM 38,302', Icons.attach_money, Colors.green),
       _MarketOverviewItem('Pending Payouts', 'RM 28,450', Icons.payments_outlined, Colors.blueGrey),
     ];
@@ -876,15 +876,6 @@ class _AdminHomeContentState extends State<AdminHomeContent> {
       ),
     );
   }
-
-class _MarketOverviewItem {
-  final String label;
-  final String value;
-  final IconData icon;
-  final Color color;
-
-  const _MarketOverviewItem(this.label, this.value, this.icon, this.color);
-}
 
   Widget _buildWelcomeSection() {
     return Container(
@@ -2125,7 +2116,7 @@ class _MarketOverviewItem {
         Row(
           children: [
             Expanded(
-              child: _buildActionCard(
+              child: _buildSimpleActionCard(
                 'Manage Users',
                 Icons.people,
                 AppTheme.primaryColor,
@@ -2139,7 +2130,7 @@ class _MarketOverviewItem {
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: _buildActionCard(
+              child: _buildSimpleActionCard(
                 'Manage Vendors',
                 Icons.business,
                 AppTheme.secondaryColor,
@@ -2159,7 +2150,7 @@ class _MarketOverviewItem {
         Row(
           children: [
             Expanded(
-              child: _buildActionCard(
+              child: _buildSimpleActionCard(
                 'View Reports',
                 Icons.analytics,
                 AppTheme.accentColor,
@@ -2173,7 +2164,7 @@ class _MarketOverviewItem {
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: _buildActionCard(
+              child: _buildSimpleActionCard(
                 'System Settings',
                 Icons.settings,
                 AppTheme.successColor,
@@ -2193,7 +2184,7 @@ class _MarketOverviewItem {
         Row(
           children: [
             Expanded(
-              child: _buildActionCard(
+              child: _buildSimpleActionCard(
                 'Service Approval',
                 Icons.fact_check,
                 Colors.orange,
@@ -2209,7 +2200,7 @@ class _MarketOverviewItem {
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: _buildActionCard(
+              child: _buildSimpleActionCard(
                 'Create Vendor',
                 Icons.add_business,
                 Colors.teal,
@@ -2229,7 +2220,7 @@ class _MarketOverviewItem {
         Row(
           children: [
             Expanded(
-              child: _buildActionCard(
+              child: _buildSimpleActionCard(
                 'Catalog Monitor',
                 Icons.auto_awesome_mosaic,
                 Colors.purple,
@@ -2245,7 +2236,7 @@ class _MarketOverviewItem {
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: _buildActionCard(
+              child: _buildSimpleActionCard(
                 'Organizer Mgmt',
                 Icons.festival,
                 Colors.indigo,
@@ -2265,7 +2256,7 @@ class _MarketOverviewItem {
         Row(
           children: [
             Expanded(
-              child: _buildActionCard(
+              child: _buildSimpleActionCard(
                 'Expo Oversight',
                 Icons.event_seat,
                 Colors.deepOrange,
@@ -2287,7 +2278,7 @@ class _MarketOverviewItem {
     );
   }
 
-  Widget _buildActionCard(
+  Widget _buildSimpleActionCard(
     String title,
     IconData icon,
     Color color,
@@ -3695,4 +3686,13 @@ class AdminApprovalsScreen extends StatelessWidget {
               ),
     );
   }
+}
+
+class _MarketOverviewItem {
+  final String label;
+  final String value;
+  final IconData icon;
+  final Color color;
+
+  const _MarketOverviewItem(this.label, this.value, this.icon, this.color);
 }

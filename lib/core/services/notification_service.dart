@@ -34,7 +34,7 @@ class NotificationService {
     );
 
     await _flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
+      settings: initializationSettings,
       onDidReceiveNotificationResponse: _onNotificationTapped,
     );
 
@@ -616,10 +616,10 @@ class NotificationService {
     );
 
     await _flutterLocalNotificationsPlugin.show(
-      notification.id.hashCode,
-      notification.title,
-      notification.message,
-      details,
+      id: notification.id.hashCode,
+      title: notification.title,
+      body: notification.message,
+      notificationDetails: details,
       payload: json.encode(notification.toJson()),
     );
   }
@@ -643,14 +643,12 @@ class NotificationService {
     );
 
     await _flutterLocalNotificationsPlugin.zonedSchedule(
-      notification.id.hashCode,
-      notification.title,
-      notification.message,
-      tz.TZDateTime.from(notification.scheduledFor!, tz.local),
-      details,
-      androidAllowWhileIdle: true,
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
+      id: notification.id.hashCode,
+      title: notification.title,
+      body: notification.message,
+      scheduledDate: tz.TZDateTime.from(notification.scheduledFor!, tz.local),
+      notificationDetails: details,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
       payload: json.encode(notification.toJson()),
     );
   }
@@ -931,7 +929,7 @@ class NotificationService {
   Future<void> cancelScheduledNotification(String notificationId) async {
     if (!_isInitialized) return;
 
-    await _flutterLocalNotificationsPlugin.cancel(notificationId.hashCode);
+    await _flutterLocalNotificationsPlugin.cancel(id: notificationId.hashCode);
   }
 
   // Request notification permissions

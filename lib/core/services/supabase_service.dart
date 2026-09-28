@@ -116,29 +116,16 @@ class SupabaseService {
 
   static Future<AuthResponse> signInWithGoogle() async {
     try {
-      // 1. Initialize Google Sign In
-      // For web, you MUST provide a clientId. For Android/iOS, it's optional if configured in native files.
       const webClientId = '576075181196-ldt55dl4m7dh52ce27hmgpv5k0bids5s.apps.googleusercontent.com';
       
-      final googleSignIn = GoogleSignIn(
+      await GoogleSignIn.instance.initialize(
         clientId: webClientId,
-        scopes: [
-          'email',
-          'openid',
-          'profile',
-        ],
       );
 
       print('DEBUG: Starting Google Sign-In native flow...');
-      final googleUser = await googleSignIn.signIn();
-      if (googleUser == null) {
-        print('DEBUG: Google Sign-In cancelled by user');
-        throw 'Google Sign-In was cancelled';
-      }
-
+      final googleUser = await GoogleSignIn.instance.authenticate();
       print('DEBUG: Google User retrieved: ${googleUser.email}');
-      final googleAuth = await googleUser.authentication;
-      final accessToken = googleAuth.accessToken;
+      final googleAuth = googleUser.authentication;
       final idToken = googleAuth.idToken;
 
       if (idToken == null) {
@@ -150,7 +137,6 @@ class SupabaseService {
       return await client.auth.signInWithIdToken(
         provider: OAuthProvider.google,
         idToken: idToken,
-        accessToken: accessToken,
       );
     } catch (e) {
       print('DEBUG ERROR: signInWithGoogle failed: $e');

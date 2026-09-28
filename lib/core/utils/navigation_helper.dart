@@ -22,15 +22,15 @@ class NavigationHelper {
 
   // Navigate to service creation
   static void navigateToServiceCreation(BuildContext context, {String? vendorId, VendorService? existingService}) {
-    // If no vendorId provided, try to get from current user
-    final effectiveVendorId = vendorId ?? Supabase.instance.client.auth.currentUser?.id ?? 'demo-vendor';
+    final effectiveVendorId = vendorId ?? Supabase.instance.client.auth.currentUser?.id ?? '';
     
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => ServiceCreationWizard(
-        vendorId: effectiveVendorId,
-        existingService: existingService,
-      )),
+      MaterialPageRoute(
+        builder: (context) => EnhancedServiceCreationScreen(
+          vendorId: effectiveVendorId,
+        ),
+      ),
     );
   }
 

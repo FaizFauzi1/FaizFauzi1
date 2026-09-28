@@ -1543,8 +1543,8 @@ class _GuestListScreenState extends State<GuestListScreen> {
   // --- Phone Contacts Import ---
   Future<void> _importFromPhoneContacts() async {
     try {
-      final permission = await FlutterContacts.requestPermission();
-      if (!permission) {
+      final permissionStatus = await FlutterContacts.permissions.request(PermissionType.read);
+      if (permissionStatus != PermissionStatus.granted) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text('Contacts permission is required to import from phone.')),
@@ -1563,7 +1563,7 @@ class _GuestListScreenState extends State<GuestListScreen> {
         ),
       );
 
-      final contacts = await FlutterContacts.getContacts(withProperties: true);
+      final contacts = await FlutterContacts.getAll(properties: {ContactProperty.phone, ContactProperty.email, ContactProperty.name});
       
       if (mounted) {
         Navigator.pop(context); // Close loading indicator
@@ -1591,7 +1591,7 @@ class _GuestListScreenState extends State<GuestListScreen> {
 
       int importedCount = 0;
       for (final contact in selectedContacts) {
-        final name = contact.displayName;
+        final name = contact.displayName ?? 'Unknown Contact';
         final phone = contact.phones.isNotEmpty ? contact.phones.first.number : '';
         final email = contact.emails.isNotEmpty ? contact.emails.first.address : '';
 
@@ -1653,7 +1653,7 @@ class _GuestListScreenState extends State<GuestListScreen> {
   // --- CSV File Import ---
   Future<void> _importFromCSV() async {
     try {
-      final result = await FilePicker.platform.pickFiles(
+      final result = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['csv'],
       );
@@ -1873,7 +1873,8 @@ class _PhoneContactsSelectorDialogState extends State<PhoneContactsSelectorDialo
   void _filterContacts(String query) {
     setState(() {
       _filteredContacts = widget.contacts.where((contact) {
-        return contact.displayName.toLowerCase().contains(query.toLowerCase()) ||
+        final displayName = contact.displayName ?? '';
+        return displayName.toLowerCase().contains(query.toLowerCase()) ||
                (contact.phones.isNotEmpty && contact.phones.any((p) => p.number.contains(query))) ||
                (contact.emails.isNotEmpty && contact.emails.any((e) => e.address.toLowerCase().contains(query.toLowerCase())));
       }).toList();
@@ -1927,7 +1928,7 @@ class _PhoneContactsSelectorDialogState extends State<PhoneContactsSelectorDialo
                   final email = contact.emails.isNotEmpty ? contact.emails.first.address : '';
 
                   return CheckboxListTile(
-                    title: Text(contact.displayName),
+                    title: Text(contact.displayName ?? 'Unknown Contact'),
                     subtitle: Text(email.isNotEmpty ? '$phone\n$email' : phone),
                     isThreeLine: email.isNotEmpty,
                     value: isSelected,

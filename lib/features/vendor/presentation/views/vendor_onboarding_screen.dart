@@ -807,7 +807,7 @@ class _VendorOnboardingScreenState extends State<VendorOnboardingScreen> {
     else if (fieldName.contains('bank')) folder = 'banking';
     
     try {
-        final result = await FilePicker.platform.pickFiles(
+        final result = await FilePicker.pickFiles(
             type: FileType.custom,
             allowedExtensions: ['jpg', 'jpeg', 'png', 'pdf'],
         );
@@ -1880,7 +1880,7 @@ class _VendorOnboardingScreenState extends State<VendorOnboardingScreen> {
   void _uploadDocument(String documentType) async {
     try {
       // Pick a file using file_picker
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
+      FilePickerResult? result = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf', 'jpg', 'jpeg', 'png', 'doc', 'docx'],
         allowMultiple: false,

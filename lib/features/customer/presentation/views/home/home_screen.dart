@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -286,7 +287,7 @@ class _HomeContentState extends State<HomeContent> {
       if (categoryProvider.allCategories.isEmpty) {
         futures.add(categoryProvider.fetchCategories());
       }
-      await Future.wait(futures).timeout(const Duration(seconds: 3), onTimeout: () => []);
+      await Future.wait(futures).timeout(const Duration(milliseconds: 1500), onTimeout: () => []);
     } catch (e) {
       debugPrint('HomeScreen: Data load notice: $e');
     } finally {
@@ -296,6 +297,70 @@ class _HomeContentState extends State<HomeContent> {
         });
       }
     }
+  }
+
+  /// Inline shimmer skeleton that matches the horizontal card lists
+  /// (Featured Venues / Featured Vendors) so the user sees a smooth
+  /// placeholder instead of a blocking spinner.
+  Widget _buildHorizontalCardSkeleton(BuildContext context, {required double height}) {
+    final isMobile = ResponsiveUtils.isMobile(context);
+    final cardWidth = isMobile ? 280.0 : 350.0;
+
+    return Shimmer.fromColors(
+      baseColor: Colors.grey.shade200,
+      highlightColor: Colors.grey.shade50,
+      period: const Duration(milliseconds: 1400),
+      child: SizedBox(
+        height: height,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            return Container(
+              width: cardWidth,
+              margin: const EdgeInsets.only(right: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Image placeholder
+                  Container(
+                    height: 120,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(width: 160, height: 16, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4))),
+                        const SizedBox(height: 8),
+                        Container(width: 200, height: 12, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4))),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Container(width: 50, height: 12, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4))),
+                            const SizedBox(width: 8),
+                            Container(width: 80, height: 12, decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(4))),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 
   String _parseCategories(dynamic categories) {
@@ -595,7 +660,7 @@ class _HomeContentState extends State<HomeContent> {
                     vendorProvider.venues.where((v) => v.isFeatured).toList();
 
                 if (vendorProvider.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return _buildHorizontalCardSkeleton(context, height: ResponsiveUtils.isMobile(context) ? 300 : 360);
                 }
 
                 if (featuredVenues.isEmpty) {
@@ -753,7 +818,7 @@ class _HomeContentState extends State<HomeContent> {
                 final vendors = vendorProvider.vendors;
 
                 if (vendorProvider.isLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return _buildHorizontalCardSkeleton(context, height: ResponsiveUtils.isMobile(context) ? 260 : 320);
                 }
 
                 if (vendors.isEmpty) {

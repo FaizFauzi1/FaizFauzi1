@@ -114,7 +114,7 @@ class _DigitalInviteCardDialogState extends State<DigitalInviteCardDialog> {
 
   Future<void> _pickCustomPdf() async {
     try {
-      final result = await FilePicker.platform.pickFiles(
+      final result = await FilePicker.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf'],
       );

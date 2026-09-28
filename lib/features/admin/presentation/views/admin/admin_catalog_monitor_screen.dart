@@ -240,7 +240,7 @@ class _AdminCatalogMonitorScreenState extends State<AdminCatalogMonitorScreen>
                 children: [
                   const Icon(Icons.copy_outlined, size: 18),
                   const SizedBox(width: 8),
-                  Text('Duplicate Detection (${mktProvider.duplicateMatches.where((m) => m.status == "Pending Review").length})'),
+                  Text('Duplicate Detection (${mktProvider.duplicateMatches.length})'),
                 ],
               ),
             ),
@@ -500,10 +500,6 @@ class _AdminCatalogMonitorScreenState extends State<AdminCatalogMonitorScreen>
                       context,
                       type: MarketplaceEntityType.service,
                       entityId: item.id,
-                      entityName: item.name,
-                      vendorName: item.vendorName,
-                      price: item.basePrice,
-                      status: item.approvalStatus.name,
                     );
                   },
                   icon: const Icon(Icons.hub_outlined, size: 14),
@@ -579,7 +575,7 @@ class _AdminCatalogMonitorScreenState extends State<AdminCatalogMonitorScreen>
   }
 
   Widget _buildDuplicateCard(DuplicateMatch match, AdminMarketplaceProvider mktProvider) {
-    final isPending = match.status == 'Pending Review';
+    const isPending = true;
 
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
@@ -610,12 +606,12 @@ class _AdminCatalogMonitorScreenState extends State<AdminCatalogMonitorScreen>
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: isPending ? Colors.orange.shade50 : Colors.green.shade50,
+                    color: Colors.orange.shade50,
                     borderRadius: BorderRadius.circular(6),
                   ),
                   child: Text(
-                    match.status,
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: isPending ? Colors.orange.shade800 : Colors.green.shade800),
+                    'Pending Review',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 11, color: Colors.orange.shade800),
                   ),
                 ),
               ],
@@ -634,9 +630,9 @@ class _AdminCatalogMonitorScreenState extends State<AdminCatalogMonitorScreen>
                       children: [
                         const Text('PRIMARY RECORD (ORIGINAL)', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.grey)),
                         const SizedBox(height: 4),
-                        Text(match.entityAName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-                        Text('Vendor: ${match.vendorA}', style: const TextStyle(fontSize: 11, color: Colors.black87)),
-                        Text('Phone: ${match.phoneA} • ${match.locationA}', style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                        Text(match.name1, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                        Text('Vendor: ${match.details1['vendor'] ?? "N/A"}', style: const TextStyle(fontSize: 11, color: Colors.black87)),
+                        Text('Phone: ${match.details1['phone'] ?? "N/A"} • ${match.details1['location'] ?? "N/A"}', style: const TextStyle(fontSize: 11, color: Colors.grey)),
                       ],
                     ),
                   ),
@@ -647,9 +643,9 @@ class _AdminCatalogMonitorScreenState extends State<AdminCatalogMonitorScreen>
                       children: [
                         const Text('POTENTIAL DUPLICATE CANDIDATE', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.red)),
                         const SizedBox(height: 4),
-                        Text(match.entityBName, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.red)),
-                        Text('Vendor: ${match.vendorB}', style: const TextStyle(fontSize: 11, color: Colors.black87)),
-                        Text('Phone: ${match.phoneB} • ${match.locationB}', style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                        Text(match.name2, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13, color: Colors.red)),
+                        Text('Vendor: ${match.details2['vendor'] ?? "N/A"}', style: const TextStyle(fontSize: 11, color: Colors.black87)),
+                        Text('Phone: ${match.details2['phone'] ?? "N/A"} • ${match.details2['location'] ?? "N/A"}', style: const TextStyle(fontSize: 11, color: Colors.grey)),
                       ],
                     ),
                   ),
@@ -657,7 +653,7 @@ class _AdminCatalogMonitorScreenState extends State<AdminCatalogMonitorScreen>
               ),
             ),
             const SizedBox(height: 10),
-            Text('Matched On: ${match.matchedFields.join(" • ")}', style: const TextStyle(fontSize: 11, color: Colors.grey, fontStyle: FontStyle.italic)),
+            Text('Matched On: ${match.reason}', style: const TextStyle(fontSize: 11, color: Colors.grey, fontStyle: FontStyle.italic)),
             const SizedBox(height: 12),
 
             if (isPending) ...[
@@ -667,7 +663,7 @@ class _AdminCatalogMonitorScreenState extends State<AdminCatalogMonitorScreen>
                     onPressed: () {
                       mktProvider.resolveDuplicate(match.id, 'Merged into Primary');
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Merged ${match.entityBName} into primary record successfully!'), backgroundColor: Colors.green),
+                        SnackBar(content: Text('Merged ${match.name2} into primary record successfully!'), backgroundColor: Colors.green),
                       );
                     },
                     icon: const Icon(Icons.merge_type, size: 14),
@@ -679,7 +675,7 @@ class _AdminCatalogMonitorScreenState extends State<AdminCatalogMonitorScreen>
                     onPressed: () {
                       mktProvider.resolveDuplicate(match.id, 'Kept Separate (Verified Legitimate)');
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Marked ${match.entityBName} as separate verified record.')),
+                        SnackBar(content: Text('Marked ${match.name2} as separate verified record.')),
                       );
                     },
                     child: const Text('Keep Separate', style: TextStyle(fontSize: 11)),
